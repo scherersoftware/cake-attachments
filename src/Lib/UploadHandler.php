@@ -9,7 +9,7 @@
  * Licensed under the MIT license:
  * http://www.opensource.org/licenses/MIT
  */
-
+// @codingStandardsIgnoreStart
 class UploadHandler
 {
 
@@ -1373,3 +1373,4 @@ class UploadHandler
     }
 
 }
+// @codingStandardsIgnoreEnd
