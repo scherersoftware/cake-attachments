@@ -1,7 +1,13 @@
 App.Components.AttachmentsComponent = Frontend.Component.extend({
     startup: function() {
-        var url = '/attachments/attachments/upload';
+        if(!$.fn.fileupload) {
+            if(this.Controller.getVar('debug')) {
+                console.error('fileupload Plugin is not loaded');
+            }
+            return;
+        }
 
+        var url = '/attachments/attachments/upload';
         $('#fileupload').fileupload({
             url: url,
             dataType: 'json',
@@ -19,7 +25,5 @@ App.Components.AttachmentsComponent = Frontend.Component.extend({
             }
         }).prop('disabled', !$.support.fileInput)
         .parent().addClass($.support.fileInput ? undefined : 'disabled');
-
-
     }
 });
