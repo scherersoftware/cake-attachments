@@ -8,6 +8,8 @@
  *
  * Licensed under the MIT license:
  * http://www.opensource.org/licenses/MIT
+ * 
+ * Adapted for codekanzlei/cake-attachments Plugin.
  */
 // @codingStandardsIgnoreStart
 class UploadHandler

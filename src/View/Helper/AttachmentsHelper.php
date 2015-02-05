@@ -30,6 +30,7 @@ class AttachmentsHelper extends Helper
         $this->Html->script('/attachments/js/vendor/jquery.ui.widget.js', ['block' => 'script']);
         $this->Html->script('/attachments/js/vendor/jquery.iframe-transport.js', ['block' => 'script']);
         $this->Html->script('/attachments/js/vendor/jquery.fileupload.js', ['block' => 'script']);
+        $this->Html->css('/attachments/css/attachments.css', ['block' => 'css']);
     }
 
     /**
