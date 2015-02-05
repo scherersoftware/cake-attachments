@@ -1,6 +1,6 @@
 <?php
 use Cake\Routing\Router;
 
-Router::plugin('ModelHistory', function ($routes) {
-    $routes->fallbacks();
+Router::plugin('Attachments', function ($routes) {
+    $routes->fallbacks('InflectedRoute');
 });
