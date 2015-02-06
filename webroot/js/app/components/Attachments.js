@@ -7,23 +7,12 @@ App.Components.AttachmentsComponent = Frontend.Component.extend({
             return;
         }
 
-        var url = '/attachments/attachments/upload';
-        $('#fileupload').fileupload({
-            url: url,
-            dataType: 'json',
-            done: function (e, data) {
-                $.each(data.result.files, function (index, file) {
-                    $('<p/>').text(file.name).appendTo('#files');
-                });
-            },
-            progressall: function (e, data) {
-                var progress = parseInt(data.loaded / data.total * 100, 10);
-                $('#progress .progress-bar').css(
-                    'width',
-                    progress + '%'
-                );
-            }
-        }).prop('disabled', !$.support.fileInput)
-        .parent().addClass($.support.fileInput ? undefined : 'disabled');
+        var config = {
+            uploadUrl: '/attachments/attachments/upload'
+        };
+
+        this.Controller.$('.fileupload').each(function(i, el) {
+            var widget = new App.Lib.AttachmentsWidget($(el), config);
+        }.bind(this));
     }
 });
