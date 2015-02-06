@@ -39,6 +39,7 @@ class AttachmentsHelper extends Helper
      * Render an attachments area for the given entity
      *
      * @param EntityInterface $entity Entity to attach files to
+     * @param array $options Override default options
      * @return string
      */
     public function attachmentsArea(EntityInterface $entity, array $options = [])
@@ -46,7 +47,8 @@ class AttachmentsHelper extends Helper
         $this->addDependencies();
         $options = Hash::merge([
             'label' => false,
-            'id' => 'fileupload-' . uniqid()
+            'id' => 'fileupload-' . uniqid(),
+            'formFieldName' => false
         ], $options);
         return $this->_View->element('Attachments.attachments_area', compact('options'));
     }

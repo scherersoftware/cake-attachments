@@ -1,19 +1,24 @@
 App.Lib.AttachmentsWidget = Class.extend({
-    element: null,
+    $element: null,
     $input: null,
+    $progress: null,
+    $fileList: null,
+    $hiddenSelect: null,
     config: {
         uploadUrl: null
     },
     init: function($element, config) {
-        this.element = $element;
+        this.$element = $element;
         if(config) {
             this.config = $.extend(this.config, config);
         }
 
-        this.$input = this.element.find('.fileupload-input');
-        this.$fileList = this.element.find('.fileupload-file-list');
-        this.$progress = this.element.find('.fileupload-progress');
+        this.$input = this.$element.find('.fileupload-input');
+        this.$fileList = this.$element.find('.fileupload-file-list');
+        this.$progress = this.$element.find('.fileupload-progress');
         this.$progress.hide();
+        this.$element.find('select');
+
 
         this.$input.fileupload({
             url: this.config.uploadUrl,

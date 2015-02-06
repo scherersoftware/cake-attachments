@@ -16,6 +16,15 @@
             </div>
             <ul class="fileupload-file-list"></ul>
 
+            <?php if($options['formFieldName']): ?>
+                <?= $this->Form->input($options['formFieldName'], [
+                    'type' => 'select',
+                    'multiple' => true,
+                    'label' => false,
+                    'class' => 'hidden-attachments-select'
+                ]) ?>
+            <?php endif; ?>
+
 <?php if($options['label']): ?>
         </div>
 <?php endif; ?>
