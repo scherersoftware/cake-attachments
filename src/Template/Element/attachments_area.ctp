@@ -21,7 +21,8 @@
                     'type' => 'select',
                     'multiple' => true,
                     'label' => false,
-                    'class' => 'hidden-attachments-select'
+                    'class' => 'hidden-attachments-select',
+                    'options' => array_combine($this->Form->context('entity')->val($options['formFieldName']), $this->Form->context('entity')->val($options['formFieldName']))
                 ]) ?>
             <?php endif; ?>
 

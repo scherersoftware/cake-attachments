@@ -28,10 +28,9 @@ App.Lib.AttachmentsWidget = Class.extend({
                 $.each(data.result.files, function (index, file) {
                     $('<li/>').text(file.name).appendTo(this.$fileList);
                 }.bind(this));
-                
+
                 if(this.$hiddenSelect) {
                     $.each(data.result.files, function (index, file) {
-                        console.log(file);
                         $('<option/>')
                             .text(file.name)
                             .attr('value', file.name)
@@ -39,7 +38,7 @@ App.Lib.AttachmentsWidget = Class.extend({
                             .appendTo(this.$hiddenSelect);
                     }.bind(this));
                 }
-                
+
                 setTimeout(function() {
                     this.$progress.hide();
                 }.bind(this), 1500);
