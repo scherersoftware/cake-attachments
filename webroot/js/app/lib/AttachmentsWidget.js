@@ -21,6 +21,14 @@ App.Lib.AttachmentsWidget = Class.extend({
             this.$hiddenSelect = this.$element.find('select.hidden-attachments-select');
         }
 
+        if(this.$hiddenSelect) {
+            // Populate the unsaved file uploads ul if the form is rendered after a validation failure
+            this.$hiddenSelect.find('option').each(function (i, option) {
+                var parts = option.value.split('/'); // remove the tmp subfolder
+                $('<li/>').text(parts[1]).appendTo(this.$fileList);
+            }.bind(this));
+        }
+
         var uuid = guid();
         this.$input.fileupload({
             url: this.config.uploadUrl + '/' + uuid,

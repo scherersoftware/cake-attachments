@@ -3,7 +3,19 @@
         <label class="col-md-2 control-label" for="input-<?php echo $options['id'] ?>"><?= $options['label'] ?></label>
         <div class="col-md-6">
 <?php endif; ?>
-
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title"><?= __('attachments') ?></h3>
+        </div>
+        <div class="panel-body">
+            
+            
+            
+            
+            
+            <hr>
+            
+            
             <span class="btn btn-success fileinput-button">
                 <i class="glyphicon glyphicon-plus"></i>
                 <span>Select files...</span>
@@ -27,6 +39,8 @@
                         : []
                 ]) ?>
             <?php endif; ?>
+        </div>
+    </div>
 
 <?php if($options['label']): ?>
         </div>
