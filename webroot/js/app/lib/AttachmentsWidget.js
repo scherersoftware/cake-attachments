@@ -4,6 +4,7 @@ App.Lib.AttachmentsWidget = Class.extend({
     $progress: null,
     $fileList: null,
     $hiddenSelect: null,
+    $dropZone: null,
     config: {
         uploadUrl: null
     },
@@ -21,6 +22,17 @@ App.Lib.AttachmentsWidget = Class.extend({
             this.$hiddenSelect = this.$element.find('select.hidden-attachments-select');
         }
 
+        this.$dropZone = this.$element.find('.dropzone');
+        this.$dropZone.bind('dragenter', function() {
+            this.$dropZone.addClass('dragging');
+        }.bind(this));
+        this.$dropZone.bind('dragleave', function() {
+            this.$dropZone.removeClass('dragging');
+        }.bind(this));
+        this.$dropZone.bind('drop', function() {
+            this.$dropZone.removeClass('dragging');
+        }.bind(this));
+
         if(this.$hiddenSelect) {
             // Populate the unsaved file uploads ul if the form is rendered after a validation failure
             this.$hiddenSelect.find('option').each(function (i, option) {
@@ -33,6 +45,7 @@ App.Lib.AttachmentsWidget = Class.extend({
         this.$input.fileupload({
             url: this.config.uploadUrl + '/' + uuid,
             dataType: 'json',
+            dropZone: this.$dropZone,
             done: function (e, data) {
                 $.each(data.result.files, function (index, file) {
                     $('<li/>').text(file.name).appendTo(this.$fileList);

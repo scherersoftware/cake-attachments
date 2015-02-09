@@ -9,35 +9,39 @@
         </div>
         <div class="panel-body">
             
-            
-            
-            
-            
+
             <hr>
-            
-            
-            <span class="btn btn-success fileinput-button">
-                <i class="glyphicon glyphicon-plus"></i>
-                <span>Select files...</span>
-                <!-- The file input field used as target for the file upload widget -->
-                <input id="input-<?php echo $options['id'] ?>" type="file" name="files[]" class="fileupload-input" multiple>
-            </span>
 
             <div class="fileupload-progress progress">
                 <div class="fileupload-progress-bar progress-bar progress-bar-success"></div>
             </div>
+            Add Attachments:<br>
             <ul class="fileupload-file-list"></ul>
 
+            <div class="upload-section">
+                <span class="btn btn-success btn-block fileinput-button">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    <span>Click to select files</span>
+                    <!-- The file input field used as target for the file upload widget -->
+                    <input id="input-<?php echo $options['id'] ?>" type="file" name="files[]" class="fileupload-input" multiple>
+                </span>
+                <small>or</small>
+                <div class="dropzone well">Drag Files Here</div>
+            </div>
+
             <?php if($options['formFieldName']): ?>
-                <?= $this->Form->input($options['formFieldName'], [
-                    'type' => 'select',
+                <?php
+                $selectOptions = [];
+                if($this->Form->context('entity')->val($options['formFieldName'])) {
+                    $selectOptions = array_combine($this->Form->context('entity')->val($options['formFieldName']), $this->Form->context('entity')->val($options['formFieldName']));
+                }
+                echo $this->Form->select($options['formFieldName'], $selectOptions, [
                     'multiple' => true,
                     'label' => false,
-                    'class' => 'hidden-attachments-select',
-                    'options' => $this->Form->context('entity')->val($options['formFieldName']) ?
-                        array_combine($this->Form->context('entity')->val($options['formFieldName']), $this->Form->context('entity')->val($options['formFieldName']))
-                        : []
-                ]) ?>
+                    'class' => 'hidden-attachments-select'
+                ]);
+                ?>
+
             <?php endif; ?>
         </div>
     </div>

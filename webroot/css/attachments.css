@@ -34,3 +34,19 @@
     height: 100%;
   }
 }
+
+.fileupload .hidden-attachments-select {
+    display: none;
+}
+
+.fileupload .dropzone {
+    text-align: center;
+    margin-bottom: 0;
+}
+.fileupload .dropzone.dragging {
+    background-color: #4DAD49;
+    color: #fff;
+}
+.fileupload .upload-section {
+    text-align: center;
+}
