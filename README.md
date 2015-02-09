@@ -2,6 +2,8 @@
 
 CakePHP 3 File Attachments Handling
 
+Note: This Plugin depends on the codekanzlei/cake-frontend-bridge Plugin.
+
 ## Usage
 
 In your Table's initialize() callback, add the following line:
