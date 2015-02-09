@@ -19,7 +19,9 @@ class AttachmentsHelper extends Helper
      *
      * @var array
      */
-    protected $_defaultConfig = [];
+    protected $_defaultConfig = [
+        'includeDependencies' => true
+    ];
 
     /**
      * Inject JS dependencies to the HTML helper
@@ -44,7 +46,9 @@ class AttachmentsHelper extends Helper
      */
     public function attachmentsArea(EntityInterface $entity, array $options = [])
     {
-        $this->addDependencies();
+        if ($this->config('includeDependencies')) {
+            $this->addDependencies();
+        }
         $options = Hash::merge([
             'label' => false,
             'id' => 'fileupload-' . uniqid(),
