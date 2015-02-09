@@ -17,8 +17,9 @@ App.Lib.AttachmentsWidget = Class.extend({
         this.$fileList = this.$element.find('.fileupload-file-list');
         this.$progress = this.$element.find('.fileupload-progress');
         this.$progress.hide();
-        this.$element.find('select');
-
+        if(this.$element.find('select.hidden-attachments-select').length > 0) {
+            this.$hiddenSelect = this.$element.find('select.hidden-attachments-select');
+        }
 
         this.$input.fileupload({
             url: this.config.uploadUrl,
@@ -27,6 +28,17 @@ App.Lib.AttachmentsWidget = Class.extend({
                 $.each(data.result.files, function (index, file) {
                     $('<li/>').text(file.name).appendTo(this.$fileList);
                 }.bind(this));
+                
+                if(this.$hiddenSelect) {
+                    $.each(data.result.files, function (index, file) {
+                        console.log(file);
+                        $('<option/>')
+                            .text(file.name)
+                            .attr('value', file.name)
+                            .attr('selected', true)
+                            .appendTo(this.$hiddenSelect);
+                    }.bind(this));
+                }
                 
                 setTimeout(function() {
                     this.$progress.hide();
