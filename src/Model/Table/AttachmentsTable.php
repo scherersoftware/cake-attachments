@@ -98,12 +98,12 @@ class AttachmentsTable extends Table
         if ($attachment->tmpPath) {
             // Make sure the folder is created
             $folder = new Folder();
-            $targetDir = dirname($attachment->filepath);
+            $targetDir = Configure::read('Attachments.path') . dirname($attachment->filepath);
             if (!$folder->create($targetDir)) {
                 throw new \Exception("Folder {$targetDir} could not be created.");
             }
-
-            if (!rename($attachment->tmpPath, $attachment->filepath)) {
+            $targetPath = Configure::read('Attachments.path') . $attachment->filepath;
+            if (!rename($attachment->tmpPath, $targetPath)) {
                 throw new \Exception("Temporary file {$attachment->tmpPath} could not be moved to {$attachment->filepath}");
             }
             $attachment->tmpPath = null;
@@ -129,7 +129,9 @@ class AttachmentsTable extends Table
         $file = new File($filePath);
         $info = $file->info();
 
-        $targetPath = Configure::read('Attachments.path') . $entity->source() . '/' . $entity->id . '/' . $info['basename'];
+        // in filepath, we store the path relative to the Attachment.path configuration
+        // to make it easy to switch storage
+        $targetPath = $entity->source() . '/' . $entity->id . '/' . $info['basename'];
 
         $attachment = $this->newEntity([
             'model' => $entity->source(),
