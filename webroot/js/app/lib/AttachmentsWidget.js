@@ -5,6 +5,7 @@ App.Lib.AttachmentsWidget = Class.extend({
     $fileList: null,
     $hiddenSelect: null,
     $dropZone: null,
+    $attachmentsTable: null,
     config: {
         uploadUrl: null
     },
@@ -21,6 +22,8 @@ App.Lib.AttachmentsWidget = Class.extend({
         if(this.$element.find('select.hidden-attachments-select').length > 0) {
             this.$hiddenSelect = this.$element.find('select.hidden-attachments-select');
         }
+
+        this.$attachmentsTable = this.$element.find('table.attachments');
 
         this.$dropZone = this.$element.find('.dropzone');
         this.$dropZone.bind('dragenter', function() {
@@ -40,6 +43,25 @@ App.Lib.AttachmentsWidget = Class.extend({
                 $('<li/>').text(parts[1]).appendTo(this.$fileList);
             }.bind(this));
         }
+
+        this.$attachmentsTable.find('td.actions a.delete-btn').click(function(e) {
+            var $tr = $(e.currentTarget).parents('tr');
+            var attachmentId = $tr.data('attachment-id');
+            var url = {
+                plugin: 'attachments',
+                controller: 'attachments',
+                action: 'delete',
+                pass: [attachmentId]
+            };
+
+            if(confirm("Do you really want to delete this file? This action cannot be undone. Click Cancel if you're unsure.")) {
+                App.Main.UIBlocker.blockElement($tr);
+                App.Main.request(url, null, function(response) {
+                    App.Main.UIBlocker.unblockElement($tr);
+                    $tr.remove();
+                });
+            }
+        }.bind(this));
 
         var uuid = guid();
         this.$input.fileupload({

@@ -65,4 +65,14 @@ class Attachment extends Entity
     {
         return Configure::read('Attachments.path') . $this->filepath;
     }
+
+    /**
+     * Delete the underlying file
+     *
+     * @return void
+     */
+    public function deleteFile()
+    {
+        unlink($this->getAbsolutePath());
+    }
 }

@@ -4,6 +4,7 @@ namespace Attachments\Controller;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Utility\Text;
+use FrontendBridge\Lib\ServiceResponse;
 
 require_once Plugin::path('Attachments') . 'src/Lib/UploadHandler.php';
 
@@ -104,5 +105,19 @@ class AttachmentsController extends AppController
             'name' => $attachment->filename
         ]);
         return $this->response;
+    }
+
+    /**
+     * Delete the file
+     *
+     * @param string $attachmentId Attachment ID
+     * @return ServiceResponse
+     */
+    public function delete($attachmentId = null)
+    {
+        // FIXME handle permissions
+        $attachment = $this->Attachments->get($attachmentId);
+        $this->Attachments->delete($attachment);
+        return new ServiceResponse('success');
     }
 }

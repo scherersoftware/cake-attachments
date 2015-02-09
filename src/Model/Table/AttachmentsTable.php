@@ -111,6 +111,19 @@ class AttachmentsTable extends Table
     }
 
     /**
+     * afterDelete
+     *
+     * @param Event $event Event
+     * @param Attachment $attachment Entity
+     * @param ArrayObject $options Options
+     * @return void
+     */
+    public function afterDelete(Event $event, Attachment $attachment, \ArrayObject $options)
+    {
+        $attachment->deleteFile();
+    }
+
+    /**
      * Creates an Attachment entity based on the given file
      *
      * @param EntityInterface $entity Entity the file will be attached to

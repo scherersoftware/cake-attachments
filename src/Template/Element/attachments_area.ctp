@@ -20,7 +20,7 @@
                         <td class="size"><?= $this->Number->toReadableSize($attachment->filesize) ?></td>
                         <td class="actions">
                             <a class="btn btn-info btn-xs download-btn" href="<?= $attachment->downloadUrl() ?>"><i class="fa fa-cloud-download"></i></a>
-                            <a class="btn btn-default btn-xs download-delete"><i class="fa fa-close"></i></a>
+                            <a class="btn btn-default btn-xs delete-btn"><i class="fa fa-close"></i></a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
