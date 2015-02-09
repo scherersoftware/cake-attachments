@@ -21,5 +21,6 @@ class Attachment extends Entity
         'filesize' => true,
         'model' => true,
         'foreign_key' => true,
+        'tmpPath' => true
     ];
 }

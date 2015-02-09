@@ -2,6 +2,11 @@
 namespace Attachments\Model\Table;
 
 use Attachments\Model\Entity\Attachment;
+use Cake\Core\Configure;
+use Cake\Datasource\EntityInterface;
+use Cake\Event\Event;
+use Cake\Filesystem\File;
+use Cake\Filesystem\Folder;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -22,7 +27,7 @@ class AttachmentsTable extends Table
     public function initialize(array $config)
     {
         $this->table('attachments');
-        $this->displayField('id');
+        $this->displayField('filename');
         $this->primaryKey('id');
         $this->addBehavior('Timestamp');
     }
@@ -54,5 +59,87 @@ class AttachmentsTable extends Table
             ->notEmpty('foreign_key');
 
         return $validator;
+    }
+
+    /**
+     * Takes the array from the attachments area hidden form field and creates
+     * attachment records for the given entity
+     *
+     * @param EntityInterface $entity Entity to attach the files to
+     * @param array $uploads List of paths relative to the Attachments.tmpUploadsPath
+     *                       config value
+     * @return void
+     */
+    public function addUploads(EntityInterface $entity, array $uploads)
+    {
+        $attachments = [];
+        foreach ($uploads as $upload) {
+            $file = Configure::read('Attachments.tmpUploadsPath') . $upload;
+
+            $attachment = $this->createAttachmentEntity($entity, $file);
+            $this->save($attachment);
+            $attachments[] = $attachment;
+        }
+        $entity->attachments = $attachments;
+    }
+
+    /**
+     * afterSave Event. If an attachment entity has its tmpPath value set, it will be moved
+     * to the defined filepath
+     *
+     * @param Event $event Event
+     * @param Attachment $attachment Entity
+     * @param ArrayObject $options Options
+     * @return void
+     * @throws \Exception If the file couldn't be moved
+     */
+    public function afterSave(Event $event, Attachment $attachment, \ArrayObject $options)
+    {
+        if ($attachment->tmpPath) {
+            // Make sure the folder is created
+            $folder = new Folder();
+            $targetDir = dirname($attachment->filepath);
+            if (!$folder->create($targetDir)) {
+                throw new \Exception("Folder {$targetDir} could not be created.");
+            }
+
+            if (!rename($attachment->tmpPath, $attachment->filepath)) {
+                throw new \Exception("Temporary file {$attachment->tmpPath} could not be moved to {$attachment->filepath}");
+            }
+            $attachment->tmpPath = null;
+        }
+    }
+
+    /**
+     * Creates an Attachment entity based on the given file
+     *
+     * @param EntityInterface $entity Entity the file will be attached to
+     * @param string $filePath Absolute path to the file
+     * @return Attachment
+     * @throws \Exception If the given file doesn't exist or isn't readable
+     */
+    public function createAttachmentEntity(EntityInterface $entity, $filePath)
+    {
+        if (!file_exists($filePath)) {
+            throw new \Exception("File {$file} does not exist.");
+        }
+        if (!is_readable($filePath)) {
+            throw new \Exception("File {$file} cannot be read.");
+        }
+        $file = new File($filePath);
+        $info = $file->info();
+
+        $targetPath = Configure::read('Attachments.path') . $entity->source() . '/' . $entity->id . '/' . $info['basename'];
+
+        $attachment = $this->newEntity([
+            'model' => $entity->source(),
+            'foreign_key' => $entity->id,
+            'filename' => $info['basename'],
+            'filesize' => $info['filesize'],
+            'filetype' => $info['mime'],
+            'filepath' => $targetPath,
+            'tmpPath' => $filePath
+        ]);
+        return $attachment;
     }
 }

@@ -21,8 +21,9 @@ App.Lib.AttachmentsWidget = Class.extend({
             this.$hiddenSelect = this.$element.find('select.hidden-attachments-select');
         }
 
+        var uuid = guid();
         this.$input.fileupload({
-            url: this.config.uploadUrl,
+            url: this.config.uploadUrl + '/' + uuid,
             dataType: 'json',
             done: function (e, data) {
                 $.each(data.result.files, function (index, file) {
@@ -31,9 +32,10 @@ App.Lib.AttachmentsWidget = Class.extend({
 
                 if(this.$hiddenSelect) {
                     $.each(data.result.files, function (index, file) {
+                        var filePath = uuid + '/' + file.name;
                         $('<option/>')
-                            .text(file.name)
-                            .attr('value', file.name)
+                            .text(filePath)
+                            .attr('value', filePath)
                             .attr('selected', true)
                             .appendTo(this.$hiddenSelect);
                     }.bind(this));
