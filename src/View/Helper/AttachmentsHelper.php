@@ -2,9 +2,9 @@
 namespace Attachments\View\Helper;
 
 use Cake\Datasource\EntityInterface;
+use Cake\Utility\Hash;
 use Cake\View\Helper;
 use Cake\View\View;
-use Cake\Utility\Hash;
 
 /**
  * Attachments helper
