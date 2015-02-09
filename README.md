@@ -30,3 +30,12 @@ The Helper will automatically add CSS and JS dependencies to your `script` and `
 want that, you can disable this behavior by setting `includeDependencies` to `false` in the Helper's config.
 
 See `AttachmentsHelper::addDependencies()` for the JS/CSS dependencies you need to include.
+
+## Requirements
+
+As defined in composer.json, for Image Resizing we need the ImageMagick extension. Also, make sure ghostscript
+is installed, without it PDF previews won't work.
+
+On Mac OS X you can install ghostscript via homebrew:
+
+    brew install ghostscript

@@ -7,26 +7,41 @@
         <div class="panel-heading">
             <h3 class="panel-title"><?= __('attachments') ?></h3>
         </div>
+        <?php if(!empty($entity->attachments)): ?>
+
+        <table class="table attachments">
+            <tbody>
+                <?php foreach($entity->attachments as $attachment): ?>
+                    <tr data-attachment-id="<?= $attachment->id ?>">
+                        <td class="icon">
+                            <img src="<?php echo $attachment->previewUrl() ?>">
+                        </td>
+                        <td class="filename"><?= $attachment->filename ?></td>
+                        <td class="size"><?= $this->Number->toReadableSize($attachment->filesize) ?></td>
+                        <td class="actions">
+                            <a class="btn btn-info btn-xs download-btn" href="<?= $attachment->downloadUrl() ?>"><i class="fa fa-cloud-download"></i></a>
+                            <a class="btn btn-default btn-xs download-delete"><i class="fa fa-close"></i></a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        <?php endif; ?>
+
         <div class="panel-body">
-            
-
-            <hr>
-
-            <div class="fileupload-progress progress">
-                <div class="fileupload-progress-bar progress-bar progress-bar-success"></div>
-            </div>
-            Add Attachments:<br>
+            Selected Files:<br>
             <ul class="fileupload-file-list"></ul>
 
             <div class="upload-section">
-                <span class="btn btn-success btn-block fileinput-button">
+                <span class="btn btn-default btn-block btn-lg fileinput-button dropzone">
                     <i class="glyphicon glyphicon-plus"></i>
-                    <span>Click to select files</span>
+                    <span>Click to select files or drag files here</span>
                     <!-- The file input field used as target for the file upload widget -->
                     <input id="input-<?php echo $options['id'] ?>" type="file" name="files[]" class="fileupload-input" multiple>
                 </span>
-                <small>or</small>
-                <div class="dropzone well">Drag Files Here</div>
+            </div>
+            <div class="fileupload-progress progress">
+                <div class="fileupload-progress-bar progress-bar progress-bar-success"></div>
             </div>
 
             <?php if($options['formFieldName']): ?>
@@ -41,7 +56,6 @@
                     'class' => 'hidden-attachments-select'
                 ]);
                 ?>
-
             <?php endif; ?>
         </div>
     </div>

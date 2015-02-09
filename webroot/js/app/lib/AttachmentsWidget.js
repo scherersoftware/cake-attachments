@@ -24,13 +24,13 @@ App.Lib.AttachmentsWidget = Class.extend({
 
         this.$dropZone = this.$element.find('.dropzone');
         this.$dropZone.bind('dragenter', function() {
-            this.$dropZone.addClass('dragging');
+            this.$dropZone.addClass('btn-success');
         }.bind(this));
         this.$dropZone.bind('dragleave', function() {
-            this.$dropZone.removeClass('dragging');
+            this.$dropZone.removeClass('btn-success');
         }.bind(this));
         this.$dropZone.bind('drop', function() {
-            this.$dropZone.removeClass('dragging');
+            this.$dropZone.removeClass('btn-success');
         }.bind(this));
 
         if(this.$hiddenSelect) {
