@@ -75,4 +75,21 @@ class Attachment extends Entity
     {
         unlink($this->getAbsolutePath());
     }
+
+    /**
+     * Array Representation, used for APIs
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'id' => $this->id,
+            'filename' => $this->filename,
+            'filetype' => $this->filetype,
+            'filesize' => $this->filesize,
+            'preview_url' => $this->previewUrl(),
+            'url' => $this->downloadUrl()
+        ];
+    }
 }
