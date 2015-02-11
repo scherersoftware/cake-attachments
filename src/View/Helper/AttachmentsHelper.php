@@ -53,7 +53,8 @@ class AttachmentsHelper extends Helper
             'label' => false,
             'id' => 'fileupload-' . uniqid(),
             'formFieldName' => false,
-            'mode' => 'full'
+            'mode' => 'full',
+            'style' => ''
         ], $options);
         return $this->_View->element('Attachments.attachments_area', compact('options', 'entity'));
     }
