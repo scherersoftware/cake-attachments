@@ -52,7 +52,8 @@ class AttachmentsHelper extends Helper
         $options = Hash::merge([
             'label' => false,
             'id' => 'fileupload-' . uniqid(),
-            'formFieldName' => false
+            'formFieldName' => false,
+            'mode' => 'full'
         ], $options);
         return $this->_View->element('Attachments.attachments_area', compact('options', 'entity'));
     }

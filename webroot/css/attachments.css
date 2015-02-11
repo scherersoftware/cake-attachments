@@ -64,3 +64,6 @@
 .fileupload table.attachments tr td.actions {
     width: 70px;
 }
+.fileupload table.attachments tr td.filename {
+    word-break: break-all;
+}
