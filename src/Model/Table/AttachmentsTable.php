@@ -41,7 +41,6 @@ class AttachmentsTable extends Table
     public function validationDefault(Validator $validator)
     {
         $validator
-            ->add('id', 'valid', ['rule' => 'uuid'])
             ->allowEmpty('id', 'create')
             ->requirePresence('filepath', 'create')
             ->notEmpty('filepath')
@@ -54,7 +53,6 @@ class AttachmentsTable extends Table
             ->notEmpty('filesize')
             ->requirePresence('model', 'create')
             ->notEmpty('model')
-            ->add('foreign_key', 'valid', ['rule' => 'uuid'])
             ->requirePresence('foreign_key', 'create')
             ->notEmpty('foreign_key');
 
@@ -99,6 +97,7 @@ class AttachmentsTable extends Table
             // Make sure the folder is created
             $folder = new Folder();
             $targetDir = Configure::read('Attachments.path') . dirname($attachment->filepath);
+
             if (!$folder->create($targetDir)) {
                 throw new \Exception("Folder {$targetDir} could not be created.");
             }
