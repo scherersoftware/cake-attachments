@@ -58,6 +58,9 @@
 .fileupload table.attachments tr td {
     vertical-align: middle;
 }
+.fileupload table.attachments tr td.icon {
+    width: 80px;
+}
 .fileupload table.attachments tr td.size {
     width: 90px;
 }
