@@ -86,7 +86,7 @@ App.Lib.AttachmentsWidget = Class.extend({
 
                 setTimeout(function() {
                     this.$progress.hide();
-                }.bind(this), 1500);
+                }.bind(this), 10000);
                 
             }.bind(this),
             progressall: function (e, data) {
