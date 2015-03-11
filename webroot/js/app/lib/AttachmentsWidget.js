@@ -103,7 +103,6 @@ App.Lib.AttachmentsWidget = Class.extend({
                 setTimeout(function() {
                     this.$progress.hide();
                 }.bind(this), 10000);
-
             }.bind(this),
             progressall: function (e, data) {
                 var progress = parseInt(data.loaded / data.total * 100, 10);
