@@ -17,11 +17,22 @@
                             <img src="<?php echo $attachment->previewUrl() ?>">
                         </td>
                         <td class="filename"><?= $attachment->filename ?></td>
+                        <td class="tags-container">
+                            <?php if ($options['tags']) : ?>
+                                <p class="tags">
+                                    <?= $this->Attachments->tagsList($attachment); ?>
+                                </p>
+                                <?= $this->Attachments->tagsChooser($entity, $attachment) ?>
+                            <?php endif; ?>
+                        </td>
                         <td class="size"><?= $this->Number->toReadableSize($attachment->filesize) ?></td>
                         <td class="actions">
+                            <?php if ($options['tags']) : ?>
+                                <a class="btn btn-default btn-xs edit-btn" href="javascript:"><i class="fa fa-pencil"></i></a>
+                            <?php endif; ?>
                             <a class="btn btn-info btn-xs download-btn" href="<?= $attachment->downloadUrl() ?>"><i class="fa fa-cloud-download"></i></a>
                             <?php if ($options['mode'] != 'readonly'): ?>
-                                <a class="btn btn-default btn-xs delete-btn"><i class="fa fa-times"></i></a>
+                                <a class="btn btn-danger btn-xs delete-btn"><i class="fa fa-times"></i></a>
                             <?php endif; ?>
                         </td>
                     </tr>

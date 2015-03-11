@@ -2,6 +2,7 @@
 namespace Attachments\View\Helper;
 
 use Cake\Datasource\EntityInterface;
+use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
 use Cake\View\Helper;
 use Cake\View\View;
@@ -12,7 +13,9 @@ use Cake\View\View;
 class AttachmentsHelper extends Helper
 {
 
-    public $helpers = ['Html'];
+    public $helpers = ['Html', 'Form' => [
+            'className' => 'Bootstrap3.BootstrapForm'
+        ]];
 
     /**
      * Default configuration.
@@ -30,11 +33,11 @@ class AttachmentsHelper extends Helper
      */
     public function addDependencies()
     {
-        $this->Html->script('/attachments/js/vendor/jquery.ui.widget.js', ['block' => 'script']);
-        $this->Html->script('/attachments/js/vendor/jquery.iframe-transport.js', ['block' => 'script']);
-        $this->Html->script('/attachments/js/vendor/jquery.fileupload.js', ['block' => 'script']);
-        $this->Html->script('/attachments/js/app/lib/AttachmentsWidget.js', ['block' => 'script']);
-        $this->Html->css('/attachments/css/attachments.css', ['block' => 'css']);
+        $this->Html->script('/attachments/js/vendor/jquery.ui.widget.js', ['block' => true]);
+        $this->Html->script('/attachments/js/vendor/jquery.iframe-transport.js', ['block' => true]);
+        $this->Html->script('/attachments/js/vendor/jquery.fileupload.js', ['block' => true]);
+        $this->Html->script('/attachments/js/app/lib/AttachmentsWidget.js', ['block' => true]);
+        $this->Html->css('/attachments/css/attachments.css', ['block' => true]);
     }
 
     /**
@@ -54,8 +57,52 @@ class AttachmentsHelper extends Helper
             'id' => 'fileupload-' . uniqid(),
             'formFieldName' => false,
             'mode' => 'full',
-            'style' => ''
+            'style' => '',
+            'tags' => true
         ], $options);
         return $this->_View->element('Attachments.attachments_area', compact('options', 'entity'));
+    }
+
+    /**
+     * Render a list of tags of given attachment
+     *
+     * @param  Attachment\Model\Entity\Attachment $attachment the attachment entity to read the tags from
+     * @return string
+     */
+    public function tagsList($attachment)
+    {
+        $tagsString = '';
+        if (empty($attachment->tags)) {
+            return $tagsString;
+        }
+
+        foreach ($attachment->tags as $tag) {
+            $tagsString .= '<label class="label label-default">' . $tag . '</label> ';
+        }
+        return $tagsString;
+    }
+
+    /**
+     * Render a multi select with all available tags of entity and the tags of attachment preselected
+     *
+     * @param  EntityInterface                    $entity     the entity to get all allowed tags from
+     * @param  Attachment\Model\Entity\Attachment $attachment the attachment entity to add the tag to
+     * @return string
+     */
+    public function tagsChooser(EntityInterface $entity, $attachment)
+    {
+        if (!TableRegistry::exists($entity->source())) {
+            throw new Cake\Network\Exception\MissingTableException('Could not find Table ' . $entity->source());
+        }
+        $Table = TableRegistry::get($entity->source());
+
+        return $this->Form->input('tags', [
+            'type' => 'select',
+            'options' => $Table->getAttachmentsTags(),
+            'class' => 'selectize',
+            'label' => false,
+            'multiple' => true,
+            'value' => $attachment->tags
+        ]);
     }
 }

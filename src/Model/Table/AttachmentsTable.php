@@ -30,6 +30,8 @@ class AttachmentsTable extends Table
         $this->displayField('filename');
         $this->primaryKey('id');
         $this->addBehavior('Timestamp');
+
+        $this->schema()->columnType('tags', 'json');
     }
 
     /**

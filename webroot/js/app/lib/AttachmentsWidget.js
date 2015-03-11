@@ -19,6 +19,10 @@ App.Lib.AttachmentsWidget = Class.extend({
         this.$fileList = this.$element.find('.fileupload-file-list');
         this.$progress = this.$element.find('.fileupload-progress');
         this.$progress.hide();
+        var tagsSelect = this.$element.find('.tags-container div.select');
+        // make the tag multi select wider in a form context (edit page)
+        tagsSelect.find('.col-md-6').removeClass('col-md-6').addClass('col-md-11');
+        tagsSelect.hide();
         if(this.$element.find('select.hidden-attachments-select').length > 0) {
             this.$hiddenSelect = this.$element.find('select.hidden-attachments-select');
         }
@@ -43,6 +47,18 @@ App.Lib.AttachmentsWidget = Class.extend({
                 $('<li/>').text(parts[1]).appendTo(this.$fileList);
             }.bind(this));
         }
+
+        this.$attachmentsTable.find('td.actions a.edit-btn').click(function(e) {
+            var $tr = $(e.currentTarget).parents('tr');
+            var tagsList = $tr.find('.tags-container .tags');
+            var tagsInput = $tr.find('.tags-container div.select');
+
+            var selectize = tagsInput.find('.selectize');
+            console.log(selectize);
+
+            tagsList.toggle();
+            tagsInput.toggle();
+        }.bind(this));
 
         this.$attachmentsTable.find('td.actions a.delete-btn').click(function(e) {
             var $tr = $(e.currentTarget).parents('tr');
@@ -86,8 +102,8 @@ App.Lib.AttachmentsWidget = Class.extend({
 
                 setTimeout(function() {
                     this.$progress.hide();
-                }.bind(this), 1500);
-                
+                }.bind(this), 10000);
+
             }.bind(this),
             progressall: function (e, data) {
                 var progress = parseInt(data.loaded / data.total * 100, 10);

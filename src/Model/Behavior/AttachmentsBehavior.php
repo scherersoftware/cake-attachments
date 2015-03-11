@@ -19,7 +19,8 @@ class AttachmentsBehavior extends Behavior
      * @var array
      */
     protected $_defaultConfig = [
-        'formFieldName' => 'attachment_uploads'
+        'formFieldName' => 'attachment_uploads',
+        'tags' => []
     ];
 
     /**
@@ -66,5 +67,90 @@ class AttachmentsBehavior extends Behavior
         if (!empty($uploads)) {
             $this->Attachments->addUploads($entity, $uploads);
         }
+    }
+
+    /**
+     * get the configured tags
+     *
+     * @param  bool   $list if it should return a list for selects or the whole array
+     * @return array
+     */
+    public function getAttachmentsTags($list = true)
+    {
+        $tags = $this->config('tags');
+
+        if (!$list) {
+            return $tags;
+        }
+
+        $tagsList = [];
+        foreach ($tags as $key => $tag) {
+            $tagsList[$key] = $tag['caption'];
+        }
+
+        return $tagsList;
+    }
+
+    /**
+     * adds a tag to the given attachment.
+     * If the tag is exclusive, it first removes this tag from every attachment belonging
+     * to the same entity as given $attachment
+     *
+     * @param Attachment\Model\Entity\Attachment $attachment the attachment entity to add the tag to
+     * @param string                             $tag        the tag to add to the attachment
+     * @return bool|Attachment   either false if tag is not configured or save failed; the successfully save Attachment entity otherwise
+     */
+    public function addTag($attachment, $tag)
+    {
+        if (!isset($this->config('tags')[$tag])) {
+            return false;
+        }
+
+        if ($this->config('tags')[$tag]['exclusive'] === true) {
+            $this->_clearTag($attachment, $tag);
+        }
+
+        $newTags = [];
+        if (!empty($attachment->tags)) {
+            $newTags = $attachment->tags;
+        }
+        $newTags[] = $tag;
+
+        $this->Attachments->patchEntity($attachment, ['tags' => $newTags]);
+        return $this->Attachments->save($attachment);
+    }
+
+    /**
+     * removes given $tag from every attachment belonging to the same entity as given $attachment
+     *
+     * @param  Attachments\Model\Entity\Attachment  $attachment the attachment entity which should get the exclusive tag
+     * @param  string                               $tag        the exclusive tag to be removed
+     * @return bool
+     */
+    protected function _clearTag($attachment, $tag)
+    {
+        $attachmentWithExclusiveTag = $this->Attachments->find()
+            ->where([
+                'Attachments.model' => $attachment->model,
+                'Attachments.foreign_key' => $attachment->foreign_key,
+                'Attachments.tags LIKE' => '%' . $tag . '%'
+            ], ['Attachments.tags' => 'string'])
+            ->contain([])
+            ->first();
+
+        if (empty($attachmentWithExclusiveTag)) {
+            return true;
+        }
+
+        foreach ($attachmentWithExclusiveTag->tags as $key => $existingTag) {
+            if ($existingTag == $tag) {
+                unset($attachmentWithExclusiveTag->tags[$key]);
+                $attachmentWithExclusiveTag->tags = array_values($attachmentWithExclusiveTag->tags);
+                $attachmentWithExclusiveTag->dirty('tags', true);
+                break;
+            }
+        }
+
+        return (bool)$this->Attachments->save($attachmentWithExclusiveTag);
     }
 }

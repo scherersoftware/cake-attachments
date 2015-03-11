@@ -3,6 +3,7 @@ namespace Attachments\Controller;
 
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
+use Cake\ORM\TableRegistry;
 use Cake\Utility\Text;
 use FrontendBridge\Lib\ServiceResponse;
 
@@ -37,7 +38,7 @@ class AttachmentsController extends AppController
         } else {
             $uuid = Text::uuid();
         }
-        
+
         $options = [
             'upload_dir' => Configure::read('Attachments.tmpUploadsPath') . '/' . $uuid . '/',
             // FIXME Make file paths configurable
@@ -119,5 +120,22 @@ class AttachmentsController extends AppController
         $attachment = $this->Attachments->get($attachmentId);
         $this->Attachments->delete($attachment);
         return new ServiceResponse('success');
+    }
+
+    /**
+     * endpoint for json action to add a tag to an attachment
+     *
+     * @param uuid   $attachmentId identifier for an attachment
+     * @param string $tag          the tag to add to the attachment
+     */
+    public function addTag($attachmentId, $tag)
+    {
+        $attachment = $this->Attachments->get($attachmentId);
+        if (!TableRegistry::exists($attachment->model)) {
+            # code...
+        }
+        $Model = TableRegistry::get($attachment->model);
+        $Model->addTag($attachment, $tag);
+        return $this->render(false);
     }
 }

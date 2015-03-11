@@ -23,6 +23,7 @@ class Attachment extends Entity
         'filesize' => true,
         'model' => true,
         'foreign_key' => true,
+        'tags' => true,
         'tmpPath' => true
     ];
 
@@ -88,6 +89,7 @@ class Attachment extends Entity
             'filename' => $this->filename,
             'filetype' => $this->filetype,
             'filesize' => $this->filesize,
+            'tags' => $this->tags,
             'preview_url' => $this->previewUrl(),
             'url' => $this->downloadUrl()
         ];
