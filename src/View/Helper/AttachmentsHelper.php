@@ -75,9 +75,10 @@ class AttachmentsHelper extends Helper
         if (empty($attachment->tags)) {
             return $tagsString;
         }
+        $Table = TableRegistry::get($attachment->model);
 
         foreach ($attachment->tags as $tag) {
-            $tagsString .= '<label class="label label-default">' . $tag . '</label> ';
+            $tagsString .= '<label class="label label-default">' . $Table->getTagCaption($tag) . '</label> ';
         }
         return $tagsString;
     }

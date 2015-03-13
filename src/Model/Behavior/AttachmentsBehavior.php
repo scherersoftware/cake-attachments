@@ -104,6 +104,20 @@ class AttachmentsBehavior extends Behavior
     }
 
     /**
+     * get the configured caption for a given tag or an empty string if this tag does not exist
+     *
+     * @param  string $tag tag
+     * @return string      caption of tag
+     */
+    public function getTagCaption($tag)
+    {
+        if (!isset($this->config('tags')[$tag])) {
+            return '';
+        }
+        return $this->config('tags')[$tag]['caption'];
+    }
+
+    /**
      * adds a tag to the given attachment.
      * If the tag is exclusive, it first removes this tag from every attachment belonging
      * to the same entity as given $attachment
