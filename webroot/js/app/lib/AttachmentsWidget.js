@@ -6,6 +6,7 @@ App.Lib.AttachmentsWidget = Class.extend({
     $hiddenSelect: null,
     $dropZone: null,
     $attachmentsTable: null,
+    $attachmentId: null,
     config: {
         uploadUrl: null
     },
@@ -20,7 +21,7 @@ App.Lib.AttachmentsWidget = Class.extend({
         this.$progress = this.$element.find('.fileupload-progress');
         this.$progress.hide();
         var tagsSelect = this.$element.find('.tags-container div.select');
-        // make the tag multi select wider in a form context (edit page)
+        // make the tag multi select wider if in a form context (edit page)
         tagsSelect.find('.col-md-6').removeClass('col-md-6').addClass('col-md-11');
         tagsSelect.hide();
         if(this.$element.find('select.hidden-attachments-select').length > 0) {
@@ -53,8 +54,14 @@ App.Lib.AttachmentsWidget = Class.extend({
             var tagsList = $tr.find('.tags-container .tags');
             var tagsInput = $tr.find('.tags-container div.select');
 
-            var selectize = tagsInput.find('.selectize');
-            console.log(selectize);
+            // FIXME move out of this click handler to prevent multiple listener
+            var selectize = tagsInput.find('select.selectize')[0].selectize;
+            var contextThis = this;
+            selectize.on('focus', function () {
+                contextThis.$attachmentId = this.$wrapper.parents('tr').data('attachment-id');
+            });
+            selectize.on('item_add', this._onTagAdded.bind(this));
+            selectize.on('item_remove', this._onTagRemoved.bind(this));
 
             tagsList.toggle();
             tagsInput.toggle();
@@ -117,5 +124,36 @@ App.Lib.AttachmentsWidget = Class.extend({
         })
         .prop('disabled', !$.support.fileInput)
         .parent().addClass($.support.fileInput ? undefined : 'disabled');
+    },
+    _onTagAdded: function(tag, $item) {
+        var $tr = $item.parents('tr');
+        console.log($tr);
+        var attachmentId = $tr.data('attachment-id');
+
+        var url = {
+            plugin: 'attachments',
+            controller: 'attachments',
+            action: 'addTag',
+            pass: [attachmentId, tag]
+        };
+
+        App.Main.UIBlocker.blockElement($tr);
+        App.Main.request(url, null, function(response) {
+            App.Main.UIBlocker.unblockElement($tr);
+        });
+    },
+    _onTagRemoved: function(tag, $item) {
+        var $tr = $item.parents('tr');
+        var url = {
+            plugin: 'attachments',
+            controller: 'attachments',
+            action: 'removeTag',
+            pass: [this.$attachmentId, tag]
+        };
+
+        App.Main.UIBlocker.blockElement($tr);
+        App.Main.request(url, null, function(response) {
+            App.Main.UIBlocker.unblockElement($tr);
+        });
     }
 });

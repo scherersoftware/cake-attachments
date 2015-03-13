@@ -16,6 +16,18 @@ class AttachmentsBehavior extends Behavior
     /**
      * Default configuration.
      *
+     * When adding this Behaviour to your table, configure tags in this form:
+     * 'tags' => [
+     *     'main_image' => [
+     *         'caption' => 'Main Image',
+     *         'exclusive' => true
+     *     ],
+     *     'beautiful' => [
+     *         'caption' => 'What a beautiful Image',
+     *         'exclusive' => false
+     *      ]
+     *  ]
+     *
      * @var array
      */
     protected $_defaultConfig = [
@@ -106,6 +118,10 @@ class AttachmentsBehavior extends Behavior
             return false;
         }
 
+        if (in_array($tag, $attachment->tags)) {
+            return true;
+        }
+
         if ($this->config('tags')[$tag]['exclusive'] === true) {
             $this->_clearTag($attachment, $tag);
         }
@@ -117,6 +133,26 @@ class AttachmentsBehavior extends Behavior
         $newTags[] = $tag;
 
         $this->Attachments->patchEntity($attachment, ['tags' => $newTags]);
+        return $this->Attachments->save($attachment);
+    }
+
+    /**
+     * adds a tag to the given attachment.
+     * If the tag is exclusive, it first removes this tag from every attachment belonging
+     * to the same entity as given $attachment
+     *
+     * @param Attachment\Model\Entity\Attachment $attachment the attachment entity to add the tag to
+     * @param string                             $tag        the tag to add to the attachment
+     * @return bool|Attachment   either false if tag is not configured or save failed; the successfully save Attachment entity otherwise
+     */
+    public function removeTag($attachment, $tag)
+    {
+        $oldTags = $attachment->tags;
+        $newTags = array_flip($oldTags);
+        unset($newTags[$tag]);
+        $newTags = array_values(array_flip($newTags));
+        $this->Attachments->patchEntity($attachment, ['tags' => $newTags]);
+
         return $this->Attachments->save($attachment);
     }
 

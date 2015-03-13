@@ -127,6 +127,7 @@ class AttachmentsController extends AppController
      *
      * @param uuid   $attachmentId identifier for an attachment
      * @param string $tag          the tag to add to the attachment
+     * @return void
      */
     public function addTag($attachmentId, $tag)
     {
@@ -136,6 +137,24 @@ class AttachmentsController extends AppController
         }
         $Model = TableRegistry::get($attachment->model);
         $Model->addTag($attachment, $tag);
+        return $this->render(false);
+    }
+
+    /**
+     * endpoint for json action to remove a tag from an attachment
+     *
+     * @param  uuid $attachmentId identifier for an attachment
+     * @param  string $tag         the tag to remove from the attachment
+     * @return void
+     */
+    public function removeTag($attachmentId, $tag)
+    {
+        $attachment = $this->Attachments->get($attachmentId);
+        if (!TableRegistry::exists($attachment->model)) {
+            # code...
+        }
+        $Model = TableRegistry::get($attachment->model);
+        $Model->removeTag($attachment, $tag);
         return $this->render(false);
     }
 }
