@@ -54,14 +54,17 @@ App.Lib.AttachmentsWidget = Class.extend({
             var tagsList = $tr.find('.tags-container .tags');
             var tagsInput = $tr.find('.tags-container div.select');
 
-            // FIXME move out of this click handler to prevent multiple listener
-            var selectize = tagsInput.find('select.selectize')[0].selectize;
-            var contextThis = this;
-            selectize.on('focus', function () {
-                contextThis.$attachmentId = this.$wrapper.parents('tr').data('attachment-id');
-            });
-            selectize.on('item_add', this._onTagAdded.bind(this));
-            selectize.on('item_remove', this._onTagRemoved.bind(this));
+            if (!tagsInput.data('tag-handlers-added')) {
+                // FIXME move out of this click handler to prevent multiple listener
+                var selectize = tagsInput.find('select.selectize')[0].selectize;
+                var contextThis = this;
+                selectize.on('focus', function () {
+                    contextThis.$attachmentId = this.$wrapper.parents('tr').data('attachment-id');
+                });
+                selectize.on('item_add', this._onTagAdded.bind(this));
+                selectize.on('item_remove', this._onTagRemoved.bind(this));
+                tagsInput.data('tag-handlers-added', true);
+            }
 
             tagsList.toggle();
             tagsInput.toggle();
