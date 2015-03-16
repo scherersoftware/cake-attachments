@@ -55,14 +55,18 @@ App.Lib.AttachmentsWidget = Class.extend({
             var tagsInput = $tr.find('.tags-container div.select');
 
             if (!tagsInput.data('tag-handlers-added')) {
-                // FIXME move out of this click handler to prevent multiple listener
                 var selectize = tagsInput.find('select.selectize')[0].selectize;
                 var contextThis = this;
                 selectize.on('focus', function () {
                     contextThis.$attachmentId = this.$wrapper.parents('tr').data('attachment-id');
                 });
-                selectize.on('item_add', this._onTagAdded.bind(this));
-                selectize.on('item_remove', this._onTagRemoved.bind(this));
+
+                $tr.find('.selectize-control').css('display', 'flex').append('<div class="btn btn-default btn-sm save-tags"><i class="fa fa-lg fa-floppy-o"></i></div>');
+
+                $tr.find('.btn.save-tags').click(this._onClickTagsSave.bind(this));
+
+                // selectize.on('item_add', this._onTagAdded.bind(this));
+                // selectize.on('item_remove', this._onTagRemoved.bind(this));
                 tagsInput.data('tag-handlers-added', true);
             }
 
@@ -128,35 +132,30 @@ App.Lib.AttachmentsWidget = Class.extend({
         .prop('disabled', !$.support.fileInput)
         .parent().addClass($.support.fileInput ? undefined : 'disabled');
     },
-    _onTagAdded: function(tag, $item) {
-        var $tr = $item.parents('tr');
-        console.log($tr);
-        var attachmentId = $tr.data('attachment-id');
+    _onClickTagsSave: function(e) {
+        var $tr = $(e.currentTarget).parents('tr');
+        var $container = $tr.parents('div.form-group.fileupload.attachments-area');
+        var tags = [];
+        var $items = $tr.find('.selectize-input.items div.item');
+        $items.each(function (index) {
+            tags.push($(this).data('value'));
+        });
 
         var url = {
             plugin: 'attachments',
             controller: 'attachments',
-            action: 'addTag',
-            pass: [attachmentId, tag]
+            action: 'saveTags',
+            pass: [this.$attachmentId]
         };
 
-        App.Main.UIBlocker.blockElement($tr);
-        App.Main.request(url, null, function(response) {
-            App.Main.UIBlocker.unblockElement($tr);
+        App.Main.UIBlocker.blockElement($container);
+        App.Main.loadJsonAction(url, {
+            target: $container,
+            data: tags,
+            onComplete: function(controller, response) {
+                App.Main.UIBlocker.unblockElement($container);
+            }.bind(this)
         });
-    },
-    _onTagRemoved: function(tag, $item) {
-        var $tr = $item.parents('tr');
-        var url = {
-            plugin: 'attachments',
-            controller: 'attachments',
-            action: 'removeTag',
-            pass: [this.$attachmentId, tag]
-        };
 
-        App.Main.UIBlocker.blockElement($tr);
-        App.Main.request(url, null, function(response) {
-            App.Main.UIBlocker.unblockElement($tr);
-        });
     }
 });

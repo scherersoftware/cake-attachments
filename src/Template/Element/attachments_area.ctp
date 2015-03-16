@@ -1,4 +1,4 @@
-<div class="form-group fileupload" id="<?php echo $options['id'] ?>" data-fileupload-id="<?php echo $options['id'] ?>" style="<?= $options['style'] ?>">
+<div class="form-group fileupload attachments-area" id="<?php echo $options['id'] ?>" data-fileupload-id="<?php echo $options['id'] ?>" style="<?= $options['style'] ?>">
 <?php if($options['label'] !== false): ?>
         <label class="col-md-2 control-label" for="input-<?php echo $options['id'] ?>"><?= $options['label'] ?></label>
         <div class="col-md-6">

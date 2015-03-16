@@ -117,7 +117,25 @@ class AttachmentsBehavior extends Behavior
         return $this->config('tags')[$tag]['caption'];
     }
 
+    public function saveTags($attachment, $tags)
+    {
+        $newTags = [];
+        foreach ($tags as $key => $tag) {
+            if (isset($this->config('tags')[$tag])) {
+                $newTags[] = $tag;
+                if ($this->config('tags')[$tag]['exclusive'] === true) {
+                    $this->_clearTag($attachment, $tag);
+                }
+            }
+        }
+
+        $this->Attachments->patchEntity($attachment, ['tags' => $newTags]);
+        return $this->Attachments->save($attachment);
+    }
+
     /**
+     * DEPRECATED
+     *
      * adds a tag to the given attachment.
      * If the tag is exclusive, it first removes this tag from every attachment belonging
      * to the same entity as given $attachment
@@ -151,6 +169,8 @@ class AttachmentsBehavior extends Behavior
     }
 
     /**
+     * DEPRECATED
+     *
      * adds a tag to the given attachment.
      * If the tag is exclusive, it first removes this tag from every attachment belonging
      * to the same entity as given $attachment

@@ -74,3 +74,7 @@
 .fileupload table.attachments tr td.filename {
     word-break: break-all;
 }
+
+table.attachments .btn.save-tags .fa {
+    vertical-align: -25%;
+}

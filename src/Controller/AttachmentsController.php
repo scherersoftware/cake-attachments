@@ -122,7 +122,25 @@ class AttachmentsController extends AppController
         return new ServiceResponse('success');
     }
 
+    public function saveTags($attachmentId)
+    {
+        $this->request->allow('post');
+        $attachment = $this->Attachments->get($attachmentId);
+        if (!TableRegistry::exists($attachment->model)) {
+            # code...
+        }
+        if (!isset($this->request->data['tags'])) {
+            debug($this->request->data);exit;
+        }
+        $Model = TableRegistry::get($attachment->model);
+        debug($tags);exit;
+        $Model->saveTags($attachment, $tags);
+
+    }
+
     /**
+     * DEPRECATED
+     *
      * endpoint for json action to add a tag to an attachment
      *
      * @param uuid   $attachmentId identifier for an attachment
@@ -141,6 +159,8 @@ class AttachmentsController extends AppController
     }
 
     /**
+     * DEPRECATED
+     *
      * endpoint for json action to remove a tag from an attachment
      *
      * @param  uuid $attachmentId identifier for an attachment

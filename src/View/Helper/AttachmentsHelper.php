@@ -103,7 +103,7 @@ class AttachmentsHelper extends Helper
             'class' => 'selectize',
             'label' => false,
             'multiple' => true,
-            'value' => $attachment->tags
+            'value' => $attachment->tags,
         ]);
     }
 }
