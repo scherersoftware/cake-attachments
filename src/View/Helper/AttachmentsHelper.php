@@ -58,7 +58,8 @@ class AttachmentsHelper extends Helper
             'formFieldName' => false,
             'mode' => 'full',
             'style' => '',
-            'tags' => true
+            'tags' => true,
+            'isAjax' => false
         ], $options);
         return $this->_View->element('Attachments.attachments_area', compact('options', 'entity'));
     }

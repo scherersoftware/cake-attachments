@@ -122,59 +122,40 @@ class AttachmentsController extends AppController
         return new ServiceResponse('success');
     }
 
+    /**
+     * endpoint for Json action to save tags of an attachment
+     *
+     * @param  uuid $attachmentId the attachment identifier
+     * @return void
+     */
     public function saveTags($attachmentId)
     {
-        $this->request->allow('post');
+        $this->request->allowMethod('post');
         $attachment = $this->Attachments->get($attachmentId);
         if (!TableRegistry::exists($attachment->model)) {
-            # code...
+            throw new Cake\Network\Exception\MissingTableException('Could not find Table ' . $attachment->model);
         }
-        if (!isset($this->request->data['tags'])) {
-            debug($this->request->data);exit;
+        $input = $this->request->input('urldecode');
+
+        $inputArray = explode('&', $this->request->input('urldecode'));
+        $tags = explode('$', explode('=', $inputArray[0])[1]);
+        unset($inputArray[0]);
+
+        // parse the attachments area options from the post data (comes in as a string)
+        $options = array();
+        foreach ($inputArray as $option) {
+            $option = substr($option, 8);
+            $optionParts = explode(']=', $option);
+            $options[$optionParts[0]] = $optionParts[1];
         }
+        // set so the first div of the attachments area element is skiped, as this
+        // serves as target for the Json Action
+        $options['isAjax'] = true;
+
         $Model = TableRegistry::get($attachment->model);
-        debug($tags);exit;
         $Model->saveTags($attachment, $tags);
 
-    }
-
-    /**
-     * DEPRECATED
-     *
-     * endpoint for json action to add a tag to an attachment
-     *
-     * @param uuid   $attachmentId identifier for an attachment
-     * @param string $tag          the tag to add to the attachment
-     * @return void
-     */
-    public function addTag($attachmentId, $tag)
-    {
-        $attachment = $this->Attachments->get($attachmentId);
-        if (!TableRegistry::exists($attachment->model)) {
-            # code...
-        }
-        $Model = TableRegistry::get($attachment->model);
-        $Model->addTag($attachment, $tag);
-        return $this->render(false);
-    }
-
-    /**
-     * DEPRECATED
-     *
-     * endpoint for json action to remove a tag from an attachment
-     *
-     * @param  uuid $attachmentId identifier for an attachment
-     * @param  string $tag         the tag to remove from the attachment
-     * @return void
-     */
-    public function removeTag($attachmentId, $tag)
-    {
-        $attachment = $this->Attachments->get($attachmentId);
-        if (!TableRegistry::exists($attachment->model)) {
-            # code...
-        }
-        $Model = TableRegistry::get($attachment->model);
-        $Model->removeTag($attachment, $tag);
-        return $this->render(false);
+        $entity = $Model->get($attachment->foreign_key, ['contain' => 'Attachments']);
+        $this->set(compact('entity', 'options'));
     }
 }

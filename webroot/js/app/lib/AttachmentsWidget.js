@@ -16,14 +16,13 @@ App.Lib.AttachmentsWidget = Class.extend({
             this.config = $.extend(this.config, config);
         }
 
+        this._prepareAttachmentsArea();
+
         this.$input = this.$element.find('.fileupload-input');
         this.$fileList = this.$element.find('.fileupload-file-list');
         this.$progress = this.$element.find('.fileupload-progress');
         this.$progress.hide();
-        var tagsSelect = this.$element.find('.tags-container div.select');
-        // make the tag multi select wider if in a form context (edit page)
-        tagsSelect.find('.col-md-6').removeClass('col-md-6').addClass('col-md-11');
-        tagsSelect.hide();
+
         if(this.$element.find('select.hidden-attachments-select').length > 0) {
             this.$hiddenSelect = this.$element.find('select.hidden-attachments-select');
         }
@@ -48,31 +47,6 @@ App.Lib.AttachmentsWidget = Class.extend({
                 $('<li/>').text(parts[1]).appendTo(this.$fileList);
             }.bind(this));
         }
-
-        this.$attachmentsTable.find('td.actions a.edit-btn').click(function(e) {
-            var $tr = $(e.currentTarget).parents('tr');
-            var tagsList = $tr.find('.tags-container .tags');
-            var tagsInput = $tr.find('.tags-container div.select');
-
-            if (!tagsInput.data('tag-handlers-added')) {
-                var selectize = tagsInput.find('select.selectize')[0].selectize;
-                var contextThis = this;
-                selectize.on('focus', function () {
-                    contextThis.$attachmentId = this.$wrapper.parents('tr').data('attachment-id');
-                });
-
-                $tr.find('.selectize-control').css('display', 'flex').append('<div class="btn btn-default btn-sm save-tags"><i class="fa fa-lg fa-floppy-o"></i></div>');
-
-                $tr.find('.btn.save-tags').click(this._onClickTagsSave.bind(this));
-
-                // selectize.on('item_add', this._onTagAdded.bind(this));
-                // selectize.on('item_remove', this._onTagRemoved.bind(this));
-                tagsInput.data('tag-handlers-added', true);
-            }
-
-            tagsList.toggle();
-            tagsInput.toggle();
-        }.bind(this));
 
         this.$attachmentsTable.find('td.actions a.delete-btn').click(function(e) {
             var $tr = $(e.currentTarget).parents('tr');
@@ -141,21 +115,64 @@ App.Lib.AttachmentsWidget = Class.extend({
             tags.push($(this).data('value'));
         });
 
+        var options = {
+            id: $container.data('fileupload-id'),
+            label: $container.data('options-label'),
+            mode: $container.data('options-mode'),
+            tags: $container.data('options-tags'),
+            formFieldName: $container.data('options-formFieldName')
+        };
+
         var url = {
             plugin: 'attachments',
             controller: 'attachments',
             action: 'saveTags',
-            pass: [this.$attachmentId]
+            pass: [$tr.data('attachment-id')]
         };
 
         App.Main.UIBlocker.blockElement($container);
         App.Main.loadJsonAction(url, {
             target: $container,
-            data: tags,
+            data: {
+                tags: tags.join('$'),
+                options: options
+            },
             onComplete: function(controller, response) {
+                this._prepareAttachmentsArea();
                 App.Main.UIBlocker.unblockElement($container);
-            }.bind(this)
+            }.bind(this),
+            // don't init so dateinputs don't get duplicated
+            initController: false
+        });
+    },
+    _prepareAttachmentsArea: function() {
+        var tagsSelect = this.$element.find('.tags-container div.select');
+        // make the tag multi select wider if in a form context (edit page)
+        tagsSelect.find('.col-md-6').removeClass('col-md-6').addClass('col-md-11');
+        tagsSelect.hide();
+
+        // selectize the multi inputs again, as initController is set to false
+        this.$element.find('select.selectize').each(function(i, e) {
+            var $select = $(e);
+            $select.selectize({
+                create: $select.hasClass('selectize-enable-create')
+            });
         });
 
+        this.$element.find('table.attachments td.actions a.edit-btn').click(function(e) {
+            var $tr = $(e.currentTarget).parents('tr');
+            var tagsList = $tr.find('.tags-container .tags');
+            var tagsInput = $tr.find('.tags-container div.select');
+
+            if (!tagsInput.data('tag-handlers-added')) {
+                $tr.find('.selectize-control').css('display', 'flex').append('<div class="btn btn-default btn-sm save-tags"><i class="fa fa-lg fa-floppy-o"></i></div>');
+                $tr.find('.btn.save-tags').click(this._onClickTagsSave.bind(this));
+
+                tagsInput.data('tag-handlers-added', true);
+            }
+
+            tagsList.toggle();
+            tagsInput.toggle();
+        }.bind(this));
     }
 });

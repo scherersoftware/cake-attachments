@@ -65,13 +65,14 @@
     width: 90px;
 }
 .fileupload table.attachments tr td.actions {
-    width: 93px;
+    width: 107px;
     text-align: right;
 }
 .fileupload table.attachments tr td.tags-container {
-    min-width: 100px;
+    min-width: 30%;
 }
 .fileupload table.attachments tr td.filename {
+    min-width: 66px;
     word-break: break-all;
 }
 

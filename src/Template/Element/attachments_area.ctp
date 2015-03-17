@@ -1,5 +1,13 @@
-<div class="form-group fileupload attachments-area" id="<?php echo $options['id'] ?>" data-fileupload-id="<?php echo $options['id'] ?>" style="<?= $options['style'] ?>">
-<?php if($options['label'] !== false): ?>
+<?php if(!$options['isAjax']) : ?>
+<div class="form-group fileupload attachments-area" id="<?php echo $options['id'] ?>" style="<?= $options['style'] ?>"
+    data-fileupload-id="<?= $options['id'] ?>"
+    data-options-label="<?= $options['label'] ?>"
+    data-options-tags="<?= $options['tags'] ?>"
+    data-options-mode="<?= $options['mode'] ?>"
+    data-options-formFieldName="<?= $options['formFieldName'] ?>"
+>
+<?php endif; ?>
+<?php if(!empty($options['label']) && $options['label'] !== false): ?>
         <label class="col-md-2 control-label" for="input-<?php echo $options['id'] ?>"><?= $options['label'] ?></label>
         <div class="col-md-6">
 <?php endif; ?>
@@ -28,11 +36,11 @@
                         <td class="size"><?= $this->Number->toReadableSize($attachment->filesize) ?></td>
                         <td class="actions">
                             <?php if ($options['tags']) : ?>
-                                <a class="btn btn-default btn-xs edit-btn" href="javascript:"><i class="fa fa-pencil"></i></a>
+                                <a class="btn btn-default btn-xs edit-btn" href="javascript:"><i class="fa fa-fw fa-pencil"></i></a>
                             <?php endif; ?>
-                            <a class="btn btn-info btn-xs download-btn" href="<?= $attachment->downloadUrl() ?>"><i class="fa fa-cloud-download"></i></a>
+                            <a class="btn btn-info btn-xs download-btn" href="<?= $attachment->downloadUrl() ?>"><i class="fa fa-fw fa-cloud-download"></i></a>
                             <?php if ($options['mode'] != 'readonly'): ?>
-                                <a class="btn btn-danger btn-xs delete-btn"><i class="fa fa-times"></i></a>
+                                <a class="btn btn-danger btn-xs delete-btn"><i class="fa fa-fw fa-times"></i></a>
                             <?php endif; ?>
                         </td>
                     </tr>
@@ -78,4 +86,6 @@
 <?php if($options['label']): ?>
         </div>
 <?php endif; ?>
+<?php if(!$options['isAjax']) : ?>
 </div>
+<?php endif; ?>

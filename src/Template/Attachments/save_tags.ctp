@@ -1,1 +1,1 @@
-<?= $this->Attachments->attachmentsArea($entity, ['mode' => 'readonly']) ?>
+<?= $this->Attachments->attachmentsArea($entity, $options) ?>
