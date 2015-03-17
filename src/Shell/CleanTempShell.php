@@ -34,23 +34,30 @@ class CleanTempShell extends Shell
 
         $dir = new Folder($tempDir);
         $folders = $dir->read();
-        $files = $dir->find();
+        $files = $dir->findRecursive();
+        $deletedFiles = 0;
+        $deletedFolders = 0;
 
         $this->out('Found ' . count($folders[0]) . ' folders and ' . count($files) . ' files');
-        $this->out();
-
-        foreach ($folders[0] as $folderName) {
-            $folder = new Folder($dir->pwd() . $folderName);
-            $folder->delete();
-        }
-        $this->out($folder->errors());
 
         foreach ($files as $filePath) {
             $file = new File($filePath);
-            $file->delete();
+            // only delete if last change is longer than 24 hours ago
+            if ($file->lastChange() < (time() - 24*60*60) && $file->delete()) {
+                $deletedFiles++;
+            }
             $file->close();
         }
 
-        $this->out('Completed');
+        foreach ($folders[0] as $folderName) {
+            $folder = new Folder($dir->pwd() . $folderName);
+            // only delete if folder is empty
+            if ($folder->dirsize() === 0 && $folder->delete()) {
+                $deletedFolders++;
+            }
+        }
+
+
+        $this->out('Deleted ' . $deletedFolders . ' folders and ' . $deletedFiles . ' files.');
     }
 }
