@@ -2,7 +2,7 @@
 <div class="form-group fileupload attachments-area" id="<?php echo $options['id'] ?>" style="<?= $options['style'] ?>"
     data-fileupload-id="<?= $options['id'] ?>"
     data-options-label="<?= $options['label'] ?>"
-    data-options-tags="<?= $options['tags'] ?>"
+    data-options-taggable="<?= $options['taggable'] ?>"
     data-options-mode="<?= $options['mode'] ?>"
     data-options-formFieldName="<?= $options['formFieldName'] ?>"
 >
@@ -26,7 +26,7 @@
                         </td>
                         <td class="filename"><?= $attachment->filename ?></td>
                         <td class="tags-container">
-                            <?php if ($options['tags']) : ?>
+                            <?php if ($options['taggable']) : ?>
                                 <p class="tags">
                                     <?= $this->Attachments->tagsList($attachment); ?>
                                 </p>
@@ -35,12 +35,12 @@
                         </td>
                         <td class="size"><?= $this->Number->toReadableSize($attachment->filesize) ?></td>
                         <td class="actions">
-                            <?php if ($options['tags']) : ?>
-                                <a class="btn btn-default btn-xs edit-btn" href="javascript:"><i class="fa fa-fw fa-pencil"></i></a>
+                            <?php if ($options['taggable']) : ?>
+                                <a class="btn btn-default btn-xs edit-btn" title="<?= __d('attachments', 'edit_tags') ?>" href="javascript:"><i class="fa fa-fw fa-pencil"></i></a>
                             <?php endif; ?>
-                            <a class="btn btn-info btn-xs download-btn" href="<?= $attachment->downloadUrl() ?>"><i class="fa fa-fw fa-cloud-download"></i></a>
+                            <a class="btn btn-info btn-xs download-btn" title="<?= __d('attachments', 'download_attachment') ?>" href="<?= $attachment->downloadUrl() ?>"><i class="fa fa-fw fa-cloud-download"></i></a>
                             <?php if ($options['mode'] != 'readonly'): ?>
-                                <a class="btn btn-danger btn-xs delete-btn"><i class="fa fa-fw fa-times"></i></a>
+                                <a class="btn btn-danger btn-xs delete-btn" title="<?= __d('attachments', 'delete_attachment') ?>"><i class="fa fa-fw fa-times"></i></a>
                             <?php endif; ?>
                         </td>
                     </tr>

@@ -119,7 +119,7 @@ App.Lib.AttachmentsWidget = Class.extend({
             id: $container.data('fileupload-id'),
             label: $container.data('options-label'),
             mode: $container.data('options-mode'),
-            tags: $container.data('options-tags'),
+            taggable: $container.data('options-taggable'),
             formFieldName: $container.data('options-formFieldName')
         };
 
@@ -141,7 +141,7 @@ App.Lib.AttachmentsWidget = Class.extend({
                 this._prepareAttachmentsArea();
                 App.Main.UIBlocker.unblockElement($container);
             }.bind(this),
-            // don't init so dateinputs don't get duplicated
+            // don't init so date-inputs don't get duplicated
             initController: false
         });
     },
@@ -151,7 +151,7 @@ App.Lib.AttachmentsWidget = Class.extend({
         tagsSelect.find('.col-md-6').removeClass('col-md-6').addClass('col-md-11');
         tagsSelect.hide();
 
-        // selectize the multi inputs again, as initController is set to false
+        // selectize the multi inputs manually, as initController is set to false
         this.$element.find('select.selectize').each(function(i, e) {
             var $select = $(e);
             $select.selectize({
