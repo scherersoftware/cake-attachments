@@ -40,7 +40,7 @@ class AttachmentsController extends AppController
         }
 
         $options = [
-            'upload_dir' => Configure::read('Attachments.tmpUploadsPath') . '/' . $uuid . '/',
+            'upload_dir' => Configure::read('Attachments.tmpUploadsPath') . DS . $uuid . DS,
             // FIXME Make file paths configurable
             'accept_file_types' => '/\.(gif|jpe?g|png|pdf|docx|doc|xls|xlsx|tif|tiff|zip)$/i'
         ];
