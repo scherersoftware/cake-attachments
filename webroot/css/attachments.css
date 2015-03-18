@@ -69,7 +69,7 @@
     text-align: right;
 }
 .fileupload table.attachments tr td.tags-container {
-    min-width: 30%;
+    min-width: 130px;
 }
 .fileupload table.attachments tr td.filename {
     min-width: 66px;
