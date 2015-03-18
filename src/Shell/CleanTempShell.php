@@ -43,7 +43,7 @@ class CleanTempShell extends Shell
         foreach ($files as $filePath) {
             $file = new File($filePath);
             // only delete if last change is longer than 24 hours ago
-            if ($file->lastChange() < (time() - 24*60*60) && $file->delete()) {
+            if ($file->lastChange() < (time() - 24 * 60 * 60) && $file->delete()) {
                 $deletedFiles++;
             }
             $file->close();
