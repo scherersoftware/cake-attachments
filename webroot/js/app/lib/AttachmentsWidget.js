@@ -73,12 +73,22 @@ App.Lib.AttachmentsWidget = Class.extend({
             dataType: 'json',
             dropZone: this.$dropZone,
             done: function (e, data) {
+                var errors = [];
+
                 $.each(data.result.files, function (index, file) {
-                    $('<li/>').text(file.name).appendTo(this.$fileList);
+                    if(!file.error) {
+                        $('<li/>').text(file.name).appendTo(this.$fileList);
+                    } else {
+                        console.log('push to error');
+                        errors.push(file);
+                    }
                 }.bind(this));
 
                 if(this.$hiddenSelect) {
                     $.each(data.result.files, function (index, file) {
+                        if(file.error) {
+                            return;
+                        }
                         var filePath = uuid + '/' + file.name;
                         $('<option/>')
                             .text(filePath)
@@ -86,6 +96,14 @@ App.Lib.AttachmentsWidget = Class.extend({
                             .attr('selected', true)
                             .appendTo(this.$hiddenSelect);
                     }.bind(this));
+                }
+                console.log(errors);
+                if (errors.length > 0) {
+                    var msg = '';
+                    for(var i in errors) {
+                        msg += errors[i].name + ': ' + errors[i].error + "\n";
+                    }
+                    alert(msg);
                 }
 
                 setTimeout(function() {
