@@ -84,6 +84,23 @@ class AttachmentsTable extends Table
     }
 
     /**
+     * Save one Attachemnt
+     *
+     * @param EntityInterface $entity Entity
+     * @param string $upload Upload
+     * @return entity
+     */
+    public function addUpload(EntityInterface $entity, $upload)
+    {
+        $file = Configure::read('Attachments.tmpUploadsPath') . $upload;
+        $attachment = $this->createAttachmentEntity($entity, $file);
+        $save = $this->save($attachment);
+        if ($save) {
+            return $attachment;
+        }
+        return $save;
+    }
+    /**
      * afterSave Event. If an attachment entity has its tmpPath value set, it will be moved
      * to the defined filepath
      *
