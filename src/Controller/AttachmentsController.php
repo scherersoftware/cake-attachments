@@ -50,7 +50,7 @@ class AttachmentsController extends AppController
     }
 
     /**
-     * Renders a PNG preview of the given attachment. Will fall back to a file icon,
+     * Renders a JPEG preview of the given attachment. Will fall back to a file icon,
      * if a preview can not be generated.
      *
      * @param string $attachmentId Attachment ID
@@ -79,6 +79,47 @@ class AttachmentsController extends AppController
 
         $image->setImageFormat('jpg');
         $image->thumbnailImage(50, 50, true, true);
+        $image->setImageCompression(\Imagick::COMPRESSION_JPEG);
+        $image->setImageCompressionQuality(75);
+        $image->stripImage();
+
+        header('Content-Type: image/' . $image->getImageFormat());
+        echo $image;
+
+        $image->destroy();
+        exit;
+    }
+
+    /**
+     * Renders a JPEG of the given attachment. Will fall back to a file icon,
+     * if a image can not be generated.
+     *
+     * @param string $attachmentId Attachment ID
+     * @return void
+     */
+    public function view($attachmentId = null)
+    {
+        // FIXME handle permissions
+        // FIXME cache previews
+        $attachment = $this->Attachments->get($attachmentId);
+
+        switch($attachment->filetype) {
+            case 'image/png':
+            case 'image/jpg':
+            case 'image/jpeg':
+            case 'image/gif':
+                $image = new \Imagick($attachment->getAbsolutePath());
+                break;
+            case 'application/pdf':
+                $image = new \Imagick($attachment->getAbsolutePath() . '[0]');
+                break;
+            default:
+                $image = new \Imagick(Plugin::path('Attachments') . '/webroot/img/file.png');
+                break;
+        }
+
+        $image->setImageFormat('jpg');
+        // $image->thumbnailImage(50, 50, true, true);
         $image->setImageCompression(\Imagick::COMPRESSION_JPEG);
         $image->setImageCompressionQuality(75);
         $image->stripImage();
@@ -148,7 +189,7 @@ class AttachmentsController extends AppController
             $optionParts = explode(']=', $option);
             $options[$optionParts[0]] = $optionParts[1];
         }
-        // set so the first div of the attachments area element is skiped, as this
+        // set so the first div of the attachments area element is skiped in the view, as it
         // serves as target for the Json Action
         $options['isAjax'] = true;
 
