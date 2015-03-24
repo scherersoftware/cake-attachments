@@ -47,8 +47,11 @@
                 <?php endforeach; ?>
             </tbody>
         </table>
+        <?php else : ?>
+            <div class="panel-body">
+                <div class="alert alert-info"><?=  __d('attachments', 'no_attachments'); ?></div>
+            </div>
         <?php endif; ?>
-
         <?php if ($options['mode'] != 'readonly'): ?>
             <div class="panel-body">
                 Selected Files:<br>

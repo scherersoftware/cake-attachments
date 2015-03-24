@@ -1,0 +1,32 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2015-03-24 15:29+0000\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: /Users/cleptric/Sites/curveup_backend/Template/Element/attachments_area.ctp:39
+msgid "edit_tags"
+msgstr ""
+
+#: /Users/cleptric/Sites/curveup_backend/Template/Element/attachments_area.ctp:41
+msgid "download_attachment"
+msgstr ""
+
+#: /Users/cleptric/Sites/curveup_backend/Template/Element/attachments_area.ctp:43
+msgid "delete_attachment"
+msgstr ""
+
+#: /Users/cleptric/Sites/curveup_backend/Template/Element/attachments_area.ctp:52
+msgid "no_attachments"
+msgstr ""
+
