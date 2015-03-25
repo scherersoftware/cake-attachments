@@ -4,32 +4,29 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2015-03-24 15:29+0000\n"
-"PO-Revision-Date: 2015-03-24 16:30+0100\n"
+"POT-Creation-Date: 2015-03-25 14:07+0000\n"
+"PO-Revision-Date: 2015-03-25 15:10+0100\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team:  <EMAIL@ADDRESS>\n"
-"Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.7.4\n"
+"Language: en_US\n"
 
 #: /Users/cleptric/Sites/curveup_backend/Template/Element/attachments_area.ctp:39
 msgid "edit_tags"
-msgstr ""
+msgstr "Edit Tags"
 
 #: /Users/cleptric/Sites/curveup_backend/Template/Element/attachments_area.ctp:41
 msgid "download_attachment"
-msgstr ""
+msgstr "Download Attachments"
 
 #: /Users/cleptric/Sites/curveup_backend/Template/Element/attachments_area.ctp:43
 msgid "delete_attachment"
-msgstr ""
+msgstr "Delete Attachments"
 
 #: /Users/cleptric/Sites/curveup_backend/Template/Element/attachments_area.ctp:52
 msgid "no_attachments"
 msgstr "No Attachments were found."
-
-#~ msgid "attachments.no_attachments"
-#~ msgstr "No attachments were found."
