@@ -119,7 +119,6 @@ class AttachmentsController extends AppController
         }
 
         $image->setImageFormat('jpg');
-        // $image->thumbnailImage(50, 50, true, true);
         $image->setImageCompression(\Imagick::COMPRESSION_JPEG);
         $image->setImageCompressionQuality(75);
         $image->stripImage();
@@ -176,8 +175,6 @@ class AttachmentsController extends AppController
         if (!TableRegistry::exists($attachment->model)) {
             throw new Cake\Network\Exception\MissingTableException('Could not find Table ' . $attachment->model);
         }
-        $input = $this->request->input('urldecode');
-
         $inputArray = explode('&', $this->request->input('urldecode'));
         $tags = explode('$', explode('=', $inputArray[0])[1]);
         unset($inputArray[0]);
@@ -189,7 +186,7 @@ class AttachmentsController extends AppController
             $optionParts = explode(']=', $option);
             $options[$optionParts[0]] = $optionParts[1];
         }
-        // set so the first div of the attachments area element is skiped in the view, as it
+        // set so the first div of the attachments area element is skipped in the view, as it
         // serves as target for the Json Action
         $options['isAjax'] = true;
 
