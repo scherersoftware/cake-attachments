@@ -25,14 +25,14 @@
                             <img src="<?php echo $attachment->previewUrl() ?>">
                         </td>
                         <td class="filename"><?= $attachment->filename ?></td>
-                        <td class="tags-container">
-                            <?php if ($options['taggable']) : ?>
+                        <?php if ($options['taggable']) : ?>
+                            <td class="tags-container">
                                 <p class="tags">
                                     <?= $this->Attachments->tagsList($attachment); ?>
                                 </p>
                                 <?= $this->Attachments->tagsChooser($entity, $attachment) ?>
-                            <?php endif; ?>
-                        </td>
+                            </td>
+                        <?php endif; ?>
                         <td class="size"><?= $this->Number->toReadableSize($attachment->filesize) ?></td>
                         <td class="actions">
                             <?php if ($options['taggable']) : ?>
