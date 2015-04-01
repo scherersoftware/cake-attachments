@@ -22,7 +22,9 @@
                 <?php foreach($entity->attachments as $attachment): ?>
                     <tr data-attachment-id="<?= $attachment->id ?>">
                         <td class="icon">
-                            <img src="<?php echo $attachment->previewUrl() ?>">
+                            <a href="<?php echo $attachment->viewUrl() ?>" data-lightbox="image-1">
+                                <img src="<?php echo $attachment->previewUrl() ?>">
+                            </a>
                         </td>
                         <td class="filename"><?= $attachment->filename ?></td>
                         <?php if ($options['taggable']) : ?>

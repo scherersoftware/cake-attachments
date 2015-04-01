@@ -43,6 +43,21 @@ class Attachment extends Entity
     }
 
     /**
+     * Returns an URL with a png view of the file
+     *
+     * @return string
+     */
+    public function viewUrl()
+    {
+        return Router::url([
+            'plugin' => 'Attachments',
+            'controller' => 'Attachments',
+            'action' => 'view',
+            $this->id
+        ]);
+    }
+
+    /**
      * Returns an URL to download the file
      *
      * @return string

@@ -37,6 +37,8 @@ class AttachmentsHelper extends Helper
         $this->Html->script('/attachments/js/vendor/jquery.iframe-transport.js', ['block' => true]);
         $this->Html->script('/attachments/js/vendor/jquery.fileupload.js', ['block' => true]);
         $this->Html->script('/attachments/js/app/lib/AttachmentsWidget.js', ['block' => true]);
+        $this->Html->script('/attachments/js/vendor/lightbox.min.js', ['block' => true]);
+        $this->Html->css('/attachments/css/vendor/lightbox.css', ['block' => true]);
         $this->Html->css('/attachments/css/attachments.css', ['block' => true]);
     }
 
