@@ -77,8 +77,8 @@ class AttachmentsController extends AppController
                 break;
         }
 
-        $image->setImageFormat('jpg');
-        $image->thumbnailImage(50, 50, true, true);
+        $image->setImageFormat('png');
+        $image->thumbnailImage(50, 50, true, false);
         $image->setImageCompression(\Imagick::COMPRESSION_JPEG);
         $image->setImageCompressionQuality(75);
         $image->stripImage();
