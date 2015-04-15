@@ -16,7 +16,7 @@ class AttachmentsBehavior extends Behavior
     /**
      * Default configuration.
      *
-     * When adding this Behaviour to your table, configure tags in this form:
+     * When adding this Behaviour to your table, configure tags -if wanted- in this form:
      * 'tags' => [
      *     'main_image' => [
      *         'caption' => 'Main Image',
