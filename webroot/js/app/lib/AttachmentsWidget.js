@@ -48,25 +48,6 @@ App.Lib.AttachmentsWidget = Class.extend({
             }.bind(this));
         }
 
-        this.$attachmentsTable.find('td.actions a.delete-btn').click(function(e) {
-            var $tr = $(e.currentTarget).parents('tr');
-            var attachmentId = $tr.data('attachment-id');
-            var url = {
-                plugin: 'attachments',
-                controller: 'attachments',
-                action: 'delete',
-                pass: [attachmentId]
-            };
-
-            if(confirm("Do you really want to delete this file? This action cannot be undone. Click Cancel if you're unsure.")) {
-                App.Main.UIBlocker.blockElement($tr);
-                App.Main.request(url, null, function(response) {
-                    App.Main.UIBlocker.unblockElement($tr);
-                    $tr.remove();
-                });
-            }
-        }.bind(this));
-
         var uuid = guid();
         this.$input.fileupload({
             url: this.config.uploadUrl + '/' + uuid,
@@ -191,6 +172,25 @@ App.Lib.AttachmentsWidget = Class.extend({
 
             tagsList.toggle();
             tagsInput.toggle();
+        }.bind(this));
+
+        this.$element.find('td.actions a.delete-btn').click(function(e) {
+            var $tr = $(e.currentTarget).parents('tr');
+            var attachmentId = $tr.data('attachment-id');
+            var url = {
+                plugin: 'attachments',
+                controller: 'attachments',
+                action: 'delete',
+                pass: [attachmentId]
+            };
+
+            if(confirm("Do you really want to delete this file? This action cannot be undone. Click Cancel if you're unsure.")) {
+                App.Main.UIBlocker.blockElement($tr);
+                App.Main.request(url, null, function(response) {
+                    App.Main.UIBlocker.unblockElement($tr);
+                    $tr.remove();
+                });
+            }
         }.bind(this));
     }
 });
