@@ -180,7 +180,7 @@ class AttachmentsController extends AppController
         unset($inputArray[0]);
 
         // parse the attachments area options from the post data (comes in as a string)
-        $options = array();
+        $options = [];
         foreach ($inputArray as $option) {
             $option = substr($option, 8);
             $optionParts = explode(']=', $option);
