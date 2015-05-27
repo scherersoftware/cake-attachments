@@ -13,7 +13,7 @@
 <?php endif; ?>
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title"><?= __('attachments') ?></h3>
+            <h3 class="panel-title"><?= __d('attachments', 'attachments') ?></h3>
         </div>
         <?php if(!empty($entity->attachments)): ?>
 
@@ -56,13 +56,12 @@
         <?php endif; ?>
         <?php if ($options['mode'] != 'readonly'): ?>
             <div class="panel-body">
-                Selected Files:<br>
                 <ul class="fileupload-file-list"></ul>
 
                 <div class="upload-section">
                     <span class="btn btn-default btn-block btn-lg fileinput-button dropzone">
-                        <i class="glyphicon glyphicon-plus"></i>
-                        <span>Click to select files or drag files here</span>
+                        <i class="fa fa-plus"></i>
+                        <span><?= __d('attachments', 'add') ?></span>
                         <!-- The file input field used as target for the file upload widget -->
                         <input id="input-<?php echo $options['id'] ?>" type="file" name="files[]" class="fileupload-input" multiple>
                     </span>

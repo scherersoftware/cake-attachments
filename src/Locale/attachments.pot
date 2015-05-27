@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2015-03-25 14:07+0000\n"
+"POT-Creation-Date: 2015-05-27 10:51+0200\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -14,19 +14,27 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: /Users/cleptric/Sites/curveup_backend/Template/Element/attachments_area.ctp:39
+#: /Users/cleptric/Sites/bo_backend/Template/Element/attachments_area.ctp:16
+msgid "attachments"
+msgstr ""
+
+#: /Users/cleptric/Sites/bo_backend/Template/Element/attachments_area.ctp:41
 msgid "edit_tags"
 msgstr ""
 
-#: /Users/cleptric/Sites/curveup_backend/Template/Element/attachments_area.ctp:41
+#: /Users/cleptric/Sites/bo_backend/Template/Element/attachments_area.ctp:43
 msgid "download_attachment"
 msgstr ""
 
-#: /Users/cleptric/Sites/curveup_backend/Template/Element/attachments_area.ctp:43
+#: /Users/cleptric/Sites/bo_backend/Template/Element/attachments_area.ctp:45
 msgid "delete_attachment"
 msgstr ""
 
-#: /Users/cleptric/Sites/curveup_backend/Template/Element/attachments_area.ctp:52
+#: /Users/cleptric/Sites/bo_backend/Template/Element/attachments_area.ctp:54
 msgid "no_attachments"
+msgstr ""
+
+#: /Users/cleptric/Sites/bo_backend/Template/Element/attachments_area.ctp:65
+msgid "add"
 msgstr ""
 

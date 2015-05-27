@@ -5,10 +5,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "POT-Creation-Date: 2015-05-27 10:51+0200\n"
-"PO-Revision-Date: 2015-05-27 10:56+0100\n"
+"PO-Revision-Date: 2015-05-27 10:51+0100\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team:  <EMAIL@ADDRESS>\n"
-"Language: en_US\n"
+"Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -17,24 +17,24 @@ msgstr ""
 
 #: /Users/cleptric/Sites/bo_backend/Template/Element/attachments_area.ctp:16
 msgid "attachments"
-msgstr "Mange attachments"
+msgstr "Anhänge verwalten"
 
 #: /Users/cleptric/Sites/bo_backend/Template/Element/attachments_area.ctp:41
 msgid "edit_tags"
-msgstr "Edit Tags"
+msgstr "Tags editieren"
 
 #: /Users/cleptric/Sites/bo_backend/Template/Element/attachments_area.ctp:43
 msgid "download_attachment"
-msgstr "Download Attachments"
+msgstr "Anhang herunterladen"
 
 #: /Users/cleptric/Sites/bo_backend/Template/Element/attachments_area.ctp:45
 msgid "delete_attachment"
-msgstr "Delete Attachments"
+msgstr "Anhang löschen"
 
 #: /Users/cleptric/Sites/bo_backend/Template/Element/attachments_area.ctp:54
 msgid "no_attachments"
-msgstr "No Attachments were found."
+msgstr "Es wurden keine Anhänge hinzugefügt."
 
 #: /Users/cleptric/Sites/bo_backend/Template/Element/attachments_area.ctp:65
 msgid "add"
-msgstr "add attachment"
+msgstr "Anhang hinzufügen"
