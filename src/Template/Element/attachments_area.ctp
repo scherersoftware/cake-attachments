@@ -12,9 +12,11 @@
         <div class="col-md-6">
 <?php endif; ?>
     <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title"><?= __d('attachments', 'attachments') ?></h3>
-        </div>
+        <?php if ($options['panelHeading']): ?>
+            <div class="panel-heading">
+                <h3 class="panel-title"><?= $options['panelHeading'] ?></h3>
+            </div>
+        <?php endif; ?>
         <?php if(!empty($entity->attachments)): ?>
 
         <table class="table attachments">

@@ -60,7 +60,8 @@ class AttachmentsHelper extends Helper
             'mode' => 'full',
             'style' => '',
             'taggable' => false,
-            'isAjax' => false
+            'isAjax' => false,
+            'panelHeading' => __d('attachments', 'attachments')
         ], $options);
         return $this->_View->element('Attachments.attachments_area', compact('options', 'entity'));
     }
