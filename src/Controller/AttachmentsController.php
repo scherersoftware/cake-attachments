@@ -62,7 +62,7 @@ class AttachmentsController extends AppController
         // FIXME cache previews
         $attachment = $this->Attachments->get($attachmentId);
 
-        switch($attachment->filetype) {
+        switch ($attachment->filetype) {
             case 'image/png':
             case 'image/jpg':
             case 'image/jpeg':
@@ -103,7 +103,7 @@ class AttachmentsController extends AppController
         // FIXME cache previews
         $attachment = $this->Attachments->get($attachmentId);
 
-        switch($attachment->filetype) {
+        switch ($attachment->filetype) {
             case 'image/png':
             case 'image/jpg':
             case 'image/jpeg':
