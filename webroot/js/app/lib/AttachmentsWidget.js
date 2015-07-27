@@ -162,18 +162,17 @@ App.Lib.AttachmentsWidget = Class.extend({
         });
     },
     _prepareAttachmentsArea: function() {
-        var tagsSelect = this.$element.find('.tags-container div.select');
-        // make the tag multi select wider if in a form context (edit page)
-        tagsSelect.find('.col-md-6').removeClass('col-md-6').addClass('col-md-11');
+        var tagsSelect = this.$element.find('.tags-container select.tag-chooser');
         tagsSelect.hide();
 
         // selectize the multi inputs manually, as initController is set to false
-        this.$element.find('select.selectize').each(function(i, e) {
+        this.$element.find('select.tag-chooser').each(function(i, e) {
             var $select = $(e);
             $select.selectize({
                 create: $select.hasClass('selectize-enable-create')
             });
         });
+        this.$element.find('.selectize-control').hide();
 
         this.$element.find('table.attachments td.actions a.edit-btn').click(function(e) {
             var $tr = $(e.currentTarget).parents('tr');

@@ -168,12 +168,12 @@ class AttachmentsController extends AppController
      * @param  uuid $attachmentId the attachment identifier
      * @return void
      */
-    public function saveTags($attachmentId)
+    public function saveTags($attachmentId = null)
     {
         $this->request->allowMethod('post');
         $attachment = $this->Attachments->get($attachmentId);
-        if (!TableRegistry::exists($attachment->model)) {
-            throw new Cake\Network\Exception\MissingTableException('Could not find Table ' . $attachment->model);
+        if (!TableRegistry::get($attachment->model)) {
+            throw new \Cake\ORM\Exception\MissingTableClassException('Could not find Table ' . $attachment->model);
         }
         $inputArray = explode('&', $this->request->input('urldecode'));
         $tags = explode('$', explode('=', $inputArray[0])[1]);

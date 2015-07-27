@@ -13,9 +13,10 @@ use Cake\View\View;
 class AttachmentsHelper extends Helper
 {
 
-    public $helpers = ['Html', 'Form' => [
-            'className' => 'Bootstrap3.BootstrapForm'
-        ]];
+    public $helpers = [
+        'Html',
+        'Form'
+    ];
 
     /**
      * Default configuration.
@@ -98,13 +99,13 @@ class AttachmentsHelper extends Helper
         }
         $Table = TableRegistry::get($entity->source());
 
-        return $this->Form->input('tags', [
+        return $this->Form->select('tags', $Table->getAttachmentsTags(), [
             'type' => 'select',
-            'options' => $Table->getAttachmentsTags(),
-            'class' => 'selectize',
+            'class' => 'tag-chooser',
+            'style' => 'display: block; width: 100%',
             'label' => false,
             'multiple' => true,
-            'value' => $attachment->tags,
+            'value' => $attachment->tags
         ]);
     }
 }
