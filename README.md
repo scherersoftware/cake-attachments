@@ -31,6 +31,18 @@ want that, you can disable this behavior by setting `includeDependencies` to `fa
 
 See `AttachmentsHelper::addDependencies()` for the JS/CSS dependencies you need to include.
 
+### Authorization
+
+If you would like to restrict access to Attachments based on custom logic, you can pass a callback function to the Behavior config.
+
+    $this->addBehavior('Attachments.Attachments', [
+        'downloadAuthorizeCallback' => function (Attachment $attachment, EntityInterface $relatedEntity, Request $request) {
+            return false;
+        }
+    ]);
+
+This callback prevents previewing, viewing, downloading, deleting and manipulating attachments.
+
 ## Requirements
 
 As defined in composer.json, for Image Resizing we need the ImageMagick extension. Also, make sure ghostscript

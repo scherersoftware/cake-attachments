@@ -32,7 +32,9 @@ class AttachmentsBehavior extends Behavior
      */
     protected $_defaultConfig = [
         'formFieldName' => 'attachment_uploads',
-        'tags' => []
+        'tags' => [],
+        // function (Attachment $attachment, EntityInterface $relatedEntity) : bool
+        'downloadAuthorizeCallback' => null
     ];
 
     /**
@@ -63,6 +65,14 @@ class AttachmentsBehavior extends Behavior
             'foreignKey' => 'foreign_key',
             'dependent' => true
         ]);
+
+        $this->Attachments->belongsTo($this->_table->registryAlias(), [
+            'conditions' => [
+                'Attachments.model' => $this->_table->registryAlias()
+            ],
+            'foreignKey' => 'foreign_key'
+        ]);
+
         parent::initialize($config);
     }
 

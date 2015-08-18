@@ -3,6 +3,7 @@ namespace Attachments\Model\Entity;
 
 use Cake\Core\Configure;
 use Cake\ORM\Entity;
+use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 
 /**
@@ -108,5 +109,26 @@ class Attachment extends Entity
             'preview_url' => $this->previewUrl(),
             'url' => $this->downloadUrl()
         ];
+    }
+
+    /**
+     * Returns the related table of this attachment
+     *
+     * @return Table
+     */
+    public function getRelatedTable()
+    {
+        return TableRegistry::get($this->model);
+    }
+
+    /**
+     * Fetches the related record of this attachment
+     *
+     * @param array $options Options for Table::get()
+     * @return Entity
+     */
+    public function getRelatedEntity(array $options = [])
+    {
+        return $this->getRelatedTable()->get($this->foreign_key, $options);
     }
 }

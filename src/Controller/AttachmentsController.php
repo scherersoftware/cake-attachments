@@ -1,8 +1,10 @@
 <?php
 namespace Attachments\Controller;
 
+use Attachments\Model\Entity\Attachment;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
+use Cake\Network\Exception\UnauthorizedException;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Text;
 use FrontendBridge\Lib\ServiceResponse;
@@ -58,9 +60,9 @@ class AttachmentsController extends AppController
      */
     public function preview($attachmentId = null)
     {
-        // FIXME handle permissions
         // FIXME cache previews
         $attachment = $this->Attachments->get($attachmentId);
+        $this->_checkAuthorization($attachment);
 
         switch ($attachment->filetype) {
             case 'image/png':
@@ -99,9 +101,9 @@ class AttachmentsController extends AppController
      */
     public function view($attachmentId = null)
     {
-        // FIXME handle permissions
         // FIXME cache previews
         $attachment = $this->Attachments->get($attachmentId);
+        $this->_checkAuthorization($attachment);
 
         switch ($attachment->filetype) {
             case 'image/png':
@@ -138,14 +140,37 @@ class AttachmentsController extends AppController
      */
     public function download($attachmentId = null)
     {
-        // FIXME handle permissions
-        $attachment = $this->Attachments->get($attachmentId);
+        $attachment = $this->Attachments->get($attachmentId, ['contain' => ['Users']]);
+
+        $this->_checkAuthorization($attachment);
 
         $this->response->file($attachment->getAbsolutePath(), [
             'download' => true,
             'name' => $attachment->filename
         ]);
         return $this->response;
+    }
+
+    /**
+     * Checks if a downloadAuthorizeCallback was configured and calls it.
+     * Will throw an UnauthorizedException if the callback returns false.
+     *
+     * @param Attachment $attachment Attachment Entity
+     * @return void
+     * @throws UnauthorizedException
+     */
+    protected function _checkAuthorization(Attachment $attachment)
+    {
+        if ($attachmentsBehavior = $attachment->getRelatedTable()->behaviors()->get('Attachments')) {
+            $behaviorConfig = $attachmentsBehavior->config();
+            if (is_callable($behaviorConfig['downloadAuthorizeCallback'])) {
+                $relatedEntity = $attachment->getRelatedEntity();
+                $authorized = $behaviorConfig['downloadAuthorizeCallback']($attachment, $relatedEntity, $this->request);
+                if ($authorized !== true) {
+                    throw new UnauthorizedException(__d('attachments', 'attachments.unauthorized_for_attachment'));
+                }
+            }
+        }
     }
 
     /**
@@ -156,7 +181,7 @@ class AttachmentsController extends AppController
      */
     public function delete($attachmentId = null)
     {
-        // FIXME handle permissions
+        $this->_checkAuthorization($attachment);
         $attachment = $this->Attachments->get($attachmentId);
         $this->Attachments->delete($attachment);
         return new ServiceResponse('success');
@@ -172,6 +197,8 @@ class AttachmentsController extends AppController
     {
         $this->request->allowMethod('post');
         $attachment = $this->Attachments->get($attachmentId);
+        $this->_checkAuthorization($attachment);
+
         if (!TableRegistry::get($attachment->model)) {
             throw new \Cake\ORM\Exception\MissingTableClassException('Could not find Table ' . $attachment->model);
         }
