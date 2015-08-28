@@ -1,5 +1,5 @@
 <?php if(!$options['isAjax']) : ?>
-<div class="form-group fileupload attachments-area" id="<?php echo $options['id'] ?>" style="<?= $options['style'] ?>"
+<div class="form-group fileupload attachments-area clearfix" id="<?php echo $options['id'] ?>" style="<?= $options['style'] ?>"
     data-fileupload-id="<?= $options['id'] ?>"
     data-options-label="<?= $options['label'] ?>"
     data-options-taggable="<?= $options['taggable'] ?>"
