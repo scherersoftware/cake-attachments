@@ -140,7 +140,7 @@ class AttachmentsController extends AppController
      */
     public function download($attachmentId = null)
     {
-        $attachment = $this->Attachments->get($attachmentId, ['contain' => ['Users']]);
+        $attachment = $this->Attachments->get($attachmentId);
 
         $this->_checkAuthorization($attachment);
 
