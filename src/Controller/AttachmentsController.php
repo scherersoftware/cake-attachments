@@ -72,8 +72,9 @@ class AttachmentsController extends AppController
                 $image = new \Imagick($attachment->getAbsolutePath());
                 break;
             case 'application/pdf':
-                $image = new \Imagick($attachment->getAbsolutePath() . '[0]');
-                break;
+                // TODO: What is this?
+                // $image = new \Imagick($attachment->getAbsolutePath() . '[0]');
+                // break;
             default:
                 $image = new \Imagick(Plugin::path('Attachments') . '/webroot/img/file.png');
                 break;

@@ -21,10 +21,11 @@
 
         <table class="table attachments">
             <tbody>
+                <?php $uniqueId = uniqid(); ?>
                 <?php foreach($entity->attachments as $attachment): ?>
                     <tr data-attachment-id="<?= $attachment->id ?>">
                         <td class="icon">
-                            <a href="<?php echo $attachment->viewUrl() ?>" data-lightbox="image" data-title="<a href='<?= $attachment->downloadUrl() ?>'><i class='fa fa-download'></i> Download </a><?= $attachment->filename ?>">
+                            <a href="<?php echo $attachment->viewUrl() ?>" data-lightbox="image-<?= $uniqueId ?>" data-title="<a href='<?= $attachment->downloadUrl() ?>'><i class='fa fa-download'></i> Download </a><?= $attachment->filename ?>">
                                 <img src="<?php echo $attachment->previewUrl() ?>">
                             </a>
                         </td>
