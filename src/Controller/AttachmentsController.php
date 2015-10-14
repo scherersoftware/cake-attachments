@@ -182,8 +182,8 @@ class AttachmentsController extends AppController
      */
     public function delete($attachmentId = null)
     {
-        $this->_checkAuthorization($attachment);
         $attachment = $this->Attachments->get($attachmentId);
+        $this->_checkAuthorization($attachment);
         $this->Attachments->delete($attachment);
         return new ServiceResponse('success');
     }
