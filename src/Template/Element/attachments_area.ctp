@@ -25,9 +25,16 @@
                 <?php foreach($entity->attachments as $attachment): ?>
                     <tr data-attachment-id="<?= $attachment->id ?>">
                         <td class="icon">
-                            <a href="<?php echo $attachment->viewUrl() ?>" data-lightbox="image-<?= $uniqueId ?>" data-title="<a href='<?= $attachment->downloadUrl() ?>'><i class='fa fa-download'></i> Download </a><?= $attachment->filename ?>">
-                                <img src="<?php echo $attachment->previewUrl() ?>">
-                            </a>
+                            <?php if ($attachment->isImage()): ?>
+                                <a href= "<?= $this->Glide->url($attachment->filepath) ?>" data-lightbox="image-<?= $uniqueId ?>" data-title="<a href='<?php echo $attachment->downloadUrl() ?>'><i class='fa fa-download'></i> Download</a>&nbsp;&nbsp;-&nbsp;<?= $attachment->filename ?>">
+                                    <img src="<?php echo $attachment->previewUrl() ?>">
+                                </a>
+                            <?php else: ?>
+                                <a href="<?php echo $attachment->downloadUrl() ?>">
+                                    <img src="<?php echo $attachment->previewUrl() ?>">
+                                </a>
+                            <?php endif; ?>
+                            
                         </td>
                         <td class="filename">
                             <?= $attachment->filename ?>

@@ -29,6 +29,22 @@ class Attachment extends Entity
     ];
 
     /**
+     * returns if attachment is image type
+     *
+     * @return void
+     */
+    public function isImage()
+    {
+        $imageTypes = [
+            'image/png',
+            'image/jpg',
+            'image/jpeg',
+            'image/gif'
+        ];
+        return in_array($this->filetype, $imageTypes);
+    }
+
+    /**
      * Returns an URL with a png preview of the file
      *
      * @return string
