@@ -72,6 +72,7 @@ class AttachmentsController extends AppController
                 $image = new \Imagick($attachment->getAbsolutePath());
                 break;
             case 'application/pdf':
+                // Will render a preview of the first page of this PDF
                 $image = new \Imagick($attachment->getAbsolutePath() . '[0]');
                 break;
             default:
