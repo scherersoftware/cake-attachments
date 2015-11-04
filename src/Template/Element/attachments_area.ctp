@@ -18,49 +18,48 @@
             </div>
         <?php endif; ?>
         <?php if(!empty($entity->attachments)): ?>
+            <table class="table attachments">
+                <tbody>
+                    <?php $uniqueId = uniqid(); ?>
+                    <?php foreach($entity->attachments as $attachment): ?>
+                        <tr data-attachment-id="<?= $attachment->id ?>">
+                            <td class="icon">
+                                <?php if ($attachment->isImage()): ?>
+                                    <a href= "<?= $this->Glide->url($attachment->filepath) ?>" data-lightbox="image-<?= $uniqueId ?>" data-title="<a href='<?php echo $attachment->downloadUrl() ?>'><i class='fa fa-download'></i> Download</a>&nbsp;&nbsp;-&nbsp;<?= $attachment->filename ?>">
+                                        <img src="<?php echo $attachment->previewUrl() ?>">
+                                    </a>
+                                <?php else: ?>
+                                    <a href="<?php echo $attachment->downloadUrl() ?>">
+                                        <img src="<?php echo $attachment->previewUrl() ?>">
+                                    </a>
+                                <?php endif; ?>
 
-        <table class="table attachments">
-            <tbody>
-                <?php $uniqueId = uniqid(); ?>
-                <?php foreach($entity->attachments as $attachment): ?>
-                    <tr data-attachment-id="<?= $attachment->id ?>">
-                        <td class="icon">
-                            <?php if ($attachment->isImage()): ?>
-                                <a href= "<?= $this->Glide->url($attachment->filepath) ?>" data-lightbox="image-<?= $uniqueId ?>" data-title="<a href='<?php echo $attachment->downloadUrl() ?>'><i class='fa fa-download'></i> Download</a>&nbsp;&nbsp;-&nbsp;<?= $attachment->filename ?>">
-                                    <img src="<?php echo $attachment->previewUrl() ?>">
-                                </a>
-                            <?php else: ?>
-                                <a href="<?php echo $attachment->downloadUrl() ?>">
-                                    <img src="<?php echo $attachment->previewUrl() ?>">
-                                </a>
-                            <?php endif; ?>
-                            
-                        </td>
-                        <td class="filename">
-                            <?= $attachment->filename ?>
-                            <?php if ($options['taggable']) : ?>
-                                <div class="tags-container">
-                                    <p class="tags">
-                                        <?= $this->Attachments->tagsList($attachment); ?>
-                                    </p>
-                                    <?= $this->Attachments->tagsChooser($entity, $attachment) ?>
-                                </div>
-                            <?php endif; ?>
-                        </td>
-                        <td class="size"><?= $this->Number->toReadableSize($attachment->filesize) ?></td>
-                        <td class="actions">
-                            <?php if ($options['taggable']) : ?>
-                                <a class="btn btn-default btn-xs edit-btn" title="<?= __d('attachments', 'edit_tags') ?>" href="javascript:"><i class="fa fa-fw fa-pencil"></i></a>
-                            <?php endif; ?>
-                            <a class="btn btn-info btn-xs download-btn" title="<?= __d('attachments', 'download_attachment') ?>" href="<?= $attachment->downloadUrl() ?>"><i class="fa fa-fw fa-cloud-download"></i></a>
-                            <?php if ($options['mode'] != 'readonly'): ?>
-                                <a class="btn btn-danger btn-xs delete-btn" title="<?= __d('attachments', 'delete_attachment') ?>"><i class="fa fa-fw fa-times"></i></a>
-                            <?php endif; ?>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+                            </td>
+                            <td class="filename">
+                                <?= $attachment->filename ?>
+                                <?php if ($options['taggable']) : ?>
+                                    <div class="tags-container">
+                                        <p class="tags">
+                                            <?= $this->Attachments->tagsList($attachment); ?>
+                                        </p>
+                                        <?= $this->Attachments->tagsChooser($entity, $attachment) ?>
+                                    </div>
+                                <?php endif; ?>
+                            </td>
+                            <td class="size"><?= $this->Number->toReadableSize($attachment->filesize) ?></td>
+                            <td class="actions">
+                                <?php if ($options['taggable']) : ?>
+                                    <a class="btn btn-default btn-xs edit-btn" title="<?= __d('attachments', 'edit_tags') ?>" href="javascript:"><i class="fa fa-fw fa-pencil"></i></a>
+                                <?php endif; ?>
+                                <a class="btn btn-info btn-xs download-btn" title="<?= __d('attachments', 'download_attachment') ?>" href="<?= $attachment->downloadUrl() ?>"><i class="fa fa-fw fa-cloud-download"></i></a>
+                                <?php if ($options['mode'] != 'readonly'): ?>
+                                    <a class="btn btn-danger btn-xs delete-btn" title="<?= __d('attachments', 'delete_attachment') ?>"><i class="fa fa-fw fa-times"></i></a>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
         <?php else : ?>
             <div class="panel-body">
                 <div class="alert alert-info"><?=  __d('attachments', 'no_attachments'); ?></div>
