@@ -25,7 +25,9 @@
                         <tr data-attachment-id="<?= $attachment->id ?>">
                             <td class="icon">
                                 <?php if ($attachment->isImage()): ?>
-                                    <a href= "<?= $this->Glide->url($attachment->filepath) ?>" data-lightbox="image-<?= $uniqueId ?>" data-title="<a href='<?php echo $attachment->downloadUrl() ?>'><i class='fa fa-download'></i> Download</a>&nbsp;&nbsp;-&nbsp;<?= $attachment->filename ?>">
+                                    <?php if (empty($options['useGlide'])) $options['useGlide'] = false; ?>
+                                    <?php $href = $options['useGlide'] ? $this->Glide->url($attachment->filepath) : $attachment->viewUrl() ?>
+                                    <a href= "<?= $href ?>" data-lightbox="image-<?= $uniqueId ?>" data-title="<a href='<?php echo $attachment->downloadUrl() ?>'><i class='fa fa-download'></i> Download</a>&nbsp;&nbsp;-&nbsp;<?= $attachment->filename ?>">
                                         <img src="<?php echo $attachment->previewUrl() ?>">
                                     </a>
                                 <?php else: ?>
