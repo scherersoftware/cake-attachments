@@ -162,6 +162,7 @@ class AttachmentsTable extends Table
 
         // in filepath, we store the path relative to the Attachment.path configuration
         // to make it easy to switch storage
+        $info = $this->__getFileName($info, $entity);
         $targetPath = $entity->source() . '/' . $entity->id . '/' . $info['basename'];
 
         $attachment = $this->newEntity([
@@ -174,5 +175,22 @@ class AttachmentsTable extends Table
             'tmpPath' => $filePath
         ]);
         return $attachment;
+    }
+
+    /**
+     * recursive method to increase the filename in case the file already exists
+     *
+     * @param string $fileInfo Array of information about the file
+     * @param EntityInterface $entity Entity
+     * @param string $id counter varibale to extend the filename
+     * @return array
+     */
+    private function __getFileName($fileInfo, EntityInterface $entity, $id = 0)
+    {
+        if (!file_exists(Configure::read('Attachments.path') . $entity->source() . '/' . $entity->id . '/' . $fileInfo['basename'])) {
+            return $fileInfo;
+        }
+        $fileInfo['basename'] = $fileInfo['filename'] . ' (' . ++$id . ').' . $fileInfo['extension'];
+        return $this->__getFileName($fileInfo, $entity, $id);
     }
 }
