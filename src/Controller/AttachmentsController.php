@@ -4,6 +4,7 @@ namespace Attachments\Controller;
 use Attachments\Model\Entity\Attachment;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
+use Cake\Filesystem\File;
 use Cake\Network\Exception\UnauthorizedException;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Text;
@@ -114,7 +115,10 @@ class AttachmentsController extends AppController
                 $image = new \Imagick($attachment->getAbsolutePath());
                 break;
             case 'application/pdf':
-                $image = new \Imagick($attachment->getAbsolutePath() . '[0]');
+                header('Content-Type: ' . $attachment->filetype);
+                $file = new File($attachment->getAbsolutePath());
+                echo $file->read();
+                exit;
                 break;
             default:
                 $image = new \Imagick(Plugin::path('Attachments') . '/webroot/img/file.png');
