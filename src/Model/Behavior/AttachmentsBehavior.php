@@ -60,7 +60,7 @@ class AttachmentsBehavior extends Behavior
         // Dynamically attach the hasMany relationship
         $this->_table->hasMany('Attachments.Attachments', [
             'conditions' => [
-                'Attachments.model' => $this->_table->alias()
+                'Attachments.model' => $this->_table->registryAlias()
             ],
             'foreignKey' => 'foreign_key',
             'dependent' => true
