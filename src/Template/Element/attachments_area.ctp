@@ -58,6 +58,9 @@
                                 <?php if ($options['mode'] != 'readonly'): ?>
                                     <a class="btn btn-danger btn-xs delete-btn" title="<?= __d('attachments', 'delete_attachment') ?>"><i class="fa fa-fw fa-times"></i></a>
                                 <?php endif; ?>
+                                <?php if ($options['additionalButtons'] !== null && is_callable($options['additionalButtons'])): ?>
+                                    <?= $options['additionalButtons']($attachment) ?>
+                                <?php endif; ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>
