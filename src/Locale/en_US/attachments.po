@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2015-05-27 10:51+0200\n"
-"PO-Revision-Date: 2015-05-27 10:56+0100\n"
+"POT-Creation-Date: 2016-02-04 16:17+0000\n"
+"PO-Revision-Date: 2016-02-04 17:17+0100\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team:  <EMAIL@ADDRESS>\n"
 "Language: en_US\n"
@@ -15,26 +15,34 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.7.6\n"
 
-#: /Users/cleptric/Sites/bo_backend/Template/Element/attachments_area.ctp:16
-msgid "attachments"
-msgstr "Mange attachments"
+#: Controller/AttachmentsController.php:171
+msgid "attachments.unauthorized_for_attachment"
+msgstr ""
 
-#: /Users/cleptric/Sites/bo_backend/Template/Element/attachments_area.ctp:41
+#: Template/Element/attachments_area.ctp:19
+msgid "delete_all_attachments"
+msgstr "delete all"
+
+#: Template/Element/attachments_area.ctp:57
 msgid "edit_tags"
 msgstr "Edit Tags"
 
-#: /Users/cleptric/Sites/bo_backend/Template/Element/attachments_area.ctp:43
+#: Template/Element/attachments_area.ctp:59
 msgid "download_attachment"
 msgstr "Download Attachments"
 
-#: /Users/cleptric/Sites/bo_backend/Template/Element/attachments_area.ctp:45
+#: Template/Element/attachments_area.ctp:61
 msgid "delete_attachment"
 msgstr "Delete Attachments"
 
-#: /Users/cleptric/Sites/bo_backend/Template/Element/attachments_area.ctp:54
+#: Template/Element/attachments_area.ctp:70
 msgid "no_attachments"
 msgstr "No Attachments were found."
 
-#: /Users/cleptric/Sites/bo_backend/Template/Element/attachments_area.ctp:65
+#: Template/Element/attachments_area.ctp:80
 msgid "add"
-msgstr "add attachment"
+msgstr "click - or - Drag & Drop here"
+
+#: View/Helper/AttachmentsHelper.php:64
+msgid "attachments"
+msgstr "Manage attachments"
