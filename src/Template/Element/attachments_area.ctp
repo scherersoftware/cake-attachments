@@ -23,20 +23,21 @@
                     <?php $uniqueId = uniqid(); ?>
                     <?php foreach($entity->attachments as $attachment): ?>
                         <tr data-attachment-id="<?= $attachment->id ?>">
-                            <td class="icon">
-                                <?php if ($attachment->isImage()): ?>
-                                    <?php if (empty($options['useGlide'])) $options['useGlide'] = false; ?>
-                                    <?php $href = $options['useGlide'] ? $this->Glide->url($attachment->filepath) : $attachment->viewUrl() ?>
-                                    <a href= "<?= $href ?>" data-lightbox="image-<?= $uniqueId ?>" data-title="<a href='<?php echo $attachment->downloadUrl() ?>'><i class='fa fa-download'></i> Download</a>&nbsp;&nbsp;-&nbsp;<?= $attachment->filename ?>">
-                                        <img src="<?php echo $attachment->previewUrl() ?>">
-                                    </a>
-                                <?php else: ?>
-                                    <a href="<?php echo $attachment->downloadUrl() ?>">
-                                        <img src="<?php echo $attachment->previewUrl() ?>">
-                                    </a>
-                                <?php endif; ?>
-
-                            </td>
+                            <?php if ($options['showIconColumn']): ?>
+                                <td class="icon">
+                                    <?php if ($attachment->isImage()): ?>
+                                        <?php if (empty($options['useGlide'])) $options['useGlide'] = false; ?>
+                                        <?php $href = $options['useGlide'] ? $this->Glide->url($attachment->filepath) : $attachment->viewUrl() ?>
+                                        <a href= "<?= $href ?>" data-lightbox="image-<?= $uniqueId ?>" data-title="<a href='<?php echo $attachment->downloadUrl() ?>'><i class='fa fa-download'></i> Download</a>&nbsp;&nbsp;-&nbsp;<?= $attachment->filename ?>">
+                                            <img src="<?php echo $attachment->previewUrl() ?>">
+                                        </a>
+                                    <?php else: ?>
+                                        <a href="<?php echo $attachment->downloadUrl() ?>">
+                                            <img src="<?php echo $attachment->previewUrl() ?>">
+                                        </a>
+                                    <?php endif; ?>
+                                </td>
+                            <?php endif; ?>
                             <td class="filename">
                                 <?= $attachment->filename ?>
                                 <?php if ($options['taggable']) : ?>
