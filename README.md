@@ -1,4 +1,4 @@
-# CakePHP 3 cake-attachments
+CakePHP 3 cake-attachments
 ==================
 
 ## Requirements
