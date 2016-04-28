@@ -21,6 +21,7 @@ App.Lib.AttachmentsWidget = Class.extend({
         this.$input = this.$element.find('.fileupload-input');
         this.$fileList = this.$element.find('.fileupload-file-list');
         this.$progress = this.$element.find('.fileupload-progress');
+        this.$errors =  this.$element.find('.fileupload-errors');
         this.$progress.hide();
 
         if(this.$element.find('select.hidden-attachments-select').length > 0) {
@@ -34,6 +35,7 @@ App.Lib.AttachmentsWidget = Class.extend({
             this.$dropZone.addClass('btn-success');
         }.bind(this));
         this.$dropZone.bind('dragleave', function() {
+            console.log('leave');
             this.$dropZone.removeClass('btn-success');
         }.bind(this));
         this.$dropZone.bind('drop', function() {
@@ -67,6 +69,25 @@ App.Lib.AttachmentsWidget = Class.extend({
             }
         }.bind(this));
 
+        this.$attachmentsTable.find('td.actions a.delete-btn').click(function(e) {
+            var $tr = $(e.currentTarget).parents('tr');
+            var attachmentId = $tr.data('attachment-id');
+            var url = {
+                plugin: 'attachments',
+                controller: 'attachments',
+                action: 'deleteAll',
+                pass: [attachmentId]
+            };
+
+            if(confirm("Do you really want to delete all files? This action cannot be undone. Click Cancel if you're unsure.")) {
+                App.Main.UIBlocker.blockElement($tr);
+                App.Main.request(url, null, function(response) {
+                    App.Main.UIBlocker.unblockElement($tr);
+                    $tr.remove();
+                });
+            }
+        }.bind(this));
+
         var uuid = guid();
         this.$input.fileupload({
             url: this.config.uploadUrl + '/' + uuid,
@@ -78,7 +99,6 @@ App.Lib.AttachmentsWidget = Class.extend({
                     if(!file.error) {
                         $('<li/>').text(file.name).appendTo(this.$fileList);
                     } else {
-                        console.log('push to error');
                         errors.push(file);
                     }
                 }.bind(this));
@@ -95,18 +115,19 @@ App.Lib.AttachmentsWidget = Class.extend({
                             .appendTo(this.$hiddenSelect);
                     }.bind(this));
                 }
-                console.log(errors);
                 if (errors.length > 0) {
                     var msg = '';
                     for(var i in errors) {
-                        msg += errors[i].name + ': ' + errors[i].error + "\n";
+                        msg += '<span class="label label-danger">' + errors[i].name + ': ' + errors[i].error + '</span><br>';
                     }
-                    alert(msg);
+                    this.$progress.find('.fileupload-progress-bar').css('background-color', '#DC524A');
+                    this.$errors.append(msg);
                 }
-
                 setTimeout(function() {
-                    this.$progress.hide();
-                }.bind(this), 10000);
+                    this.$progress.find('.fileupload-progress-bar').css('width', '0');
+                    //this.$errors.text('');
+                    //this.$progress.fadeOut(1000);
+                }.bind(this), 8000);
             }.bind(this),
             progressall: function (e, data) {
                 var progress = parseInt(data.loaded / data.total * 100, 10);
@@ -116,6 +137,8 @@ App.Lib.AttachmentsWidget = Class.extend({
                 );
             }.bind(this),
             start: function (e, data) {
+                this.$progress.find('.fileupload-progress-bar').css('width', '0');
+                this.$progress.find('.fileupload-progress-bar').css('background-color', '#54BB53');
                 this.$progress.show();
             }.bind(this)
         })

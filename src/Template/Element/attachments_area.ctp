@@ -13,7 +13,12 @@
 <?php endif; ?>
     <div class="panel panel-default">
         <?php if ($options['panelHeading']): ?>
-            <div class="panel-heading">
+            <div class="panel-heading less-padding-right">
+                <div class="pull-right">
+                    <?php if ($options['mode'] != 'readonly'): ?>
+                        <a class="btn btn-danger btn-xs delete-all-btn"><i class="fa fa-fw fa-trash"></i><?= __d('attachments', 'delete_all_attachments') ?></a>
+                    <?php endif; ?>
+                </div>
                 <h3 class="panel-title"><?= $options['panelHeading'] ?></h3>
             </div>
         <?php endif; ?>
@@ -23,21 +28,18 @@
                     <?php $uniqueId = uniqid(); ?>
                     <?php foreach($entity->attachments as $attachment): ?>
                         <tr data-attachment-id="<?= $attachment->id ?>">
-                            <?php if ($options['showIconColumn']): ?>
-                                <td class="icon">
-                                    <?php if ($attachment->isImage()): ?>
-                                        <?php if (empty($options['useGlide'])) $options['useGlide'] = false; ?>
-                                        <?php $href = $options['useGlide'] ? $this->Glide->url($attachment->filepath) : $attachment->viewUrl() ?>
-                                        <a href= "<?= $href ?>" data-lightbox="image-<?= $uniqueId ?>" data-title="<a href='<?php echo $attachment->downloadUrl() ?>'><i class='fa fa-download'></i> Download</a>&nbsp;&nbsp;-&nbsp;<?= $attachment->filename ?>">
-                                            <img src="<?php echo $attachment->previewUrl() ?>">
-                                        </a>
-                                    <?php else: ?>
-                                        <a href="<?php echo $attachment->downloadUrl() ?>">
-                                            <img src="<?php echo $attachment->previewUrl() ?>">
-                                        </a>
-                                    <?php endif; ?>
-                                </td>
-                            <?php endif; ?>
+                            <td class="icon">
+                                <?php if ($attachment->isImage()): ?>
+                                    <a href= "<?= $this->Glide->url($attachment->filepath) ?>" data-lightbox="image-<?= $uniqueId ?>" data-title="<a href='<?php echo $attachment->downloadUrl() ?>'><i class='fa fa-download'></i> Download</a>&nbsp;&nbsp;-&nbsp;<?= $attachment->filename ?>">
+                                        <img src="<?php echo $attachment->previewUrl() ?>">
+                                    </a>
+                                <?php else: ?>
+                                    <a href="<?php echo $attachment->viewUrl() ?>" target="_blank">
+                                        <img src="<?php echo $attachment->previewUrl() ?>">
+                                    </a>
+                                <?php endif; ?>
+
+                            </td>
                             <td class="filename">
                                 <?= $attachment->filename ?>
                                 <?php if ($options['taggable']) : ?>
@@ -58,9 +60,6 @@
                                 <?php if ($options['mode'] != 'readonly'): ?>
                                     <a class="btn btn-danger btn-xs delete-btn" title="<?= __d('attachments', 'delete_attachment') ?>"><i class="fa fa-fw fa-times"></i></a>
                                 <?php endif; ?>
-                                <?php if ($options['additionalButtons'] !== null && is_callable($options['additionalButtons'])): ?>
-                                    <?= $options['additionalButtons']($attachment) ?>
-                                <?php endif; ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -68,7 +67,7 @@
             </table>
         <?php else : ?>
             <div class="panel-body">
-                <div class="alert alert-info"><?=  __d('attachments', 'no_attachments'); ?></div>
+                <div class="alert alert-info no-margin"><?=  __d('attachments', 'no_attachments'); ?></div>
             </div>
         <?php endif; ?>
         <?php if ($options['mode'] != 'readonly'): ?>
@@ -77,7 +76,7 @@
 
                 <div class="upload-section">
                     <span class="btn btn-default btn-block btn-lg fileinput-button dropzone">
-                        <i class="fa fa-plus"></i>
+                        <i class="fa fa-image"></i>
                         <span><?= __d('attachments', 'add') ?></span>
                         <!-- The file input field used as target for the file upload widget -->
                         <input id="input-<?php echo $options['id'] ?>" type="file" name="files[]" class="fileupload-input" multiple>
@@ -85,6 +84,8 @@
                 </div>
                 <div class="fileupload-progress progress">
                     <div class="fileupload-progress-bar progress-bar progress-bar-success"></div>
+                </div>
+                <div class="fileupload-errors">
                 </div>
 
                 <?php if($options['formFieldName']): ?>
