@@ -86,10 +86,13 @@ In your `config/app.php`, add the following key:
     'Attachments' => [
         'tmpUploadsPath' => ROOT . '/tmp/uploads/',
         'path' => ROOT . '/app_data/attachments/',
-        'acceptedFileTypes' => '/\.(jpe?g|png)$/i'
+        'acceptedFileTypes' => '/\.(jpe?g|png)$/i',
+        'autorotate' => false
     ],
 
 Further possible filetypes you want to allow can be specified in the 'acceptedFileTypes' filed, such as `gif|jpe?g|png|pdf|docx|doc|xls|xlsx|tif|tiff|zip`
+
+When setting autorotate to true, views and previews of picture attachments will be rotated depending on their EXIF data.
 
 #### 6. Adding AttachmentHelper to your project
 
