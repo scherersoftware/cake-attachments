@@ -8,8 +8,8 @@ You can find the requirements in `composer.json`.
 
 - [ImageMagick](http://www.imagemagick.org/script/binary-releases.php) for resizing images
 - [cake-frontend-bridge](https://github.com/scherersoftware/cake-frontend-bridge) for easy access to the current controller and action derived from the URL
-- [ghostscript](http://ghostscript.com/download/) for pdf previews. On Mac OS X, oyu can install ghostscript via homebrew:
- 
+- [ghostscript](http://ghostscript.com/download/) for pdf previews. On Mac OS X, you can install ghostscript via homebrew:
+
  ```
  `brew install ghostscript`
  ```
@@ -27,7 +27,7 @@ Note: This Plugin depends on the codekanzlei/cake-frontend-bridge Plugin.
 			"codekanzlei/cake-attachments": "dev-master",
 			...
 		}
-		
+
 #### 2. Include the plugin using composer
 
 Open a terminal in your project directory and run the following command:
@@ -39,11 +39,11 @@ Open a terminal in your project directory and run the following command:
 #### 1. Load the plugin in your `config/bootstrap.php`
 
 	Plugin::load('Attachments', ['bootstrap' => false, 'routes' => true]);
-		
+
 Also be sure to add the cake-frontend-bridge since it is required for this plugin to work properly.
 
 	Plugin::load('FrontendBridge', ['bootstrap' => false, 'routes' => true, 'autoload' => true]);
-		
+
 #### 2. Create a table `attachments` in your project database
 
 Run the following sql-query on your project database. You can find it in the Plugin's `config/schema.sql` file.
@@ -66,9 +66,9 @@ Run the following sql-query on your project database. You can find it in the Plu
 
 Open a terminal in your project directory and run these commands:
 
-	$ mkdir tmp/uploads
-	$ mkdir app_data/attachments
-	
+	$ mkdir -p tmp/uploads
+	$ mkdir -p app_data/attachments
+
 You might have to change the folder permissions for these folders depending on your environment. The application must have permissions to read and write data into them.
 
 #### 4. Adding JavaScript files to your project
@@ -109,7 +109,7 @@ Lastly, add the FrontendBridge-key to `public $components`
 
 	'FrontendBridge.FrontendBridge',
 
-	
+
 #### 7. Include Attachments in your default layout
 
 In your `src/Template/Layout/default.ctp`, you need to create a new div element that contains the UI-elements of the Attachments Plugin.
@@ -117,18 +117,18 @@ In your `src/Template/Layout/default.ctp`, you need to create a new div element 
 	<div class="<?php echo $this->FrontendBridge->getMainContentClasses() ?>">
 
 	</div>
-	
+
 **Note:** Make sure that the line containing `<?= $this->fetch('content') ?>` is a child-element of this `<div>`-Element.
 
 ## Usage
 
- 	
+
 #### 1. Setting up a Model
 
 Go to the table you want use the Attachments plugin in. For example, if you want to be able to attach files to your Users, go to `/Model/Table/UsersTable.php` and add the following line to its `initialize()` callback method:
 
     $this->addBehavior('Attachments.Attachments');
-    
+
 #### 2. Setting up an Entity
 
 In your Entity (if we stick to the Users-example above this would be `Model/Entity/User.php`), make sure you add `attachments` and `attachment_uploads` to your `$_accessible` property like so:
