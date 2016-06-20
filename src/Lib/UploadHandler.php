@@ -1123,7 +1123,11 @@ class UploadHandler
     }
 
     protected function get_upload_data($id) {
-        return @$_FILES[$id];
+        if (array_key_exists($id, $_FILES)) {
+            return $_FILES[$id];
+        } else {
+            return null;
+        }
     }
 
     protected function get_query_param($id) {
