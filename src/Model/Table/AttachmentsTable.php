@@ -152,10 +152,10 @@ class AttachmentsTable extends Table
     public function createAttachmentEntity(EntityInterface $entity, $filePath)
     {
         if (!file_exists($filePath)) {
-            throw new \Exception("File {$file} does not exist.");
+            throw new \Exception("File {$filePath} does not exist.");
         }
         if (!is_readable($filePath)) {
-            throw new \Exception("File {$file} cannot be read.");
+            throw new \Exception("File {$filePath} cannot be read.");
         }
         $file = new File($filePath);
         $info = $file->info();
