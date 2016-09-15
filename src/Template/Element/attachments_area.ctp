@@ -14,11 +14,6 @@
     <div class="panel panel-default">
         <?php if ($options['panelHeading']): ?>
             <div class="panel-heading less-padding-right">
-                <div class="pull-right">
-                    <?php if ($options['mode'] != 'readonly'): ?>
-                        <a class="btn btn-danger btn-xs delete-all-btn"><i class="fa fa-fw fa-trash"></i><?= __d('attachments', 'delete_all_attachments') ?></a>
-                    <?php endif; ?>
-                </div>
                 <h3 class="panel-title"><?= $options['panelHeading'] ?></h3>
             </div>
         <?php endif; ?>
