@@ -15,6 +15,20 @@ require_once Plugin::path('Attachments') . 'src/Lib/UploadHandler.php';
 class AttachmentsController extends AppController
 {
 
+
+    /**
+     * beforeFilter event
+     *
+     * @param Event $event cake event
+     * @return void
+     */
+    public function beforeFilter(\Cake\Event\Event $event)
+    {
+        if (isset($this->Csrf) && in_array($event->subject()->request->params['action'], ['upload'])) {
+            $this->eventManager()->off($this->Csrf);
+        }
+    }
+
     /**
      * Initializer
      *
