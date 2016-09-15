@@ -62,7 +62,8 @@ class AttachmentsHelper extends Helper
             'taggable' => false,
             'isAjax' => false,
             'panelHeading' => __d('attachments', 'attachments'),
-            'showIconColumn' => true
+            'showIconColumn' => true,
+            'additionalButtons' => null
         ], $options);
         return $this->_View->element('Attachments.attachments_area', compact('options', 'entity'));
     }
