@@ -56,7 +56,7 @@ App.Lib.AttachmentsWidget = Class.extend({
             var url = {
                 plugin: 'attachments',
                 controller: 'attachments',
-                action: 'deleteAll',
+                action: 'delete',
                 pass: [attachmentId]
             };
 
