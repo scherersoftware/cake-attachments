@@ -19,10 +19,13 @@
         <?php endif; ?>
         <?php if(!empty($entity->attachments)): ?>
             <table class="table attachments">
-                <tbody>
+                <tbody id="attachemnts-list">
                     <?php $uniqueId = uniqid(); ?>
                     <?php foreach($entity->attachments as $attachment): ?>
                         <tr data-attachment-id="<?= $attachment->id ?>">
+                            <td>
+                                <span class="fa fa-arrows-v"></span>
+                            </td>
                             <td class="icon">
                                 <?php if ($attachment->isImage()): ?>
                                     <a href= "<?= $this->Glide->url($attachment->filepath) ?>" data-lightbox="image-<?= $uniqueId ?>" data-title="<a href='<?php echo $attachment->downloadUrl() ?>'><i class='fa fa-download'></i> Download</a>&nbsp;&nbsp;-&nbsp;<?= $attachment->filename ?>">
@@ -33,7 +36,6 @@
                                         <img src="<?php echo $attachment->previewUrl() ?>">
                                     </a>
                                 <?php endif; ?>
-
                             </td>
                             <td class="filename">
                                 <?= $attachment->filename ?>

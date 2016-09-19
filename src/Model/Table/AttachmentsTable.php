@@ -30,6 +30,10 @@ class AttachmentsTable extends Table
         $this->displayField('filename');
         $this->primaryKey('id');
         $this->addBehavior('Timestamp');
+        $this->addBehavior('CkTools.Sortable', [
+            'sortField' => 'sort',
+            'defaultOrder' => ['sort' => 'ASC']
+        ]);
 
         $this->schema()->columnType('tags', 'json');
     }
