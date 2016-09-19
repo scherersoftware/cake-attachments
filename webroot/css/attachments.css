@@ -108,3 +108,6 @@ table.attachments .btn.save-tags .fa {
 .less-padding-right {
     padding-right: 8px;
 }
+#attachments-list:hover {
+    cursor: ns-resize;
+}

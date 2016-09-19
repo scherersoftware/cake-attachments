@@ -22,7 +22,7 @@
                 <tbody id="attachemnts-list">
                     <?php $uniqueId = uniqid(); ?>
                     <?php foreach($entity->attachments as $attachment): ?>
-                        <tr data-attachment-id="<?= $attachment->id ?>">
+                        <tr data-attachment-id="<?= $attachment->id ?>" data-sort="<?= $attachment->sort ?>">
                             <td>
                                 <span class="fa fa-arrows-v"></span>
                             </td>
