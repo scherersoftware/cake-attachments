@@ -7,6 +7,7 @@ CREATE TABLE `attachments` (
   `model` varchar(255) NOT NULL,
   `foreign_key` char(36) NOT NULL,
   `tags` text,
+  `sort` int(10) NULL,
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
