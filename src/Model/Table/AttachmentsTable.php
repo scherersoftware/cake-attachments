@@ -33,7 +33,7 @@ class AttachmentsTable extends Table
         $this->addBehavior('CkTools.Sortable', [
             'sortField' => 'sort',
             'defaultOrder' => ['sort' => 'ASC'],
-            'columnScope' => ['columnScope']
+            'columnScope' => ['foreign_key']
         ]);
 
         $this->schema()->columnType('tags', 'json');
