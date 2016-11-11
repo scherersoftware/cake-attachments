@@ -16,6 +16,20 @@ require_once Plugin::path('Attachments') . 'src/Lib/UploadHandler.php';
 class AttachmentsController extends AppController
 {
 
+
+    /**
+     * beforeFilter event
+     *
+     * @param Event $event cake event
+     * @return void
+     */
+    public function beforeFilter(\Cake\Event\Event $event)
+    {
+        if (isset($this->Csrf) && in_array($event->subject()->request->params['action'], ['upload'])) {
+            $this->eventManager()->off($this->Csrf);
+        }
+    }
+
     /**
      * Initializer
      *
@@ -72,6 +86,9 @@ class AttachmentsController extends AppController
             case 'image/jpeg':
             case 'image/gif':
                 $image = new \Imagick($attachment->getAbsolutePath());
+                if (Configure::read('Attachments.autorotate')) {
+                    $this->_autorotate($image);
+                }
                 break;
             case 'application/pdf':
                 // Will render a preview of the first page of this PDF
@@ -114,6 +131,9 @@ class AttachmentsController extends AppController
             case 'image/jpeg':
             case 'image/gif':
                 $image = new \Imagick($attachment->getAbsolutePath());
+                if (Configure::read('Attachments.autorotate')) {
+                    $this->_autorotate($image);
+                }
                 break;
             case 'application/pdf':
                 header('Content-Type: ' . $attachment->filetype);
@@ -177,6 +197,43 @@ class AttachmentsController extends AppController
                 }
             }
         }
+    }
+
+    /**
+     * rotate image depending on exif info
+     *
+     * @param Imagick $image image handler
+     * @return void
+     */
+    protected function _autorotate(\Imagick $image)
+    {
+        switch ($image->getImageOrientation()) {
+            case \Imagick::ORIENTATION_TOPRIGHT:
+                $image->flopImage();
+                break;
+            case \Imagick::ORIENTATION_BOTTOMRIGHT:
+                $image->rotateImage('#000', 180);
+                break;
+            case \Imagick::ORIENTATION_BOTTOMLEFT:
+                $image->flopImage();
+                $image->rotateImage('#000', 180);
+                break;
+            case \Imagick::ORIENTATION_LEFTTOP:
+                $image->flopImage();
+                $image->rotateImage('#000', -90);
+                break;
+            case \Imagick::ORIENTATION_RIGHTTOP:
+                $image->rotateImage('#000', 90);
+                break;
+            case \Imagick::ORIENTATION_RIGHTBOTTOM:
+                $image->flopImage();
+                $image->rotateImage('#000', 90);
+                break;
+            case \Imagick::ORIENTATION_LEFTBOTTOM:
+                $image->rotateImage('#000', -90);
+                break;
+        }
+        $image->setImageOrientation(\Imagick::ORIENTATION_TOPLEFT);
     }
 
     /**

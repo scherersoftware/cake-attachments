@@ -72,16 +72,21 @@ class AttachmentsTable extends Table
      *
      * @param EntityInterface $entity Entity to attach the files to
      * @param array $uploads List of paths relative to the Attachments.tmpUploadsPath
-     *                       config value
+     *                       config value or ['path_to_file' => [tag1, tag2, tag3, ...]]
      * @return void
      */
     public function addUploads(EntityInterface $entity, array $uploads)
     {
         $attachments = [];
-        foreach ($uploads as $upload) {
-            $file = Configure::read('Attachments.tmpUploadsPath') . $upload;
+        foreach ($uploads as $path => $tags) {
+            if (!(array_keys($uploads) !== range(0, count($uploads) - 1))) {
+                // if only paths and no tags
+                $path = $tags;
+                $tags = [];
+            }
+            $file = Configure::read('Attachments.tmpUploadsPath') . $path;
 
-            $attachment = $this->createAttachmentEntity($entity, $file);
+            $attachment = $this->createAttachmentEntity($entity, $file, $tags);
             $this->save($attachment);
             $attachments[] = $attachment;
         }
@@ -92,13 +97,19 @@ class AttachmentsTable extends Table
      * Save one Attachemnt
      *
      * @param EntityInterface $entity Entity
-     * @param string $upload Upload
+     * @param string $upload String to uploaded file or ['path_to_file' => [tag1, tag2, tag3, ...]]
      * @return entity
      */
     public function addUpload(EntityInterface $entity, $upload)
     {
-        $file = Configure::read('Attachments.tmpUploadsPath') . $upload;
-        $attachment = $this->createAttachmentEntity($entity, $file);
+        $tags = [];
+        $path = $upload;
+        if (is_array($upload)) {
+            $tags = reset($upload);
+            $path = reset(array_flip($upload));
+        }
+        $file = Configure::read('Attachments.tmpUploadsPath') . $path;
+        $attachment = $this->createAttachmentEntity($entity, $file, $tags);
         $save = $this->save($attachment);
         if ($save) {
             return $attachment;
@@ -151,16 +162,17 @@ class AttachmentsTable extends Table
      *
      * @param EntityInterface $entity Entity the file will be attached to
      * @param string $filePath Absolute path to the file
+     * @param array $tags Indexed array of tags to be assigned
      * @return Attachment
      * @throws \Exception If the given file doesn't exist or isn't readable
      */
-    public function createAttachmentEntity(EntityInterface $entity, $filePath)
+    public function createAttachmentEntity(EntityInterface $entity, $filePath, array $tags = [])
     {
         if (!file_exists($filePath)) {
-            throw new \Exception("File {$file} does not exist.");
+            throw new \Exception("File {$filePath} does not exist.");
         }
         if (!is_readable($filePath)) {
-            throw new \Exception("File {$file} cannot be read.");
+            throw new \Exception("File {$filePath} cannot be read.");
         }
         $file = new File($filePath);
         $info = $file->info();
@@ -177,7 +189,8 @@ class AttachmentsTable extends Table
             'filesize' => $info['filesize'],
             'filetype' => $info['mime'],
             'filepath' => $targetPath,
-            'tmpPath' => $filePath
+            'tmpPath' => $filePath,
+            'tags' => $tags
         ]);
         return $attachment;
     }

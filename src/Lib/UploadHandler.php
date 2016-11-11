@@ -1123,15 +1123,27 @@ class UploadHandler
     }
 
     protected function get_upload_data($id) {
-        return @$_FILES[$id];
+        if (array_key_exists($id, $_FILES)) {
+            return $_FILES[$id];
+        } else {
+            return null;
+        }
     }
 
     protected function get_query_param($id) {
-        return @$_GET[$id];
+        if (array_key_exists($id, $_GET)) {
+            return $_GET[$id];
+        } else {
+            return null;
+        }
     }
 
     protected function get_server_var($id) {
-        return @$_SERVER[$id];
+        if (array_key_exists($id, $_SERVER)) {
+            return $_SERVER[$id];
+        } else {
+            return null;
+        }
     }
 
     protected function handle_form_data($file, $index) {
