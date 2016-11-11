@@ -8,6 +8,7 @@ use Cake\Filesystem\File;
 use Cake\Network\Exception\UnauthorizedException;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Text;
+use CkTools\Lib\ApiReturnCode;
 use FrontendBridge\Lib\ServiceResponse;
 
 require_once Plugin::path('Attachments') . 'src/Lib/UploadHandler.php';
@@ -284,5 +285,28 @@ class AttachmentsController extends AppController
 
         $entity = $Model->get($attachment->foreign_key, ['contain' => 'Attachments']);
         $this->set(compact('entity', 'options'));
+    }
+
+    /**
+     * Sort Interface
+     *
+     * @return ServiceResponse
+     */
+    public function sort()
+    {
+        if ($this->request->is(['post'])) {
+            if (!empty($this->request->data['attachmentId']) && isset($this->request->data['sort'])) {
+                $attachmentId = $this->request->data['attachmentId'];
+                $sort = $this->request->data['sort'];
+                
+                $attachment = $this->Attachments->get($attachmentId);
+                $attachment->sort = $sort;
+                if ($this->Attachments->save($attachment)) {
+                    return new ServiceResponse(ApiReturnCode::SUCCESS, [$attachmentId, $sort]);
+                }
+                return new ServiceResponse(ApiReturnCode::INTERNAL_ERROR, []);
+            }
+        }
+        throw new NotFoundException();
     }
 }
