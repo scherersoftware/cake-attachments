@@ -1,3 +1,5 @@
+<?php $leftGrid = $this->Form->config('grid.left') ?: 2; ?>
+<?php $middleGrid = $this->Form->config('grid.middle') ?: 6; ?>
 <?php if(!$options['isAjax']) : ?>
 <div class="form-group fileupload attachments-area clearfix" id="<?php echo $options['id'] ?>" style="<?= $options['style'] ?>"
     data-fileupload-id="<?= $options['id'] ?>"
@@ -8,8 +10,8 @@
 >
 <?php endif; ?>
 <?php if(!empty($options['label']) && $options['label'] !== false): ?>
-        <label class="col-md-2 control-label" for="input-<?php echo $options['id'] ?>"><?= $options['label'] ?></label>
-        <div class="col-md-6">
+        <label class="col-md-<?= $leftGrid ?>  control-label" for="input-<?php echo $options['id'] ?>"><?= $options['label'] ?></label>
+        <div class="col-md-<?= $middleGrid ?>">
 <?php endif; ?>
     <div class="panel panel-default">
         <?php if ($options['panelHeading']): ?>
