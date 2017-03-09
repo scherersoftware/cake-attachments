@@ -1,114 +1,207 @@
-<?php $leftGrid = $this->Form->config('grid.left') ?: 2; ?>
-<?php $middleGrid = $this->Form->config('grid.middle') ?: 6; ?>
-<?php if(!$options['isAjax']) : ?>
-<div class="form-group fileupload attachments-area clearfix" id="<?php echo $options['id'] ?>" style="<?= $options['style'] ?>"
-    data-fileupload-id="<?= $options['id'] ?>"
-    data-options-label="<?= $options['label'] ?>"
-    data-options-taggable="<?= $options['taggable'] ?>"
-    data-options-mode="<?= $options['mode'] ?>"
-    data-options-formFieldName="<?= $options['formFieldName'] ?>"
->
-<?php endif; ?>
-<?php if(!empty($options['label']) && $options['label'] !== false): ?>
-        <label class="col-md-<?= $leftGrid ?>  control-label" for="input-<?php echo $options['id'] ?>"><?= $options['label'] ?></label>
-        <div class="col-md-<?= $middleGrid ?>">
-<?php endif; ?>
-    <div class="panel panel-default">
-        <?php if ($options['panelHeading']): ?>
-            <div class="panel-heading">
-                <h3 class="panel-title"><?= $options['panelHeading'] ?></h3>
+<div class="attachments-container">
+<div class="row">
+    <div class="col-xs-12">
+        <div class="attachments-dropzone">
+            <div class="hint">
+                <b class="fileupload-button">Choose a file</b> or drag it here.
             </div>
-        <?php endif; ?>
-        <?php if(!empty($entity->attachments)): ?>
-            <table class="table attachments">
-                <tbody>
-                    <?php $uniqueId = uniqid(); ?>
-                    <?php foreach($entity->attachments as $attachment): ?>
-                        <tr data-attachment-id="<?= $attachment->id ?>">
-                            <?php if ($options['showIconColumn']): ?>
-                                <td class="icon">
-                                    <?php if ($attachment->isImage()): ?>
-                                        <?php if (empty($options['useGlide'])) $options['useGlide'] = false; ?>
-                                        <?php $href = $options['useGlide'] ? $this->Glide->url($attachment->filepath) : $attachment->viewUrl() ?>
-                                        <a href= "<?= $href ?>" data-lightbox="image-<?= $uniqueId ?>" data-title="<a href='<?php echo $attachment->downloadUrl() ?>'><i class='fa fa-download'></i> Download</a>&nbsp;&nbsp;-&nbsp;<?= $attachment->filename ?>">
-                                            <img src="<?php echo $attachment->previewUrl() ?>">
-                                        </a>
-                                    <?php else: ?>
-                                        <a href="<?php echo $attachment->downloadUrl() ?>">
-                                            <img src="<?php echo $attachment->previewUrl() ?>">
-                                        </a>
-                                    <?php endif; ?>
-                                </td>
-                            <?php endif; ?>
-                            <td class="filename">
-                                <?= $attachment->filename ?>
-                                <?php if ($options['taggable']) : ?>
-                                    <div class="tags-container">
-                                        <p class="tags">
-                                            <?= $this->Attachments->tagsList($attachment); ?>
-                                        </p>
-                                        <?= $this->Attachments->tagsChooser($entity, $attachment) ?>
-                                    </div>
-                                <?php endif; ?>
-                            </td>
-                            <td class="size"><?= $this->Number->toReadableSize($attachment->filesize) ?></td>
-                            <td class="actions">
-                                <?php if ($options['taggable']) : ?>
-                                    <a class="btn btn-default btn-xs edit-btn" title="<?= __d('attachments', 'edit_tags') ?>" href="javascript:"><i class="fa fa-fw fa-pencil"></i></a>
-                                <?php endif; ?>
-                                <a class="btn btn-info btn-xs download-btn" title="<?= __d('attachments', 'download_attachment') ?>" href="<?= $attachment->downloadUrl() ?>"><i class="fa fa-fw fa-cloud-download"></i></a>
-                                <?php if ($options['mode'] != 'readonly'): ?>
-                                    <a class="btn btn-danger btn-xs delete-btn" title="<?= __d('attachments', 'delete_attachment') ?>"><i class="fa fa-fw fa-times"></i></a>
-                                <?php endif; ?>
-                                <?php if ($options['additionalButtons'] !== null && is_callable($options['additionalButtons'])): ?>
-                                    <?= $options['additionalButtons']($attachment) ?>
-                                <?php endif; ?>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        <?php else : ?>
-            <div class="panel-body">
-                <div class="alert alert-info"><?=  __d('attachments', 'no_attachments'); ?></div>
-            </div>
-        <?php endif; ?>
-        <?php if ($options['mode'] != 'readonly'): ?>
-            <div class="panel-body">
-                <ul class="fileupload-file-list"></ul>
-
-                <div class="upload-section">
-                    <span class="btn btn-default btn-block btn-lg fileinput-button dropzone">
-                        <i class="fa fa-plus"></i>
-                        <span><?= __d('attachments', 'add') ?></span>
-                        <!-- The file input field used as target for the file upload widget -->
-                        <input id="input-<?php echo $options['id'] ?>" type="file" name="files[]" class="fileupload-input" multiple>
-                    </span>
+            <input id="input-<?php echo $options['id'] ?>" type="file" name="files[]" class="fileupload-input" multiple>
+            <script id="item-template" type="text/attachments-item-template">
+                <div class="item">
+                    <div class="uploading">
+                        <div class="progress">
+                          <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 0%"></div>
+                        </div>
+                    </div>
                 </div>
-                <div class="fileupload-progress progress">
-                    <div class="fileupload-progress-bar progress-bar progress-bar-success"></div>
+            </script>
+            <script id="item-add-more-template" type="text/attachments-item-template">
+                <div class="item add-more">
+                    <i>Add more...</i>
                 </div>
-
-                <?php if($options['formFieldName']): ?>
-                    <?php
-                    $selectOptions = [];
-                    if($this->Form->context('entity')->val($options['formFieldName'])) {
-                        $selectOptions = array_combine($this->Form->context('entity')->val($options['formFieldName']), $this->Form->context('entity')->val($options['formFieldName']));
-                    }
-                    echo $this->Form->select($options['formFieldName'], $selectOptions, [
-                        'multiple' => true,
-                        'label' => false,
-                        'class' => 'hidden-attachments-select'
-                    ]);
-                    ?>
-                <?php endif; ?>
-            </div>
-        <?php endif; ?>
-    </div>
-
-<?php if($options['label']): ?>
+            </script>
         </div>
-<?php endif; ?>
-<?php if(!$options['isAjax']) : ?>
+    </div>
 </div>
-<?php endif; ?>
+<!-- <h3>List View</h3>
+<div class="row">
+    <div class="col-xs-12">
+        <ul class="attachments-list list-group">
+          <li class="list-group-item">
+              <div class="img pull-left"></div>
+              <div class="misc pull-left">
+                  <div class="info">
+                      <b>Foo.jpg - 3MB</b>
+                  </div>
+                  <div class="tags">
+                      <span class="label label-default">#foo</span>
+                      <span class="label label-default">#bar</span>
+                      <span class="label label-default">#1337</span>
+                      <span class="label label-default">#this-is-a-tag</span>
+                  </div>
+              </div>
+              <div class="buttons pull-right">
+                  <div class="btn btn-default btn-xs"><i class="fa fa-download fa-lg pull-left" aria-hidden="true"></i> Download</div>
+                  <div class="btn btn-default btn-xs"><i class="fa fa-tags fa-lg pull-left" aria-hidden="true"></i> Edit Tags</div>
+                  <div class="btn btn-default btn-xs"><i class="fa fa-trash fa-lg pull-left" aria-hidden="true"></i> Delte</div>
+              </div>
+          </li>
+          <li class="list-group-item">
+              <div class="img pull-left">
+                  <div class="magnify">
+                      <i class="fa fa-eye fa-2x" aria-hidden="true"></i>
+                  </div>
+              </div>
+              <div class="misc pull-left">
+                  <div class="info">
+                      <b>Foo.jpg - 3MB</b>
+                  </div>
+                  <div class="tags">
+                      <span class="label label-default">#foo <i class="fa fa-trash" aria-hidden="true"></i></span>
+                      <span class="label label-default">#bar <i class="fa fa-trash" aria-hidden="true"></i></span>
+                      <span class="label label-default">#1337 <i class="fa fa-trash" aria-hidden="true"></i></span>
+                      <span class="label label-default">#this-is-a-tag <i class="fa fa-trash" aria-hidden="true"></i></span>
+                      <div class="tag-input">
+                          <input type="text" placeholder="Add a new tag">
+                          <div>
+                              <i class="fa fa-save fa-lg" aria-hidden="true"></i>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="buttons pull-right">
+                  <div class="btn btn-default btn-xs"><i class="fa fa-download fa-lg pull-left" aria-hidden="true"></i> Download</div>
+                  <div class="btn btn-default btn-xs active"><i class="fa fa-tags fa-lg pull-left" aria-hidden="true"></i> Edit Tags</div>
+                  <div class="btn btn-default btn-xs"><i class="fa fa-trash fa-lg pull-left" aria-hidden="true"></i> Delte</div>
+              </div>
+          </li>
+        </ul>
+    </div>
+</div>
+
+<h3>Tiles View</h3>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="attachments-tiles">
+            <div class="item">
+                <div class="img"></div>
+                <div class="misc">
+                    <div class="info">
+                        Foo.jpg
+                    </div>
+                    <div class="tags">
+                        <span class="label label-default">#foo</span>
+                        <span class="label label-default">#bar</span>
+                        <span class="label label-default">#1337</span>
+                        <span class="label label-default">#this-is-a-tag</span>
+                        <div class="more-tags">And 5+ more...</div>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="img"></div>
+                <div class="magnify">
+                    <i class="fa fa-eye" aria-hidden="true"></i>
+                </div>
+                <div class="misc">
+                    <div class="info">
+                        Foo.jpg - 3MB
+                    </div>
+                    <div class="buttons">
+                        <div class="button"><i class="fa fa-download fa-lg" aria-hidden="true"></i></div>
+                        <div class="button"><i class="fa fa-tags fa-lg" aria-hidden="true"></i></div>
+                        <div class="button"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="img"></div>
+                <div class="magnify">
+                    <i class="fa fa-eye" aria-hidden="true"></i>
+                </div>
+                <div class="misc">
+                    <div class="info">
+                        Foo.jpg - 3MB
+                    </div>
+                    <div class="buttons">
+                        <div class="button"><i class="fa fa-download fa-lg" aria-hidden="true"></i></div>
+                        <div class="button">
+                            <i class="fa fa-tags fa-lg" aria-hidden="true"></i>
+                        </div>
+                        <div class="button"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></div>
+                    </div>
+                    <div class="edit-tags">
+                        <div class="headline">Edit Tags</div>
+                        <div class="label label-default">
+                            #foo
+                            <i class="fa fa-trash pull-right" aria-hidden="true"></i>
+                        </div>
+                        <div class="label label-default">
+                            #bar
+                            <i class="fa fa-trash pull-right" aria-hidden="true"></i>
+                        </div>
+                        <div class="label label-default">
+                            #1337
+                            <i class="fa fa-trash pull-right" aria-hidden="true"></i>
+                        </div>
+                        <div class="label label-default">
+                            #this-is-a-tag
+                            <i class="fa fa-trash pull-right" aria-hidden="true"></i>
+                        </div>
+                        <div class="add-tag label label-success">
+                            Add a new one
+                            <i class="fa fa-plus pull-right" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h3 class="dropzone">Dropzone</h3>
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="attachments-dropzone">
+            <div class="hint">
+                Drag & Drop files here<br>
+                -
+                <div>
+                    <div class="btn btn-default">
+                        <i class="fa fa-floppy-o" aria-hidden="true"></i><span>&nbsp;-&nbsp;or click here</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h3>Dropzone while uploading</h3>
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="attachments-dropzone">
+            <div class="item">
+                <div class="uploading">
+                    <div class="progress">
+                      <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%">
+                        <span class="sr-only">45% Complete</span>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="remove">
+                    <i class="fa fa-times fa-lg" aria-hidden="true"></i>
+                </div>
+                <div class="tag">
+                    <i class="fa fa-tags fa-lg" aria-hidden="true"></i>
+                </div>
+            </div>
+            <div class="item add-more">
+                <i>Add more...</i>
+            </div>
+        </div>
+    </div>
+</div> -->
