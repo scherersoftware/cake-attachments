@@ -63,7 +63,7 @@ class AttachmentsController extends AppController
         ];
 
         $uploadHandler = new \UploadHandler($options);
-        exit;
+        $this->response->stop();
     }
 
     /**

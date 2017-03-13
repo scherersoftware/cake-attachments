@@ -112,16 +112,3 @@
 <?php if(!$options['isAjax']) : ?>
 </div>
 <?php endif; ?>
-
-<div class="row">
-    <div class="col-xs-12">
-        <div class="attachemnts-dropzone  upload-section">
-            <span class="btn btn-default btn-block btn-lg fileinput-button dropzone">
-                <i class="fa fa-disc"></i>
-                <span><?= __d('attachments', 'add') ?></span>
-                <!-- The file input field used as target for the file upload widget -->
-                <input id="input-<?php echo $options['id'] ?>" type="file" name="files[]" class="fileupload-input" multiple>
-            </span>
-        </div>
-    </div>
-</div>
