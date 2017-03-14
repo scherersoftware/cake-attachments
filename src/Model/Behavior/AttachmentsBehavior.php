@@ -76,7 +76,7 @@ class AttachmentsBehavior extends Behavior
     }
 
     /**
-     * afterSave Event
+     * AfterSave Event
      *
      * @param Event $event Event
      * @param EntityInterface $entity Entity to be saved
@@ -91,9 +91,9 @@ class AttachmentsBehavior extends Behavior
     }
 
     /**
-     * get the configured tags
+     * Get the configured tags
      *
-     * @param  bool   $list if it should return a list for selects or the whole array
+     * @param bool $list If it should return a list for selects or the whole array
      * @return array
      */
     public function getAttachmentsTags($list = true)
@@ -152,7 +152,7 @@ class AttachmentsBehavior extends Behavior
     }
 
     /**
-     * removes given $tag from every attachment belonging to the same entity as given $attachment
+     * Removes given $tag from every attachment belonging to the same entity as given $attachment
      *
      * @param \Attachments\Model\Entity\Attachment $attachment The attachment entity which should get the exclusive tag
      * @param string $tag The exclusive tag to be removed

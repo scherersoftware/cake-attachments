@@ -20,7 +20,7 @@
                 </div>
             </script>
         </div>
-        <?php if ($options['formFieldName']) {
+        <?php
             $selectOptions = [];
             if($this->Form->context('entity')->val($options['formFieldName'])) {
                 $selectOptions = array_combine(
@@ -34,6 +34,6 @@
                 'label' => false,
                 'class' => 'hidden-attachments-select'
             ]);
-        } ?>
+        ?>
     </div>
 </div>
