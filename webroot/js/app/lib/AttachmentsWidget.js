@@ -87,6 +87,18 @@ App.Lib.AttachmentsWidget = Class.extend({
         .parent().addClass($.support.fileInput ? undefined : 'disabled');
     },
     _handleFileAdd: function(data) {
+
+        $.each(data.files, function (index, file) {
+            // FIXME Workaround for duplicated files
+            if ($('.item[data-name="' + file.name + '"]').length) {
+                return;
+            }
+            var template = $('#item-template').html().replace('<div class="item">', '<div class="item" data-name="' + file.name + '">');
+            this.$dropZone.prepend(template);
+            var src = URL.createObjectURL(file);
+            $item = $('.item[data-name="' + file.name + '"]').css("background-image", "url(" + src  + ")");
+        }.bind(this));
+
         $('.hint').hide();
         this.$dropZone.find('.add-more').remove();
 
@@ -94,12 +106,6 @@ App.Lib.AttachmentsWidget = Class.extend({
         this.$dropZone.append(addMoreTemplate);
         this.$dropZone.find('.add-more').click(function() {
             this.$input.trigger( "click" );
-        }.bind(this));
-        $.each(data.files, function (index, file) {
-            var template = $('#item-template').html().replace('<div class="item">', '<div class="item" data-name="' + file.name + '">');
-            this.$dropZone.prepend(template);
-            var src = URL.createObjectURL(file);
-            $item = $('.item[data-name="' + file.name + '"]').css("background-image", "url(" + src  + ")");
         }.bind(this));
     }
 });
