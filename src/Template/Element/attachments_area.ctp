@@ -20,12 +20,12 @@
                                 </div>
                             </div>
                             <div class="buttons pull-right">
-                                <a href="<?= $attachment->downloadUrl() ?>" class="btn btn-default btn-xs">
-                                    <i class="fa fa-download fa-lg pull-left" aria-hidden="true"></i>
+                                <a href="<?= $attachment->downloadUrl() ?>" class="btn btn-default btn-xs btn-block">
+                                    <i class="fa fa-download" aria-hidden="true"></i>
                                     <span class="hidden-xs"> <?= __d('attachments', 'download_attachment') ?></span>
                                 </a>
-                                <a class="btn btn-danger btn-xs btn-delete" data-attachment-id="<?= $attachment->id ?>">
-                                    <i class="fa fa-trash fa-lg pull-left" aria-hidden="true"></i>
+                                <a class="btn btn-danger btn-xs btn-delete btn-block" data-attachment-id="<?= $attachment->id ?>">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
                                     <span class="hidden-xs"> <?= __d('attachments', 'delete_attachment') ?></span>
                                 </a>
                             </div>

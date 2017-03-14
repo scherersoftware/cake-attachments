@@ -52,11 +52,6 @@
 .attachments-list .misc > .tags > .tag-input .fa {
     cursor: pointer;
 }
-.attachments-list .buttons > a {
-    width: 100px;
-    display: block;
-    margin-bottom: 5px;
-}
 .attachments-list .buttons > a > .fa {
     padding-top: 3px;
 }
