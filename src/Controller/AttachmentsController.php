@@ -91,8 +91,12 @@ class AttachmentsController extends AppController
                 break;
             case 'application/pdf':
                 // Will render a preview of the first page of this PDF
-                $image = new \Imagick($attachment->getAbsolutePath() . '[0]');
-                break;
+                try {
+                    $image = new \Imagick($attachment->getAbsolutePath() . '[0]');
+                    break;
+                } catch (\ImagickException $e) {
+                    //fall through
+                };
             default:
                 $image = new \Imagick(Plugin::path('Attachments') . '/webroot/img/file.png');
                 break;
@@ -108,7 +112,7 @@ class AttachmentsController extends AppController
         echo $image;
 
         $image->destroy();
-        exit;
+        $this->response->stop();
     }
 
     /**
@@ -154,7 +158,7 @@ class AttachmentsController extends AppController
         echo $image;
 
         $image->destroy();
-        exit;
+        $this->response->stop();
     }
 
     /**

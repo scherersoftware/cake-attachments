@@ -1,6 +1,42 @@
 <div class="attachments-container">
     <div class="row">
         <div class="col-xs-12">
+            <?php if (empty($entity->attachments)): ?>
+                <div class="alert alert-info"><?= __('no_photos') ?></div>
+            <?php else: ?>
+                <ul class="attachments-list list-group">
+                    <?php foreach ($entity->attachments as $attachment): ?>
+                        <li class="list-group-item" data-attachment-id="<?= $attachment->id ?>">
+                            <?php if ($attachment->isImage()) : ?>
+                                <a href="<?= $attachment->viewUrl() ?>" target="_blank" class="img pull-left" data-featherlight="image" style="background-image: url(<?= $attachment->previewUrl() ?>);">
+                                    <i class="fa fa-eye fa-3x" aria-hidden="true"></i>
+                                </a>
+                            <?php else : ?>
+                                <div class="img pull-left" style="background-image: url(<?= $attachment->previewUrl() ?>);"></div>
+                            <?php endif; ?>
+                            <div class="misc pull-left">
+                                <div class="info">
+                                    <b><?= h($attachment->filename) ?> - <?= round($attachment->filesize / 1024 / 1024, 2) ?> MB</b>
+                                </div>
+                            </div>
+                            <div class="buttons pull-right">
+                                <a href="<?= $attachment->downloadUrl() ?>" class="btn btn-default btn-xs">
+                                    <i class="fa fa-download fa-lg pull-left" aria-hidden="true"></i>
+                                    <span class="hidden-xs"> <?= __d('attachments', 'download_attachment') ?></span>
+                                </a>
+                                <a class="btn btn-danger btn-xs btn-delete" data-attachment-id="<?= $attachment->id ?>">
+                                    <i class="fa fa-trash fa-lg pull-left" aria-hidden="true"></i>
+                                    <span class="hidden-xs"> <?= __d('attachments', 'delete_attachment') ?></span>
+                                </a>
+                            </div>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
             <div class="attachments-dropzone">
                 <div class="hint">
                     <b class="fileupload-button">Choose a file</b> or drag it here.

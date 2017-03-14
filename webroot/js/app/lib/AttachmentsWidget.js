@@ -16,6 +16,24 @@ App.Lib.AttachmentsWidget = Class.extend({
             this.config = $.extend(this.config, config);
         }
 
+        $('.attachments-list a.btn-delete').click(function(e) {
+            var attachmentId = $(e.currentTarget).data('attachment-id');
+            var url = {
+                plugin: 'attachments',
+                controller: 'attachments',
+                action: 'delete',
+                pass: [attachmentId]
+            };
+
+            if(confirm("Do you really want to delete this file? This action cannot be undone. Click Cancel if you're unsure.")) {
+                App.Main.UIBlocker.blockElement($(e.currentTarget));
+                App.Main.request(url, null, function(response) {
+                    App.Main.UIBlocker.unblockElement($(e.currentTarget));
+                    $('.attachments-list li[data-attachment-id=' + attachmentId + ']').remove();
+                });
+            }
+        }.bind(this));
+
         this.$input = this.$element.find('.fileupload-input');
 
         $('.fileupload-button').click(function() {
@@ -77,27 +95,43 @@ App.Lib.AttachmentsWidget = Class.extend({
                 );
             }.bind(this),
             drop: function (e, data) {
-                this._handleFileAdd(data);
+                return this._handleFileAdd(data);
             }.bind(this),
             change: function (e, data) {
-                this._handleFileAdd(data);
+                return this._handleFileAdd(data);
             }.bind(this)
         })
         .prop('disabled', !$.support.fileInput)
         .parent().addClass($.support.fileInput ? undefined : 'disabled');
     },
     _handleFileAdd: function(data) {
-
+        var abort = false;
         $.each(data.files, function (index, file) {
             // FIXME Workaround for duplicated files
             if ($('.item[data-name="' + file.name + '"]').length) {
-                return;
+                abort = true;
+                return true;
             }
             var template = $('#item-template').html().replace('<div class="item">', '<div class="item" data-name="' + file.name + '">');
             this.$dropZone.prepend(template);
             var src = URL.createObjectURL(file);
-            $item = $('.item[data-name="' + file.name + '"]').css("background-image", "url(" + src  + ")");
+            switch (file.type) {
+                case 'image/png':
+                case 'image/jpg':
+                case 'image/jpeg':
+                case 'image/gif':
+                    $('.item[data-name="' + file.name + '"]').css("background-image", "url(" + src  + ")");
+                    break;
+                default:
+                    $('.item[data-name="' + file.name + '"]').css("background-image", "url(/attachments/img/file.png)");
+                    $('.item[data-name="' + file.name + '"]').css("background-color", "rgba(1, 1, 1, 0.4)");
+                    break;
+            }
         }.bind(this));
+
+        if (abort) {
+            return false;
+        }
 
         $('.hint').hide();
         this.$dropZone.find('.add-more').remove();

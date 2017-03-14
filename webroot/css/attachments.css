@@ -9,11 +9,10 @@
     height: 80px;
     width: 80px;
     margin-right: 10px;
-    background-image: url(/attachments/img/item1.png);
     background-position: center center;
     background-size: cover;
 }
-.attachments-list .img .magnify {
+.attachments-list a.img > .fa {
     border-radius: 10px;
     height: 80px;
     width: 80px;
@@ -22,6 +21,11 @@
     text-align: center;
     color: white;
     cursor: pointer;
+    z-index: 10;
+    visibility: hidden;
+}
+.attachments-list a.img:hover > .fa {
+    visibility: visible;
 }
 .attachments-list .misc > .tags > .label > .fa-trash {
     cursor: pointer;
@@ -48,12 +52,12 @@
 .attachments-list .misc > .tags > .tag-input .fa {
     cursor: pointer;
 }
-.attachments-list .buttons > div {
+.attachments-list .buttons > a {
     width: 100px;
     display: block;
     margin-bottom: 5px;
 }
-.attachments-list .buttons > div > .fa {
+.attachments-list .buttons > a > .fa {
     padding-top: 3px;
 }
 .attachments-tiles {
@@ -248,7 +252,6 @@
     top: 30px;
 }
 .attachments-dropzone > .item > .uploading {
-    background-color: rgba(1, 1, 1, 0.4);
     height: 100%;
     width: 100%;
     border-radius: 10px;
