@@ -9,7 +9,7 @@
  * Licensed under the MIT license:
  * https://opensource.org/licenses/MIT
  */
-
+// @codingStandardsIgnoreStart
 class UploadHandler
 {
 
@@ -1391,3 +1391,4 @@ class UploadHandler
         return substr(basename('X'.$splited[count($splited)-1], $suffix), 1);
     }
 }
+// @codingStandardsIgnoreEnd

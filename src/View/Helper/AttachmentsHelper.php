@@ -54,17 +54,12 @@ class AttachmentsHelper extends Helper
             $this->addDependencies();
         }
         $options = Hash::merge([
-            'label' => false,
             'id' => 'fileupload-' . uniqid(),
-            'formFieldName' => false,
-            'mode' => 'full',
-            'style' => '',
+            'full_mode' => true,
+            'formFieldName' => 'attachment_uploads',
             'taggable' => false,
-            'isAjax' => false,
-            'panelHeading' => __d('attachments', 'attachments'),
-            'showIconColumn' => true,
-            'additionalButtons' => null
         ], $options);
+
         return $this->_View->element('Attachments.attachments_area', compact('options', 'entity'));
     }
 
@@ -85,15 +80,17 @@ class AttachmentsHelper extends Helper
         foreach ($attachment->tags as $tag) {
             $tagsString .= '<label class="label label-default">' . $Table->getTagCaption($tag) . '</label> ';
         }
+
         return $tagsString;
     }
 
     /**
      * Render a multi select with all available tags of entity and the tags of attachment preselected
      *
-     * @param  EntityInterface                    $entity     the entity to get all allowed tags from
-     * @param  Attachment\Model\Entity\Attachment $attachment the attachment entity to add the tag to
+     * @param  EntityInterface $entity The entity to get all allowed tags from
+     * @param  Attachment\Model\Entity\Attachment $attachment The attachment entity to add the tag to
      * @return string
+     * @throws
      */
     public function tagsChooser(EntityInterface $entity, $attachment)
     {

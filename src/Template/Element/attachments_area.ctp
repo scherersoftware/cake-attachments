@@ -1,76 +1,8 @@
 <div class="attachments-container">
-    <div class="row">
-        <div class="col-xs-12">
-            <?php if (empty($entity->attachments)): ?>
-                <div class="alert alert-info"><?= __('no_photos') ?></div>
-            <?php else: ?>
-                <ul class="attachments-list list-group">
-                    <?php foreach ($entity->attachments as $attachment): ?>
-                        <li class="list-group-item" data-attachment-id="<?= $attachment->id ?>">
-                            <?php if ($attachment->isImage()) : ?>
-                                <a href="<?= $attachment->viewUrl() ?>" target="_blank" class="img pull-left" data-featherlight="image" style="background-image: url(<?= $attachment->previewUrl() ?>);">
-                                    <i class="fa fa-eye fa-3x" aria-hidden="true"></i>
-                                </a>
-                            <?php else : ?>
-                                <div class="img pull-left" style="background-image: url(<?= $attachment->previewUrl() ?>);"></div>
-                            <?php endif; ?>
-                            <div class="misc pull-left">
-                                <div class="info">
-                                    <b><?= h($attachment->filename) ?> - <?= round($attachment->filesize / 1024 / 1024, 2) ?> MB</b>
-                                </div>
-                            </div>
-                            <div class="buttons pull-right">
-                                <a href="<?= $attachment->downloadUrl() ?>" class="btn btn-default btn-xs btn-block">
-                                    <i class="fa fa-download" aria-hidden="true"></i>
-                                    <span class="hidden-xs"> <?= __d('attachments', 'download_attachment') ?></span>
-                                </a>
-                                <a class="btn btn-danger btn-xs btn-delete btn-block" data-attachment-id="<?= $attachment->id ?>">
-                                    <i class="fa fa-trash" aria-hidden="true"></i>
-                                    <span class="hidden-xs"> <?= __d('attachments', 'delete_attachment') ?></span>
-                                </a>
-                            </div>
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
-            <?php endif; ?>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="attachments-dropzone">
-                <div class="hint">
-                    <b class="fileupload-button">Choose a file</b> or drag it here.
-                </div>
-                <input id="input-<?php echo $options['id'] ?>" type="file" name="files[]" class="fileupload-input" multiple>
-                <script id="item-template" type="text/attachments-item-template">
-                    <div class="item">
-                        <div class="uploading">
-                            <div class="progress">
-                              <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 0%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </script>
-                <script id="item-add-more-template" type="text/attachments-item-template">
-                    <div class="item add-more">
-                        <i>Add more...</i>
-                    </div>
-                </script>
-            </div>
-            <?php if($options['formFieldName']) {
-                $selectOptions = [];
-                if($this->Form->context('entity')->val($options['formFieldName'])) {
-                    $selectOptions = array_combine($this->Form->context('entity')->val($options['formFieldName']), $this->Form->context('entity')->val($options['formFieldName']));
-                }
-
-                echo $this->Form->select($options['formFieldName'], $selectOptions, [
-                    'multiple' => true,
-                    'label' => false,
-                    'class' => 'hidden-attachments-select'
-                ]);
-            } ?>
-        </div>
-    </div>
+    <?= $this->element('Attachments.attachments_list', [$options, $entity]) ?>
+    <?php if ($options['full_mode'] === true) : ?>
+        <?= $this->element('Attachments.attachments_dropzone', [$options, $entity]) ?>
+    <?php endif; ?>
 </div>
 <!-- <h3>List View</h3>
 <div class="row">

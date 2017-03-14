@@ -109,6 +109,7 @@ class AttachmentsTable extends Table
         if ($save) {
             return $attachment;
         }
+
         return $save;
     }
     /**
@@ -187,6 +188,7 @@ class AttachmentsTable extends Table
             'tmpPath' => $filePath,
             'tags' => $tags
         ]);
+
         return $attachment;
     }
 
@@ -204,6 +206,7 @@ class AttachmentsTable extends Table
             return $fileInfo;
         }
         $fileInfo['basename'] = $fileInfo['filename'] . ' (' . ++$id . ').' . $fileInfo['extension'];
+
         return $this->__getFileName($fileInfo, $entity, $id);
     }
 }

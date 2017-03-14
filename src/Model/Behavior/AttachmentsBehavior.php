@@ -33,7 +33,6 @@ class AttachmentsBehavior extends Behavior
     protected $_defaultConfig = [
         'formFieldName' => 'attachment_uploads',
         'tags' => [],
-        // function (Attachment $attachment, EntityInterface $relatedEntity) : bool
         'downloadAuthorizeCallback' => null
     ];
 
@@ -114,24 +113,25 @@ class AttachmentsBehavior extends Behavior
     }
 
     /**
-     * get the configured caption for a given tag or an empty string if this tag does not exist
+     * Get the configured caption for a given tag or an empty string if this tag does not exist
      *
-     * @param  string $tag tag
-     * @return string      caption of tag
+     * @param string $tag Tag
+     * @return string Caption of tag
      */
     public function getTagCaption($tag)
     {
         if (!isset($this->config('tags')[$tag])) {
             return '';
         }
+
         return $this->config('tags')[$tag]['caption'];
     }
 
     /**
-     * method to save the tags of an attachment
+     * Method to save the tags of an attachment
      *
-     * @param  Attachments\Model\Entity\Attachment $attachment the attachment entity
-     * @param  array $tags       array of tags
+     * @param \Attachments\Model\Entity\Attachment $attachment The attachment entity
+     * @param array $tags Array of tags
      * @return bool
      */
     public function saveTags($attachment, $tags)
@@ -147,14 +147,15 @@ class AttachmentsBehavior extends Behavior
         }
 
         $this->Attachments->patchEntity($attachment, ['tags' => $newTags]);
+
         return (bool)$this->Attachments->save($attachment);
     }
 
     /**
      * removes given $tag from every attachment belonging to the same entity as given $attachment
      *
-     * @param  Attachments\Model\Entity\Attachment  $attachment the attachment entity which should get the exclusive tag
-     * @param  string                               $tag        the exclusive tag to be removed
+     * @param \Attachments\Model\Entity\Attachment $attachment The attachment entity which should get the exclusive tag
+     * @param string $tag The exclusive tag to be removed
      * @return bool
      */
     protected function _clearTag($attachment, $tag)

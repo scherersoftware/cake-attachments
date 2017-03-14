@@ -52,8 +52,21 @@
 .attachments-list .misc > .tags > .tag-input .fa {
     cursor: pointer;
 }
-.attachments-list .buttons > a > .fa {
-    padding-top: 3px;
+@media (max-width: 520px) {
+    .attachments-list .img {
+        display: block;
+        float: none !important;
+    }
+    .attachments-list .misc {
+        float: none !important;
+        margin: 10px 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .attachments-list .buttons {
+        float: none !important;
+    }
 }
 .attachments-tiles {
     position: relative;

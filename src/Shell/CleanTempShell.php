@@ -57,7 +57,6 @@ class CleanTempShell extends Shell
             }
         }
 
-
         $this->out('Deleted ' . $deletedFolders . ' folders and ' . $deletedFiles . ' files.');
     }
 }
