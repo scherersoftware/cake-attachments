@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-xs-12">
-        <?php if (empty($entity->attachments) && $options['full_mode'] === true): ?>
+        <?php if (empty($entity->attachments)): ?>
             <div class="alert alert-info"><?= __('no_photos') ?></div>
         <?php else: ?>
             <ul class="attachments-list list-group">
@@ -13,13 +13,15 @@
                         <?php else : ?>
                             <div class="img pull-left" style="background-image: url(<?= $attachment->previewUrl() ?>);"></div>
                         <?php endif; ?>
-                        <div class="misc pull-left">
+                        <div class="misc">
                             <div class="info">
-                                <b><?= h($attachment->filename) ?> - <?= round($attachment->filesize / 1024 / 1024, 2) ?> MB</b>
+                                <b><?= h($attachment->filename) ?></b>
+                                <br>
+                                <b><?= round($attachment->filesize / 1024 / 1024, 2) ?> MB</b>
                             </div>
                         </div>
                         <div class="buttons pull-right">
-                            <a href="<?= $attachment->downloadUrl() ?>" class="btn btn-default btn-xs btn-block">
+                            <a href="<?= $attachment->downloadUrl() ?>" target="_blank" class="btn btn-default btn-xs btn-block">
                                 <i class="fa fa-download" aria-hidden="true"></i>
                                 <span> <?= __d('attachments', 'download_attachment') ?></span>
                             </a>

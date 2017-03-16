@@ -16,6 +16,17 @@ App.Lib.AttachmentsWidget = Class.extend({
             this.config = $.extend(this.config, config);
         }
 
+        var isAdvancedUpload = function() {
+          var div = document.createElement('div');
+          return (('draggable' in div) || ('ondragstart' in div && 'ondrop' in div));
+        }();
+
+        if (isAdvancedUpload === false) {
+            $('.attachments-dropzone').addClass('no-drag-support');
+            $('.attachments-dropzone .hint > b').prepend('<i class="fa fa-picture-o" aria-hidden="true""></i>');
+            $('.attachments-dropzone .hint > span').hide();
+        }
+
         $('.attachments-list a.btn-delete').click(function(e) {
             var attachmentId = $(e.currentTarget).data('attachment-id');
             var url = {
@@ -98,6 +109,7 @@ App.Lib.AttachmentsWidget = Class.extend({
                 return this._handleFileAdd(data);
             }.bind(this),
             change: function (e, data) {
+                console.log("in");
                 return this._handleFileAdd(data);
             }.bind(this)
         })

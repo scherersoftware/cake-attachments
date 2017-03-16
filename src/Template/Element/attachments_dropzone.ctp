@@ -2,7 +2,10 @@
     <div class="col-xs-12">
         <div class="attachments-dropzone">
             <div class="hint">
-                <b class="fileupload-button">Choose a file</b> or drag it here.
+                <b class="fileupload-button">
+                    Choose a file
+                </b>
+                <span>Or drag it here</span>
             </div>
             <input id="input-<?= $options['id'] ?>" type="file" name="files[]" class="fileupload-input" multiple>
             <script id="item-template" type="text/attachments-item-template">

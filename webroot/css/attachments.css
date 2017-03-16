@@ -52,7 +52,7 @@
 .attachments-list .misc > .tags > .tag-input .fa {
     cursor: pointer;
 }
-@media (max-width: 520px) {
+@media (max-width: 450px) {
     .attachments-list .img {
         display: block;
         float: none !important;
@@ -66,6 +66,9 @@
     }
     .attachments-list .buttons {
         float: none !important;
+    }
+    .attachments-list .buttons > .btn-xs {
+        padding: 6px 12px;
     }
 }
 .attachments-tiles {
@@ -217,10 +220,16 @@
     left: 0;
     box-sizing: border-box;
     font-size: 30px;
-    margin-top: -21px;
-    height: 42px;
+    margin-top: -50px;
+    line-height: 100px;
+    height: 100px;
     top: 50%;
     text-align: center;
+}
+@media (max-width: 450px) {
+    .attachments-dropzone > .hint {
+        font-size: 20px;
+    }
 }
 .attachments-dropzone > .hint > b {
     cursor: pointer;

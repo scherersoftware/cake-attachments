@@ -1,6 +1,7 @@
 <?php
 namespace Attachments\Controller;
 
+use App\Controller\AppController;
 use Attachments\Model\Entity\Attachment;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
