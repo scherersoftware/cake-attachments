@@ -34,11 +34,20 @@ class AttachmentsHelper extends Helper
      */
     public function addDependencies()
     {
-        $this->Html->script('/attachments/js/vendor/jquery.ui.widget.js', ['block' => true]);
-        $this->Html->script('/attachments/js/vendor/jquery.iframe-transport.js', ['block' => true]);
-        $this->Html->script('/attachments/js/vendor/jquery.fileupload.js', ['block' => true]);
-        $this->Html->script('/attachments/js/app/lib/AttachmentsWidget.js', ['block' => true]);
-        $this->Html->css('/attachments/css/attachments.css', ['block' => true]);
+        // Render script reference inline, when request is ajax.
+        $inline = [];
+        $renderInBlock = !$this->request->is('ajax');
+
+        $inline[] = $this->Html->script('/attachments/js/vendor/jquery.ui.widget.js', ['block' => $renderInBlock]);
+        $inline[] = $this->Html->script('/attachments/js/vendor/jquery.iframe-transport.js', ['block' => $renderInBlock]);
+        $inline[] = $this->Html->script('/attachments/js/vendor/jquery.fileupload.js', ['block' => $renderInBlock]);
+        $inline[] = $this->Html->script('/attachments/js/app/lib/AttachmentsWidget.js', ['block' => $renderInBlock]);
+        $inline[] = $this->Html->css('/attachments/css/attachments.css', ['block' => $renderInBlock]);
+
+        if (!$renderInBlock) {
+            // print in one line
+            echo implode('', $inline);
+        }
     }
 
     /**
