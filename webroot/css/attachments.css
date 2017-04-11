@@ -195,7 +195,7 @@
 .attachments-dropzone {
     position: relative;
     width: 100%;
-    min-height: 200px;
+    min-height: 50px;
     float: left;
     background-color: rgba(10, 10, 10, 0.1);
     border: 2px dashed #999;
@@ -219,7 +219,7 @@
     right: 0;
     left: 0;
     box-sizing: border-box;
-    font-size: 30px;
+    font-size: 20px;
     margin-top: -50px;
     line-height: 100px;
     height: 100px;
