@@ -27,7 +27,7 @@ App.Lib.AttachmentsWidget = Class.extend({
             $('.attachments-dropzone .hint > span').hide();
         }
 
-        $('.attachments-list a.btn-delete').click(function(e) {
+        $('.attachments-list a.btn-delete').off('click').on('click', function(e) {
             var attachmentId = $(e.currentTarget).data('attachment-id');
             var url = {
                 plugin: 'attachments',
@@ -47,7 +47,7 @@ App.Lib.AttachmentsWidget = Class.extend({
 
         this.$input = this.$element.find('.fileupload-input');
 
-        $('.fileupload-button').click(function() {
+        $('.fileupload-button').off('click').on('click', function() {
             this.$input.trigger( "click" );
         }.bind(this));
 
@@ -57,18 +57,18 @@ App.Lib.AttachmentsWidget = Class.extend({
         this.$dropZone = this.$element.find('.attachments-dropzone');
 
         var counter = 0;
-        this.$dropZone.bind('dragenter', function(e) {
+        this.$dropZone.off('dragenter').on('dragenter', function(e) {
             e.preventDefault(); // needed for IE
             counter++;
             this.$dropZone.addClass('active');
         }.bind(this));
-        this.$dropZone.bind('dragleave', function() {
+        this.$dropZone.off('dragleave').on('dragleave', function() {
             counter--;
             if (counter === 0) {
                 this.$dropZone.removeClass('active');
             }
         }.bind(this));
-        this.$dropZone.bind('drop', function() {
+        this.$dropZone.off('drop').on('drop', function() {
             counter = 0;
             this.$dropZone.removeClass('active');
         }.bind(this));
@@ -150,7 +150,7 @@ App.Lib.AttachmentsWidget = Class.extend({
 
         var addMoreTemplate = $('#item-add-more-template').html();
         this.$dropZone.append(addMoreTemplate);
-        this.$dropZone.find('.add-more').click(function() {
+        this.$dropZone.find('.add-more').off('click').on('click', function() {
             this.$input.trigger( "click" );
         }.bind(this));
     }
