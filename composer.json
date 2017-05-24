@@ -7,7 +7,7 @@
     },
     "require": {
         "php": ">=5.4",
-        "codekanzlei/cake-frontend-bridge": "1.0.*",
+        "codekanzlei/cake-frontend-bridge": "~1.0",
         "ext-imagick": "*"
     },
     "require-dev": {
