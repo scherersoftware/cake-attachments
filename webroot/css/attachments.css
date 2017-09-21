@@ -4,6 +4,9 @@
 .attachments-list > li {
     min-height: 100px;
 }
+.attachments-list .misc {
+    float: left;
+}
 .attachments-list .img {
     border-radius: 10px;
     height: 80px;
