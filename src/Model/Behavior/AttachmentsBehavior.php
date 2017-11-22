@@ -1,6 +1,7 @@
 <?php
 namespace Attachments\Model\Behavior;
 
+use Attachments\Model\Entity\Attachment;
 use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
 use Cake\ORM\Behavior;
@@ -78,8 +79,8 @@ class AttachmentsBehavior extends Behavior
     /**
      * AfterSave Event
      *
-     * @param Event $event Event
-     * @param EntityInterface $entity Entity to be saved
+     * @param \Cake\Event\Event $event Event
+     * @param \Cake\Datasource\EntityInterface $entity Entity to be saved
      * @return void
      */
     public function afterSave(Event $event, EntityInterface $entity)
@@ -96,7 +97,7 @@ class AttachmentsBehavior extends Behavior
      * @param bool $list If it should return a list for selects or the whole array
      * @return array
      */
-    public function getAttachmentsTags($list = true)
+    public function getAttachmentsTags(bool $list = true): array
     {
         $tags = $this->config('tags');
 
@@ -118,7 +119,7 @@ class AttachmentsBehavior extends Behavior
      * @param string $tag Tag
      * @return string Caption of tag
      */
-    public function getTagCaption($tag)
+    public function getTagCaption(string $tag): string
     {
         if (!isset($this->config('tags')[$tag])) {
             return '';
@@ -134,7 +135,7 @@ class AttachmentsBehavior extends Behavior
      * @param array $tags Array of tags
      * @return bool
      */
-    public function saveTags($attachment, $tags)
+    public function saveTags(Attachment $attachment, array $tags): bool
     {
         $newTags = [];
         foreach ($tags as $tag) {
@@ -148,7 +149,7 @@ class AttachmentsBehavior extends Behavior
 
         $this->Attachments->patchEntity($attachment, ['tags' => $newTags]);
 
-        return (bool)$this->Attachments->save($attachment);
+        return $this->Attachments->save($attachment) !== false;
     }
 
     /**
@@ -158,7 +159,7 @@ class AttachmentsBehavior extends Behavior
      * @param string $tag The exclusive tag to be removed
      * @return bool
      */
-    protected function _clearTag($attachment, $tag)
+    protected function _clearTag(Attachment $attachment, string $tag): bool
     {
         $attachmentWithExclusiveTag = $this->Attachments->find()
             ->where([
@@ -183,6 +184,6 @@ class AttachmentsBehavior extends Behavior
             }
         }
 
-        return (bool)$this->Attachments->save($attachmentWithExclusiveTag);
+        return $this->Attachments->save($attachmentWithExclusiveTag) !== false;
     }
 }

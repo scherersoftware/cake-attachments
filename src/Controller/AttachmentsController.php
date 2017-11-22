@@ -5,6 +5,7 @@ use App\Controller\AppController;
 use Attachments\Model\Entity\Attachment;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
+use Cake\Event\Event;
 use Cake\Filesystem\File;
 use Cake\Network\Exception\UnauthorizedException;
 use Cake\ORM\TableRegistry;
@@ -20,10 +21,10 @@ class AttachmentsController extends AppController
     /**
      * beforeFilter event
      *
-     * @param Event $event cake event
+     * @param \Cake\Event\Event $event cake event
      * @return void
      */
-    public function beforeFilter(\Cake\Event\Event $event)
+    public function beforeFilter(Event $event): void
     {
         if (isset($this->Csrf) && in_array($event->subject()->request->params['action'], ['upload'])) {
             $this->eventManager()->off($this->Csrf);
@@ -35,7 +36,7 @@ class AttachmentsController extends AppController
      *
      * @return void
      */
-    public function initialize()
+    public function initialize(): void
     {
         $this->loadModel('Attachments.Attachments');
         parent::initialize();
@@ -48,7 +49,7 @@ class AttachmentsController extends AppController
      *                     per form session.
      * @return void
      */
-    public function upload($uuid = null)
+    public function upload(string $uuid = null)
     {
         if ($uuid) {
             // strip everything but valid UUID chars
@@ -74,7 +75,7 @@ class AttachmentsController extends AppController
      * @param string $attachmentId Attachment ID
      * @return void
      */
-    public function preview($attachmentId = null)
+    public function preview(string $attachmentId = null)
     {
         // FIXME cache previews
         $attachment = $this->Attachments->get($attachmentId);
@@ -123,7 +124,7 @@ class AttachmentsController extends AppController
      * @param string $attachmentId Attachment ID
      * @return void
      */
-    public function view($attachmentId = null)
+    public function view(string $attachmentId = null)
     {
         // FIXME cache previews
         $attachment = $this->Attachments->get($attachmentId);
@@ -168,7 +169,7 @@ class AttachmentsController extends AppController
      * @param string $attachmentId Attachment ID
      * @return void
      */
-    public function download($attachmentId = null)
+    public function download(string $attachmentId = null)
     {
         $attachment = $this->Attachments->get($attachmentId);
 
@@ -178,6 +179,7 @@ class AttachmentsController extends AppController
             'download' => true,
             'name' => $attachment->filename
         ]);
+
         return $this->response;
     }
 
@@ -187,9 +189,9 @@ class AttachmentsController extends AppController
      *
      * @param Attachment $attachment Attachment Entity
      * @return void
-     * @throws UnauthorizedException
+     * @throws \Cake\Network\Exception\UnauthorizedException if the configured downloadAuthorizeCallback returns false
      */
-    protected function _checkAuthorization(Attachment $attachment)
+    protected function _checkAuthorization(Attachment $attachment): void
     {
         if ($attachmentsBehavior = $attachment->getRelatedTable()->behaviors()->get('Attachments')) {
             $behaviorConfig = $attachmentsBehavior->config();
@@ -204,12 +206,12 @@ class AttachmentsController extends AppController
     }
 
     /**
-     * rotate image depending on exif info
+     * Rotate image depending on exif info
      *
      * @param Imagick $image image handler
      * @return void
      */
-    protected function _autorotate(\Imagick $image)
+    protected function _autorotate(\Imagick $image): void
     {
         switch ($image->getImageOrientation()) {
             case \Imagick::ORIENTATION_TOPRIGHT:
@@ -244,23 +246,24 @@ class AttachmentsController extends AppController
      * Delete the file
      *
      * @param string $attachmentId Attachment ID
-     * @return ServiceResponse
+     * @return \FrontendBridge\Lib\ServiceResponse
      */
-    public function delete($attachmentId = null)
+    public function delete(string $attachmentId = null): ServiceResponse
     {
         $attachment = $this->Attachments->get($attachmentId);
         $this->_checkAuthorization($attachment);
         $this->Attachments->delete($attachment);
+
         return new ServiceResponse('success');
     }
 
     /**
-     * endpoint for Json action to save tags of an attachment
+     * Endpoint for Json action to save tags of an attachment
      *
-     * @param  uuid $attachmentId the attachment identifier
-     * @return void
+     * @param  string $attachmentId the attachment identifier
+     * @return void|\Cake\Http\Response
      */
-    public function saveTags($attachmentId = null)
+    public function saveTags(string $attachmentId = null)
     {
         $this->request->allowMethod('post');
         $attachment = $this->Attachments->get($attachmentId);

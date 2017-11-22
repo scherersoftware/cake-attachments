@@ -40,7 +40,7 @@ class AttachmentsTable extends Table
      * @param \Cake\Validation\Validator $validator Validator instance.
      * @return \Cake\Validation\Validator
      */
-    public function validationDefault(Validator $validator)
+    public function validationDefault(Validator $validator): Validator
     {
         $validator
             ->allowEmpty('id', 'create')
@@ -65,12 +65,12 @@ class AttachmentsTable extends Table
      * Takes the array from the attachments area hidden form field and creates
      * attachment records for the given entity
      *
-     * @param EntityInterface $entity Entity to attach the files to
+     * @param \Cake\Datasource\EntityInterface $entity Entity to attach the files to
      * @param array $uploads List of paths relative to the Attachments.tmpUploadsPath
      *                       config value or ['path_to_file' => [tag1, tag2, tag3, ...]]
      * @return void
      */
-    public function addUploads(EntityInterface $entity, array $uploads)
+    public function addUploads(EntityInterface $entity, array $uploads): void
     {
         $attachments = [];
         foreach ($uploads as $path => $tags) {
@@ -91,9 +91,9 @@ class AttachmentsTable extends Table
     /**
      * Save one Attachemnt
      *
-     * @param EntityInterface $entity Entity
+     * @param \Cake\Datasource\EntityInterface $entity Entity
      * @param string $upload String to uploaded file or ['path_to_file' => [tag1, tag2, tag3, ...]]
-     * @return entity
+     * @return \Cake\Datasource\EntityInterface|bool
      */
     public function addUpload(EntityInterface $entity, $upload)
     {
@@ -116,13 +116,13 @@ class AttachmentsTable extends Table
      * afterSave Event. If an attachment entity has its tmpPath value set, it will be moved
      * to the defined filepath
      *
-     * @param Event $event Event
-     * @param Attachment $attachment Entity
-     * @param ArrayObject $options Options
+     * @param \Cake\Event\Event $event Event
+     * @param \Attachments\Model\Entity\Attachment $attachment Entity
+     * @param \ArrayObject $options Options
      * @return void
      * @throws \Exception If the file couldn't be moved
      */
-    public function afterSave(Event $event, Attachment $attachment, \ArrayObject $options)
+    public function afterSave(Event $event, Attachment $attachment, \ArrayObject $options): void
     {
         if ($attachment->tmpPath) {
             // Make sure the folder is created
@@ -143,12 +143,12 @@ class AttachmentsTable extends Table
     /**
      * afterDelete
      *
-     * @param Event $event Event
-     * @param Attachment $attachment Entity
-     * @param ArrayObject $options Options
+     * @param \Cake\Event\Event $event Event
+     * @param \Attachments\Model\Entity\Attachment $attachment Entity
+     * @param \ArrayObject $options Options
      * @return void
      */
-    public function afterDelete(Event $event, Attachment $attachment, \ArrayObject $options)
+    public function afterDelete(Event $event, Attachment $attachment, \ArrayObject $options): void
     {
         $attachment->deleteFile();
     }
@@ -156,13 +156,13 @@ class AttachmentsTable extends Table
     /**
      * Creates an Attachment entity based on the given file
      *
-     * @param EntityInterface $entity Entity the file will be attached to
+     * @param \Cake\Datasource\EntityInterface $entity Entity the file will be attached to
      * @param string $filePath Absolute path to the file
      * @param array $tags Indexed array of tags to be assigned
-     * @return Attachment
+     * @return \Attachments\Model\Entity\Attachment
      * @throws \Exception If the given file doesn't exist or isn't readable
      */
-    public function createAttachmentEntity(EntityInterface $entity, $filePath, array $tags = [])
+    public function createAttachmentEntity(EntityInterface $entity, string $filePath, array $tags = []): Attachment
     {
         if (!file_exists($filePath)) {
             throw new \Exception("File {$filePath} does not exist.");
@@ -195,12 +195,12 @@ class AttachmentsTable extends Table
     /**
      * recursive method to increase the filename in case the file already exists
      *
-     * @param string $fileInfo Array of information about the file
-     * @param EntityInterface $entity Entity
-     * @param string $id counter varibale to extend the filename
+     * @param array $fileInfo Array of information about the file
+     * @param \Cake\Datasource\EntityInterface $entity Entity
+     * @param int $id counter varibale to extend the filename
      * @return array
      */
-    private function __getFileName($fileInfo, EntityInterface $entity, $id = 0)
+    private function __getFileName(array $fileInfo, EntityInterface $entity, int $id = 0): array
     {
         if (!file_exists(Configure::read('Attachments.path') . $entity->source() . '/' . $entity->id . '/' . $fileInfo['basename'])) {
             return $fileInfo;

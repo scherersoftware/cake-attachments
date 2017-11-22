@@ -31,9 +31,9 @@ class Attachment extends Entity
     /**
      * returns if attachment is image type
      *
-     * @return void
+     * @return bool
      */
-    public function isImage()
+    public function isImage(): bool
     {
         $imageTypes = [
             'image/png',
@@ -50,7 +50,7 @@ class Attachment extends Entity
      *
      * @return string
      */
-    public function previewUrl()
+    public function previewUrl(): string
     {
         return Router::url([
             'plugin' => 'Attachments',
@@ -65,7 +65,7 @@ class Attachment extends Entity
      *
      * @return string
      */
-    public function viewUrl()
+    public function viewUrl(): string
     {
         return Router::url([
             'plugin' => 'Attachments',
@@ -80,7 +80,7 @@ class Attachment extends Entity
      *
      * @return string
      */
-    public function downloadUrl()
+    public function downloadUrl(): string
     {
         return Router::url([
             'plugin' => 'Attachments',
@@ -95,7 +95,7 @@ class Attachment extends Entity
      *
      * @return string
      */
-    public function getAbsolutePath()
+    public function getAbsolutePath(): string
     {
         return Configure::read('Attachments.path') . $this->filepath;
     }
@@ -105,7 +105,7 @@ class Attachment extends Entity
      *
      * @return void
      */
-    public function deleteFile()
+    public function deleteFile(): void
     {
         unlink($this->getAbsolutePath());
     }
@@ -115,7 +115,7 @@ class Attachment extends Entity
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'id' => $this->id,
