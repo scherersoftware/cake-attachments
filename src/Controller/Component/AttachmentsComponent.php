@@ -4,6 +4,7 @@ namespace Attachments\Controller\Component;
 use Attachments\Model\Entity\Attachment;
 use Cake\Controller\Component;
 use Cake\Controller\ComponentRegistry;
+use Cake\Network\Exception\UnauthorizedException;
 
 /**
  * Attachments component
