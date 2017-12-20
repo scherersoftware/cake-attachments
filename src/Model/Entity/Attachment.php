@@ -53,6 +53,7 @@ class Attachment extends Entity
     public function previewUrl(): string
     {
         return Router::url([
+            'prefix' => false,
             'plugin' => 'Attachments',
             'controller' => 'Attachments',
             'action' => 'preview',
@@ -68,6 +69,7 @@ class Attachment extends Entity
     public function viewUrl(): string
     {
         return Router::url([
+            'prefix' => false,
             'plugin' => 'Attachments',
             'controller' => 'Attachments',
             'action' => 'view',
@@ -83,6 +85,7 @@ class Attachment extends Entity
     public function downloadUrl(): string
     {
         return Router::url([
+            'prefix' => false,
             'plugin' => 'Attachments',
             'controller' => 'Attachments',
             'action' => 'download',
