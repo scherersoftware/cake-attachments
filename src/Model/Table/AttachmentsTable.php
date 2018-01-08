@@ -129,7 +129,13 @@ class AttachmentsTable extends Table
             $folder = new Folder();
             $targetDir = Configure::read('Attachments.path') . dirname($attachment->filepath);
 
-            if (!$folder->create($targetDir)) {
+            $mode = 0755;
+
+            if (!empty(Configure::read('Attachments.mode'))) {
+                $mode = Configure::read('Attachments.mode');
+            }
+
+            if (!$folder->create($targetDir, $mode)) {
                 throw new \Exception("Folder {$targetDir} could not be created.");
             }
             $targetPath = Configure::read('Attachments.path') . $attachment->filepath;

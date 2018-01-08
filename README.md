@@ -87,6 +87,7 @@ In your `config/app.php`, add the following key:
         'tmpUploadsPath' => ROOT . '/tmp/uploads/',
         'path' => ROOT . '/app_data/attachments/',
         'acceptedFileTypes' => '/\.(jpe?g|png)$/i',
+        'mode' => 0755,
         'autorotate' => false
     ],
 

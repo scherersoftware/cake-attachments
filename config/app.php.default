@@ -4,6 +4,7 @@ $config = [
         'tmpUploadsPath' => ROOT . '/tmp/uploads/',
         'path' => ROOT . '/app_data/attachments/',
         'acceptedFileTypes' => '/\.(gif|jpe?g|png)$/i',
+		'mode' => 0755,
         'autorotate' => false
     ]
 ];
