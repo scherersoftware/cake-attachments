@@ -39,7 +39,8 @@ class Attachment extends Entity
             'image/png',
             'image/jpg',
             'image/jpeg',
-            'image/gif'
+            'image/gif',
+            'image/tiff'
         ];
 
         return in_array($this->filetype, $imageTypes);

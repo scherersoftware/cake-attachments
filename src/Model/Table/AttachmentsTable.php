@@ -32,6 +32,10 @@ class AttachmentsTable extends Table
         $this->addBehavior('Timestamp');
 
         $this->schema()->columnType('tags', 'json');
+
+        if (($afterInitializeCallback = Configure::read('Attachments.afterInitializeCallback')) && is_callable($afterInitializeCallback)) {
+            $afterInitializeCallback($this);
+        }
     }
 
     /**
