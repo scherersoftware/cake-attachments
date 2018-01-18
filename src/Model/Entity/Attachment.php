@@ -47,6 +47,21 @@ class Attachment extends Entity
     }
 
     /**
+     * Returns if attachment is of video type
+     *
+     * @return bool
+     */
+    public function isVideo(): bool
+    {
+        $videoTypes = [
+            'video/quicktime',
+            'video/mp4'
+        ];
+
+        return in_array($this->filetype, $videoTypes);
+    }
+
+    /**
      * Returns an URL with a png preview of the file
      *
      * @return string

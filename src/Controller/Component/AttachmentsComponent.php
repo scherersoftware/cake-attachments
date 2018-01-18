@@ -12,14 +12,14 @@ use Cake\Network\Exception\UnauthorizedException;
 class AttachmentsComponent extends Component
 {
     /**
-     * Checks if a downloadAuthorizeCallback was configured and calls it.
+     * Assert if a downloadAuthorizeCallback was configured and call it.
      * Will throw an UnauthorizedException if the callback returns false.
      *
      * @param Attachment $attachment Attachment Entity
      * @return void
      * @throws \Cake\Network\Exception\UnauthorizedException if the configured downloadAuthorizeCallback returns false
      */
-    public function checkDownloadAuthorization(Attachment $attachment): void
+    public function assertDownloadAuthorization(Attachment $attachment): void
     {
         if ($attachmentsBehavior = $attachment->getRelatedTable()->behaviors()->get('Attachments')) {
             $behaviorConfig = $attachmentsBehavior->config();

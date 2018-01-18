@@ -82,7 +82,7 @@ class AttachmentsController extends AppController
     {
         // FIXME cache previews
         $attachment = $this->Attachments->get($attachmentId);
-        $this->AttachmentsComponent->checkDownloadAuthorization($attachment);
+        $this->AttachmentsComponent->assertDownloadAuthorization($attachment);
 
         switch ($attachment->filetype) {
             case 'image/png':
@@ -131,7 +131,7 @@ class AttachmentsController extends AppController
     {
         // FIXME cache previews
         $attachment = $this->Attachments->get($attachmentId);
-        $this->AttachmentsComponent->checkDownloadAuthorization($attachment);
+        $this->AttachmentsComponent->assertDownloadAuthorization($attachment);
 
         switch ($attachment->filetype) {
             case 'image/png':
@@ -176,7 +176,7 @@ class AttachmentsController extends AppController
     {
         $attachment = $this->Attachments->get($attachmentId);
 
-        $this->AttachmentsComponent->checkDownloadAuthorization($attachment);
+        $this->AttachmentsComponent->assertDownloadAuthorization($attachment);
 
         $this->response->file($attachment->getAbsolutePath(), [
             'download' => true,
@@ -232,7 +232,7 @@ class AttachmentsController extends AppController
     public function delete(string $attachmentId = null): ServiceResponse
     {
         $attachment = $this->Attachments->get($attachmentId);
-        $this->AttachmentsComponent->checkDownloadAuthorization($attachment);
+        $this->AttachmentsComponent->assertDownloadAuthorization($attachment);
         $this->Attachments->delete($attachment);
 
         return new ServiceResponse('success');
@@ -248,7 +248,7 @@ class AttachmentsController extends AppController
     {
         $this->request->allowMethod('post');
         $attachment = $this->Attachments->get($attachmentId);
-        $this->AttachmentsComponent->checkDownloadAuthorization($attachment);
+        $this->AttachmentsComponent->assertDownloadAuthorization($attachment);
 
         if (!TableRegistry::get($attachment->model)) {
             throw new \Cake\ORM\Exception\MissingTableClassException('Could not find Table ' . $attachment->model);
