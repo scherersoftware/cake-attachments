@@ -54,8 +54,15 @@ class Attachment extends Entity
     public function isVideo(): bool
     {
         $videoTypes = [
+            'video/mp4',
+            'video/webm',
+            'video/ogg',
             'video/quicktime',
-            'video/mp4'
+            'video/x-ms-wmv',
+            'video/x-msvideo',
+            'video/x-flv',
+            'video/3gpp',
+            'video/3gpp2'
         ];
 
         return in_array($this->filetype, $videoTypes);
