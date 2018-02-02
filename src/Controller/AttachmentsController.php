@@ -27,6 +27,8 @@ class AttachmentsController extends AppController
         if (isset($this->Csrf) && in_array($event->subject()->request->params['action'], ['upload'])) {
             $this->eventManager()->off($this->Csrf);
         }
+
+        parent::beforeFilter($event);
     }
 
     /**
