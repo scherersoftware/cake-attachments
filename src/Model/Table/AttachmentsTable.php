@@ -172,6 +172,12 @@ class AttachmentsTable extends Table
         $file = new File($filePath);
         $info = $file->info();
 
+        if (!empty($invalidChars = Configure::read('Attachments.invalid_characters'))) {
+            $replaceChars = Configure::read('Attachments.replace_characters');
+            $info['basename'] = str_replace($invalidChars, $replaceChars ? $replaceChars : '', $info['basename']);
+            $info['filename'] = str_replace($invalidChars, $replaceChars ? $replaceChars : '', $info['filename']);
+        }
+
         // in filepath, we store the path relative to the Attachment.path configuration
         // to make it easy to switch storage
         $info = $this->__getFileName($info, $entity);
