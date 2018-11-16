@@ -26,12 +26,12 @@ class AttachmentsTable extends Table
      */
     public function initialize(array $config)
     {
-        $this->table('attachments');
-        $this->displayField('filename');
-        $this->primaryKey('id');
+        $this->setTable('attachments');
+        $this->setDisplayField('filename');
+        $this->setPrimaryKey('id');
         $this->addBehavior('Timestamp');
 
-        $this->schema()->columnType('tags', 'json');
+        $this->getSchema()->setColumnType('tags', 'json');
 
         if (($afterInitializeCallback = Configure::read('Attachments.afterInitializeCallback')) && is_callable($afterInitializeCallback)) {
             $afterInitializeCallback($this);
@@ -96,7 +96,7 @@ class AttachmentsTable extends Table
      * Save one Attachemnt
      *
      * @param \Cake\Datasource\EntityInterface $entity Entity
-     * @param string $upload String to uploaded file or ['path_to_file' => [tag1, tag2, tag3, ...]]
+     * @param string|array $upload String to uploaded file or ['path_to_file' => [tag1, tag2, tag3, ...]]
      * @return \Cake\Datasource\EntityInterface|bool
      */
     public function addUpload(EntityInterface $entity, $upload)

@@ -8,6 +8,7 @@ use Cake\Core\Plugin;
 use Cake\Event\Event;
 use Cake\Filesystem\File;
 use Cake\Network\Exception\UnauthorizedException;
+use Cake\ORM\Exception\MissingTableClassException;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Text;
 use FrontendBridge\Lib\ServiceResponse;
@@ -17,7 +18,6 @@ require_once Plugin::path('Attachments') . 'src/Lib/UploadHandler.php';
 class AttachmentsController extends AppController
 {
 
-
     /**
      * beforeFilter event
      *
@@ -26,7 +26,7 @@ class AttachmentsController extends AppController
      */
     public function beforeFilter(Event $event): void
     {
-        if (isset($this->Csrf) && in_array($event->subject()->request->params['action'], ['upload'])) {
+        if (isset($this->Csrf) && $event->getSubject()->request->getParam('action') === 'upload') {
             $this->eventManager()->off($this->Csrf);
         }
         
@@ -172,7 +172,7 @@ class AttachmentsController extends AppController
      * Download the file
      *
      * @param string $attachmentId Attachment ID
-     * @return void
+     * @return \Cake\Network\Response
      */
     public function download(string $attachmentId = null)
     {
@@ -180,18 +180,16 @@ class AttachmentsController extends AppController
 
         $this->AttachmentsComponent->assertDownloadAuthorization($attachment);
 
-        $this->response->file($attachment->getAbsolutePath(), [
+        return $this->response->withFile($attachment->getAbsolutePath(), [
             'download' => true,
             'name' => $attachment->filename
         ]);
-
-        return $this->response;
     }
 
     /**
      * Rotate image depending on exif info
      *
-     * @param Imagick $image image handler
+     * @param \Imagick $image image handler
      * @return void
      */
     protected function _autorotate(\Imagick $image): void
@@ -252,8 +250,8 @@ class AttachmentsController extends AppController
         $attachment = $this->Attachments->get($attachmentId);
         $this->AttachmentsComponent->assertDownloadAuthorization($attachment);
 
-        if (!TableRegistry::get($attachment->model)) {
-            throw new \Cake\ORM\Exception\MissingTableClassException('Could not find Table ' . $attachment->model);
+        if (!TableRegistry::getTableLocator()->get($attachment->model)) {
+            throw new MissingTableClassException('Could not find Table ' . $attachment->model);
         }
         $inputArray = explode('&', $this->request->input('urldecode'));
         $tags = explode('$', explode('=', $inputArray[0])[1]);
@@ -270,7 +268,7 @@ class AttachmentsController extends AppController
         // serves as target for the Json Action
         $options['isAjax'] = true;
 
-        $Model = TableRegistry::get($attachment->model);
+        $Model = TableRegistry::getTableLocator()->get($attachment->model);
         $Model->saveTags($attachment, $tags);
 
         $entity = $Model->get($attachment->foreign_key, ['contain' => 'Attachments']);
