@@ -7,8 +7,6 @@ use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
-use Cake\ORM\Query;
-use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 

@@ -354,8 +354,10 @@ class UploadHandler
         switch ($last) {
             case 'g':
                 $val *= 1024;
+                // intentional fallthrough
             case 'm':
                 $val *= 1024;
+                // intentional fallthrough
             case 'k':
                 $val *= 1024;
         }
@@ -570,7 +572,7 @@ class UploadHandler
     }
 
     protected function gd_destroy_image_object($file_path) {
-        $image = (isset($this->image_objects[$file_path])) ? $this->image_objects[$file_path] : null ;
+        $image = $this->image_objects[$file_path] ?? null;
         return $image && imagedestroy($image);
     }
 
@@ -763,7 +765,6 @@ class UploadHandler
             case 'gif':
             case 'png':
                 imagecolortransparent($new_img, imagecolorallocate($new_img, 0, 0, 0));
-            case 'png':
                 imagealphablending($new_img, false);
                 imagesavealpha($new_img, true);
                 break;
@@ -805,7 +806,7 @@ class UploadHandler
     }
 
     protected function imagick_destroy_image_object($file_path) {
-        $image = (isset($this->image_objects[$file_path])) ? $this->image_objects[$file_path] : null ;
+        $image = $this->image_objects[$file_path] ?? null;
         return $image && $image->destroy();
     }
 
@@ -1346,8 +1347,7 @@ class UploadHandler
                 // $upload is a one-dimensional array:
                 $files[] = $this->handle_file_upload(
                     isset($upload['tmp_name']) ? $upload['tmp_name'] : null,
-                    $file_name ? $file_name : (isset($upload['name']) ?
-                            $upload['name'] : null),
+                    $file_name ? $file_name : ($upload['name'] ?? null),
                     $size ? $size : (isset($upload['size']) ?
                             $upload['size'] : $this->get_server_var('CONTENT_LENGTH')),
                     isset($upload['type']) ?

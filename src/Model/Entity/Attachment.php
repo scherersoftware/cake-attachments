@@ -2,7 +2,9 @@
 namespace Attachments\Model\Entity;
 
 use Cake\Core\Configure;
+use Cake\Datasource\EntityInterface;
 use Cake\ORM\Entity;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 
@@ -43,7 +45,7 @@ class Attachment extends Entity
             'image/tiff'
         ];
 
-        return in_array($this->filetype, $imageTypes);
+        return in_array($this->filetype, $imageTypes, true);
     }
 
     /**
@@ -65,7 +67,7 @@ class Attachment extends Entity
             'video/3gpp2'
         ];
 
-        return in_array($this->filetype, $videoTypes);
+        return in_array($this->filetype, $videoTypes, true);
     }
 
     /**
@@ -157,20 +159,20 @@ class Attachment extends Entity
     /**
      * Returns the related table of this attachment
      *
-     * @return Table
+     * @return \Cake\ORM\Table
      */
-    public function getRelatedTable()
+    public function getRelatedTable(): Table
     {
-        return TableRegistry::get($this->model);
+        return TableRegistry::getTableLocator()->get($this->model);
     }
 
     /**
      * Fetches the related record of this attachment
      *
      * @param array $options Options for Table::get()
-     * @return Entity
+     * @return \Cake\Datasource\EntityInterface
      */
-    public function getRelatedEntity(array $options = [])
+    public function getRelatedEntity(array $options = []): EntityInterface
     {
         return $this->getRelatedTable()->get($this->foreign_key, $options);
     }

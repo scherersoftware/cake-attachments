@@ -60,15 +60,15 @@ class AttachmentsBehavior extends Behavior
         // Dynamically attach the hasMany relationship
         $this->_table->hasMany('Attachments.Attachments', [
             'conditions' => [
-                'Attachments.model' => $this->_table->registryAlias()
+                'Attachments.model' => $this->_table->getRegistryAlias()
             ],
             'foreignKey' => 'foreign_key',
             'dependent' => true
         ]);
 
-        $this->Attachments->belongsTo($this->_table->registryAlias(), [
+        $this->Attachments->belongsTo($this->_table->getRegistryAlias(), [
             'conditions' => [
-                'Attachments.model' => $this->_table->registryAlias()
+                'Attachments.model' => $this->_table->getRegistryAlias()
             ],
             'foreignKey' => 'foreign_key'
         ]);
@@ -85,7 +85,7 @@ class AttachmentsBehavior extends Behavior
      */
     public function afterSave(Event $event, EntityInterface $entity)
     {
-        $uploads = $entity->get($this->config('formFieldName'));
+        $uploads = $entity->get($this->getConfig('formFieldName'));
         if (!empty($uploads)) {
             $this->Attachments->addUploads($entity, $uploads);
         }
@@ -99,7 +99,7 @@ class AttachmentsBehavior extends Behavior
      */
     public function getAttachmentsTags(bool $list = true): array
     {
-        $tags = $this->config('tags');
+        $tags = $this->getConfig('tags');
 
         if (!$list) {
             return $tags;
@@ -121,11 +121,11 @@ class AttachmentsBehavior extends Behavior
      */
     public function getTagCaption(string $tag): string
     {
-        if (!isset($this->config('tags')[$tag])) {
+        if (!isset($this->getConfig('tags')[$tag])) {
             return '';
         }
 
-        return $this->config('tags')[$tag]['caption'];
+        return $this->getConfig('tags')[$tag]['caption'];
     }
 
     /**

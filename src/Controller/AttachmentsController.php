@@ -103,7 +103,8 @@ class AttachmentsController extends AppController
                     break;
                 } catch (\ImagickException $e) {
                     //fall through
-                };
+                }
+                // intentional fall through in case of caught exception
             default:
                 $image = new \Imagick(Plugin::path('Attachments') . '/webroot/img/file.png');
                 break;
