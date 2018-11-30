@@ -50,7 +50,7 @@ class CleanTempShell extends Shell
         }
 
         foreach ($folders[0] as $folderName) {
-            $folder = new Folder($dir->pwd() . $folderName);
+            $folder = new Folder($dir->pwd() . DS . $folderName);
             // only delete if folder is empty
             if ($folder->dirsize() === 0 && $folder->delete()) {
                 $deletedFolders++;
