@@ -1,5 +1,5 @@
 <?php
-$config = [
+return [
     'Attachments' => [
         'tmpUploadsPath' => ROOT . '/tmp/uploads/',
         'path' => ROOT . '/app_data/attachments/',

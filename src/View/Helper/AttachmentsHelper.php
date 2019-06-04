@@ -1,11 +1,12 @@
 <?php
 namespace Attachments\View\Helper;
 
+use Attachments\Model\Entity\Attachment;
 use Cake\Datasource\EntityInterface;
+use Cake\ORM\Exception\MissingTableClassException;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
 use Cake\View\Helper;
-use Cake\View\View;
 
 /**
  * Attachments helper
@@ -32,7 +33,7 @@ class AttachmentsHelper extends Helper
      *
      * @return void
      */
-    public function addDependencies()
+    public function addDependencies(): void
     {
         // Render script reference inline, when request is ajax.
         $inline = [];
@@ -57,9 +58,9 @@ class AttachmentsHelper extends Helper
      * @param array $options Override default options
      * @return string
      */
-    public function attachmentsArea(EntityInterface $entity, array $options = [])
+    public function attachmentsArea(EntityInterface $entity, array $options = []): string
     {
-        if ($this->config('includeDependencies')) {
+        if ($this->getConfig('includeDependencies')) {
             $this->addDependencies();
         }
         $options = Hash::merge([
@@ -75,19 +76,19 @@ class AttachmentsHelper extends Helper
     /**
      * Render a list of tags of given attachment
      *
-     * @param  Attachment\Model\Entity\Attachment $attachment the attachment entity to read the tags from
+     * @param  \Attachments\Model\Entity\Attachment $attachment the attachment entity to read the tags from
      * @return string
      */
-    public function tagsList($attachment)
+    public function tagsList(Attachment $attachment): string
     {
         $tagsString = '';
         if (empty($attachment->tags)) {
             return $tagsString;
         }
-        $Table = TableRegistry::get($attachment->model);
+        $table = TableRegistry::getTableLocator()->get($attachment->model);
 
         foreach ($attachment->tags as $tag) {
-            $tagsString .= '<label class="label label-default">' . $Table->getTagCaption($tag) . '</label> ';
+            $tagsString .= '<label class="label label-default">' . $table->getTagCaption($tag) . '</label> ';
         }
 
         return $tagsString;
@@ -96,19 +97,19 @@ class AttachmentsHelper extends Helper
     /**
      * Render a multi select with all available tags of entity and the tags of attachment preselected
      *
-     * @param  EntityInterface $entity The entity to get all allowed tags from
-     * @param  Attachment\Model\Entity\Attachment $attachment The attachment entity to add the tag to
+     * @param  EntityInterface                    $entity     the entity to get all allowed tags from
+     * @param  \Attachments\Model\Entity\Attachment $attachment the attachment entity to add the tag to
      * @return string
      * @throws
      */
-    public function tagsChooser(EntityInterface $entity, $attachment)
+    public function tagsChooser(EntityInterface $entity, Attachment $attachment): string
     {
-        if (!TableRegistry::exists($entity->source())) {
-            throw new Cake\Network\Exception\MissingTableException('Could not find Table ' . $entity->source());
+        if (!TableRegistry::getTableLocator()->exists($entity->getSource())) {
+            throw new MissingTableClassException('Could not find Table ' . $entity->getSource());
         }
-        $Table = TableRegistry::get($entity->source());
+        $table = TableRegistry::getTableLocator()->get($entity->getSource());
 
-        return $this->Form->select('tags', $Table->getAttachmentsTags(), [
+        return $this->Form->select('tags', $table->getAttachmentsTags(), [
             'type' => 'select',
             'class' => 'tag-chooser',
             'style' => 'display: block; width: 100%',

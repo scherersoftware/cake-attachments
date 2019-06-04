@@ -91,13 +91,13 @@ class AttachmentsTable extends Table
     }
 
     /**
-     * Save one Attachemnt
+     * Save one Attachment
      *
      * @param \Cake\Datasource\EntityInterface $entity Entity
      * @param string|array $upload String to uploaded file or ['path_to_file' => [tag1, tag2, tag3, ...]]
      * @return \Cake\Datasource\EntityInterface|bool
      */
-    public function addUpload(EntityInterface $entity, $upload)
+    public function addUpload(EntityInterface $entity, $upload): Attachment
     {
         $tags = [];
         $path = $upload;
@@ -114,13 +114,14 @@ class AttachmentsTable extends Table
 
         return $save;
     }
+
     /**
      * afterSave Event. If an attachment entity has its tmpPath value set, it will be moved
      * to the defined filepath
      *
-     * @param \Cake\Event\Event $event Event
+     * @param \Cake\Event\Event                    $event      Event
      * @param \Attachments\Model\Entity\Attachment $attachment Entity
-     * @param \ArrayObject $options Options
+     * @param \ArrayObject                         $options    Options
      * @return void
      * @throws \Exception If the file couldn't be moved
      */
@@ -151,9 +152,9 @@ class AttachmentsTable extends Table
     /**
      * afterDelete
      *
-     * @param \Cake\Event\Event $event Event
+     * @param \Cake\Event\Event                    $event      Event
      * @param \Attachments\Model\Entity\Attachment $attachment Entity
-     * @param \ArrayObject $options Options
+     * @param \ArrayObject                         $options    Options
      * @return void
      */
     public function afterDelete(Event $event, Attachment $attachment, \ArrayObject $options): void
@@ -164,9 +165,9 @@ class AttachmentsTable extends Table
     /**
      * Creates an Attachment entity based on the given file
      *
-     * @param \Cake\Datasource\EntityInterface $entity Entity the file will be attached to
-     * @param string $filePath Absolute path to the file
-     * @param array $tags Indexed array of tags to be assigned
+     * @param \Cake\Datasource\EntityInterface $entity   Entity the file will be attached to
+     * @param string                           $filePath Absolute path to the file
+     * @param array                            $tags     Indexed array of tags to be assigned
      * @return \Attachments\Model\Entity\Attachment
      * @throws \Exception If the given file doesn't exist or isn't readable
      */
@@ -190,10 +191,10 @@ class AttachmentsTable extends Table
         // in filepath, we store the path relative to the Attachment.path configuration
         // to make it easy to switch storage
         $info = $this->__getFileName($info, $entity);
-        $targetPath = $entity->source() . '/' . $entity->id . '/' . $info['basename'];
+        $targetPath = $entity->getSource() . '/' . $entity->id . '/' . $info['basename'];
 
         $attachment = $this->newEntity([
-            'model' => $entity->source(),
+            'model' => $entity->getSource(),
             'foreign_key' => $entity->id,
             'filename' => $info['basename'],
             'filesize' => $info['filesize'],
@@ -209,14 +210,14 @@ class AttachmentsTable extends Table
     /**
      * recursive method to increase the filename in case the file already exists
      *
-     * @param array $fileInfo Array of information about the file
-     * @param \Cake\Datasource\EntityInterface $entity Entity
-     * @param int $id counter varibale to extend the filename
+     * @param array                            $fileInfo Array of information about the file
+     * @param \Cake\Datasource\EntityInterface $entity   Entity
+     * @param string                           $id       counter variable to extend the filename
      * @return array
      */
-    private function __getFileName(array $fileInfo, EntityInterface $entity, int $id = 0): array
+    private function __getFileName($fileInfo, EntityInterface $entity, $id = 0): array
     {
-        if (!file_exists(Configure::read('Attachments.path') . $entity->source() . '/' . $entity->id . '/' . $fileInfo['basename'])) {
+        if (!file_exists(Configure::read('Attachments.path') . $entity->getSource() . '/' . $entity->id . '/' . $fileInfo['basename'])) {
             return $fileInfo;
         }
         $fileInfo['basename'] = $fileInfo['filename'] . ' (' . ++$id . ').' . $fileInfo['extension'];

@@ -15,6 +15,9 @@ use FrontendBridge\Lib\ServiceResponse;
 
 require_once Plugin::path('Attachments') . 'src/Lib/UploadHandler.php';
 
+/**
+ * @property  \Attachments\Model\Table\AttachmentsTable $Attachments
+ */
 class AttachmentsController extends AppController
 {
 
@@ -24,10 +27,10 @@ class AttachmentsController extends AppController
      * @param \Cake\Event\Event $event cake event
      * @return void
      */
-    public function beforeFilter(Event $event): void
+    public function beforeFilter(Event $event)
     {
-        if (isset($this->Csrf) && $event->getSubject()->request->getParam('action') === 'upload') {
-            $this->eventManager()->off($this->Csrf);
+        if (isset($this->Csrf) && $event->getSubject()->getRequest()->getParam('action') === 'upload') {
+            $this->getEventManager()->off($this->Csrf);
         }
         
         parent::beforeFilter($event);
@@ -54,7 +57,7 @@ class AttachmentsController extends AppController
      *                     per form session.
      * @return void
      */
-    public function upload(string $uuid = null)
+    public function upload(string $uuid = null): void
     {
         if ($uuid) {
             // strip everything but valid UUID chars
@@ -80,7 +83,7 @@ class AttachmentsController extends AppController
      * @param string $attachmentId Attachment ID
      * @return void
      */
-    public function preview(string $attachmentId = null)
+    public function preview(string $attachmentId = null): void
     {
         // FIXME cache previews
         $attachment = $this->Attachments->get($attachmentId);
@@ -130,7 +133,7 @@ class AttachmentsController extends AppController
      * @param string $attachmentId Attachment ID
      * @return void
      */
-    public function view(string $attachmentId = null)
+    public function view(string $attachmentId = null): void
     {
         // FIXME cache previews
         $attachment = $this->Attachments->get($attachmentId);
@@ -193,6 +196,26 @@ class AttachmentsController extends AppController
      * @param \Imagick $image image handler
      * @return void
      */
+    protected function _checkAuthorization(Attachment $attachment): void
+    {
+        if ($attachmentsBehavior = $attachment->getRelatedTable()->getBehavior('Attachments')) {
+            $behaviorConfig = $attachmentsBehavior->getConfig();
+            if (is_callable($behaviorConfig['downloadAuthorizeCallback'])) {
+                $relatedEntity = $attachment->getRelatedEntity();
+                $authorized = $behaviorConfig['downloadAuthorizeCallback']($attachment, $relatedEntity, $this->getRequest());
+                if ($authorized !== true) {
+                    throw new UnauthorizedException(__d('attachments', 'attachments.unauthorized_for_attachment'));
+                }
+            }
+        }
+    }
+
+    /**
+     * rotate image depending on exif info
+     *
+     * @param \Imagick $image image handler
+     * @return void
+     */
     protected function _autorotate(\Imagick $image): void
     {
         switch ($image->getImageOrientation()) {
@@ -243,9 +266,9 @@ class AttachmentsController extends AppController
      * Endpoint for Json action to save tags of an attachment
      *
      * @param  string $attachmentId the attachment identifier
-     * @return void|\Cake\Http\Response
+     * @return void
      */
-    public function saveTags(string $attachmentId = null)
+    public function saveTags(string $attachmentId = null): void
     {
         $this->request->allowMethod('post');
         $attachment = $this->Attachments->get($attachmentId);

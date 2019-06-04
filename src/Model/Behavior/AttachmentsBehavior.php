@@ -2,10 +2,10 @@
 namespace Attachments\Model\Behavior;
 
 use Attachments\Model\Entity\Attachment;
+use Attachments\Model\Table\AttachmentsTable;
 use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
 use Cake\ORM\Behavior;
-use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -40,7 +40,7 @@ class AttachmentsBehavior extends Behavior
     /**
      * AttachmentsTable instance
      *
-     * @var AttachmentsTable
+     * @var \Attachments\Model\Table\AttachmentsTable
      */
     public $Attachments;
 
@@ -83,7 +83,7 @@ class AttachmentsBehavior extends Behavior
      * @param \Cake\Datasource\EntityInterface $entity Entity to be saved
      * @return void
      */
-    public function afterSave(Event $event, EntityInterface $entity)
+    public function afterSave(Event $event, EntityInterface $entity): void
     {
         $uploads = $entity->get($this->getConfig('formFieldName'));
         if (!empty($uploads)) {
@@ -131,17 +131,17 @@ class AttachmentsBehavior extends Behavior
     /**
      * Method to save the tags of an attachment
      *
-     * @param \Attachments\Model\Entity\Attachment $attachment The attachment entity
-     * @param array $tags Array of tags
+     * @param  \Attachments\Model\Entity\Attachment $attachment the attachment entity
+     * @param  array $tags       array of tags
      * @return bool
      */
     public function saveTags(Attachment $attachment, array $tags): bool
     {
         $newTags = [];
         foreach ($tags as $tag) {
-            if (isset($this->config('tags')[$tag])) {
+            if (isset($this->getConfig('tags')[$tag])) {
                 $newTags[] = $tag;
-                if ($this->config('tags')[$tag]['exclusive'] === true) {
+                if ($this->getConfig('tags')[$tag]['exclusive'] === true) {
                     $this->_clearTag($attachment, $tag);
                 }
             }
@@ -179,7 +179,7 @@ class AttachmentsBehavior extends Behavior
             if ($existingTag === $tag) {
                 unset($attachmentWithExclusiveTag->tags[$key]);
                 $attachmentWithExclusiveTag->tags = array_values($attachmentWithExclusiveTag->tags);
-                $attachmentWithExclusiveTag->dirty('tags', true);
+                $attachmentWithExclusiveTag->setDirty('tags', true);
                 break;
             }
         }
