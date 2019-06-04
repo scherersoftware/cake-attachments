@@ -3,10 +3,12 @@ namespace Attachments\Controller;
 
 use App\Controller\AppController;
 use Attachments\Model\Entity\Attachment;
+use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Event\Event;
 use Cake\Filesystem\File;
+use Cake\Http\Response;
 use Cake\Network\Exception\UnauthorizedException;
 use Cake\ORM\Exception\MissingTableClassException;
 use Cake\ORM\TableRegistry;
@@ -18,7 +20,7 @@ require_once Plugin::path('Attachments') . 'src/Lib/UploadHandler.php';
 /**
  * @property  \Attachments\Model\Table\AttachmentsTable $Attachments
  */
-class AttachmentsController extends AppController
+class AttachmentsController extends Controller
 {
 
     /**
@@ -73,7 +75,7 @@ class AttachmentsController extends AppController
         ];
 
         $uploadHandler = new \UploadHandler($options);
-        $this->response->stop();
+        exit;
     }
 
     /**
@@ -123,7 +125,7 @@ class AttachmentsController extends AppController
         echo $image;
 
         $image->destroy();
-        $this->response->stop();
+        exit;
     }
 
     /**
@@ -169,22 +171,22 @@ class AttachmentsController extends AppController
         echo $image;
 
         $image->destroy();
-        $this->response->stop();
+        exit;
     }
 
     /**
      * Download the file
      *
      * @param string $attachmentId Attachment ID
-     * @return \Cake\Network\Response
+     * @return \Cake\Http\Response
      */
-    public function download(string $attachmentId = null)
+    public function download(string $attachmentId = null): Response
     {
         $attachment = $this->Attachments->get($attachmentId);
 
         $this->AttachmentsComponent->assertDownloadAuthorization($attachment);
 
-        return $this->response->withFile($attachment->getAbsolutePath(), [
+        return $this->getResponse()->withFile($attachment->getAbsolutePath(), [
             'download' => true,
             'name' => $attachment->filename
         ]);

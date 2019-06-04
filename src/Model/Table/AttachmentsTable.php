@@ -9,6 +9,7 @@ use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Exception;
 
 /**
  * Attachments Model
@@ -31,7 +32,9 @@ class AttachmentsTable extends Table
 
         $this->getSchema()->setColumnType('tags', 'json');
 
-        if (($afterInitializeCallback = Configure::read('Attachments.afterInitializeCallback')) && is_callable($afterInitializeCallback)) {
+        if (($afterInitializeCallback = Configure::read('Attachments.afterInitializeCallback'))
+            && is_callable($afterInitializeCallback)
+        ) {
             $afterInitializeCallback($this);
         }
     }
@@ -139,11 +142,11 @@ class AttachmentsTable extends Table
             }
 
             if (!$folder->create($targetDir, $mode)) {
-                throw new \Exception("Folder {$targetDir} could not be created.");
+                throw new Exception("Folder {$targetDir} could not be created.");
             }
             $targetPath = Configure::read('Attachments.path') . $attachment->filepath;
             if (!rename($attachment->tmpPath, $targetPath)) {
-                throw new \Exception("Temporary file {$attachment->tmpPath} could not be moved to {$attachment->filepath}");
+                throw new Exception("Temporary file {$attachment->tmpPath} could not be moved to {$attachment->filepath}");
             }
             $attachment->tmpPath = null;
         }
@@ -174,10 +177,10 @@ class AttachmentsTable extends Table
     public function createAttachmentEntity(EntityInterface $entity, string $filePath, array $tags = []): Attachment
     {
         if (!file_exists($filePath)) {
-            throw new \Exception("File {$filePath} does not exist.");
+            throw new Exception("File {$filePath} does not exist.");
         }
         if (!is_readable($filePath)) {
-            throw new \Exception("File {$filePath} cannot be read.");
+            throw new Exception("File {$filePath} cannot be read.");
         }
         $file = new File($filePath);
         $info = $file->info();
@@ -193,7 +196,7 @@ class AttachmentsTable extends Table
         $info = $this->__getFileName($info, $entity);
         $targetPath = $entity->getSource() . '/' . $entity->id . '/' . $info['basename'];
 
-        $attachment = $this->newEntity([
+        return $this->newEntity([
             'model' => $entity->getSource(),
             'foreign_key' => $entity->id,
             'filename' => $info['basename'],
@@ -203,8 +206,6 @@ class AttachmentsTable extends Table
             'tmpPath' => $filePath,
             'tags' => $tags
         ]);
-
-        return $attachment;
     }
 
     /**
