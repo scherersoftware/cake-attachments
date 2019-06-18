@@ -37,7 +37,7 @@ class AttachmentsHelper extends Helper
     {
         // Render script reference inline, when request is ajax.
         $inline = [];
-        $renderInBlock = !$this->request->is('ajax');
+        $renderInBlock = !$this->getView()->getRequest()->is('ajax');
 
         $inline[] = $this->Html->script('/attachments/js/vendor/jquery.ui.widget.js', ['block' => $renderInBlock]);
         $inline[] = $this->Html->script('/attachments/js/vendor/jquery.iframe-transport.js', ['block' => $renderInBlock]);

@@ -4,7 +4,7 @@ namespace Attachments\Controller\Component;
 use Attachments\Model\Entity\Attachment;
 use Cake\Controller\Component;
 use Cake\Controller\ComponentRegistry;
-use Cake\Network\Exception\UnauthorizedException;
+use Cake\Http\Exception\UnauthorizedException;
 
 /**
  * Attachments component
@@ -25,7 +25,7 @@ class AttachmentsComponent extends Component
             $behaviorConfig = $attachmentsBehavior->config();
             if (is_callable($behaviorConfig['downloadAuthorizeCallback'])) {
                 $relatedEntity = $attachment->getRelatedEntity();
-                $authorized = $behaviorConfig['downloadAuthorizeCallback']($attachment, $relatedEntity, $this->request);
+                $authorized = $behaviorConfig['downloadAuthorizeCallback']($attachment, $relatedEntity, $this->getRequest());
                 if ($authorized !== true) {
                     throw new UnauthorizedException(__d('attachments', 'attachments.unauthorized_for_attachment_download'));
                 }

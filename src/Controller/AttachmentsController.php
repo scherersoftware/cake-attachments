@@ -9,7 +9,7 @@ use Cake\Core\Plugin;
 use Cake\Event\Event;
 use Cake\Filesystem\File;
 use Cake\Http\Response;
-use Cake\Network\Exception\UnauthorizedException;
+use Cake\Http\Exception\UnauthorizedException;
 use Cake\ORM\Exception\MissingTableClassException;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Text;
@@ -272,14 +272,14 @@ class AttachmentsController extends Controller
      */
     public function saveTags(string $attachmentId = null): void
     {
-        $this->request->allowMethod('post');
+        $this->getRequest()->allowMethod('post');
         $attachment = $this->Attachments->get($attachmentId);
         $this->AttachmentsComponent->assertDownloadAuthorization($attachment);
 
         if (!TableRegistry::getTableLocator()->get($attachment->model)) {
             throw new MissingTableClassException('Could not find Table ' . $attachment->model);
         }
-        $inputArray = explode('&', $this->request->input('urldecode'));
+        $inputArray = explode('&', $this->getRequest()->input('urldecode'));
         $tags = explode('$', explode('=', $inputArray[0])[1]);
         unset($inputArray[0]);
 
