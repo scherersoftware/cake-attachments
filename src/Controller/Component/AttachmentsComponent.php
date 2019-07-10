@@ -25,7 +25,7 @@ class AttachmentsComponent extends Component
             $behaviorConfig = $attachmentsBehavior->config();
             if (is_callable($behaviorConfig['downloadAuthorizeCallback'])) {
                 $relatedEntity = $attachment->getRelatedEntity();
-                $authorized = $behaviorConfig['downloadAuthorizeCallback']($attachment, $relatedEntity, $this->getRequest());
+                $authorized = $behaviorConfig['downloadAuthorizeCallback']($attachment, $relatedEntity, $this->getController()->getRequest());
                 if ($authorized !== true) {
                     throw new UnauthorizedException(__d('attachments', 'attachments.unauthorized_for_attachment_download'));
                 }
