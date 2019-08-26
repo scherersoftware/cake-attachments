@@ -98,7 +98,7 @@ class AttachmentsTable extends Table
      *
      * @param \Cake\Datasource\EntityInterface $entity Entity
      * @param string|array $upload String to uploaded file or ['path_to_file' => [tag1, tag2, tag3, ...]]
-     * @return \Cake\Datasource\EntityInterface|bool
+     * @return \Attachments\Model\Entity\Attachment
      */
     public function addUpload(EntityInterface $entity, $upload): Attachment
     {
@@ -110,12 +110,9 @@ class AttachmentsTable extends Table
         }
         $file = Configure::read('Attachments.tmpUploadsPath') . $path;
         $attachment = $this->createAttachmentEntity($entity, $file, $tags);
-        $save = $this->save($attachment);
-        if ($save) {
-            return $attachment;
-        }
+        $this->save($attachment);
 
-        return $save;
+        return $attachment;
     }
 
     /**
