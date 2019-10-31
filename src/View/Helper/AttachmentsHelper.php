@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace Attachments\View\Helper;
 
 use Attachments\Model\Entity\Attachment;
@@ -14,9 +15,12 @@ use Cake\View\Helper;
 class AttachmentsHelper extends Helper
 {
 
+    /**
+     * {@inheritDoc}
+     */
     public $helpers = [
         'Html',
-        'Form'
+        'Form',
     ];
 
     /**
@@ -25,7 +29,7 @@ class AttachmentsHelper extends Helper
      * @var array
      */
     protected $_defaultConfig = [
-        'includeDependencies' => true
+        'includeDependencies' => true,
     ];
 
     /**
@@ -54,7 +58,7 @@ class AttachmentsHelper extends Helper
     /**
      * Render an attachments area for the given entity
      *
-     * @param EntityInterface $entity Entity to attach files to
+     * @param \Cake\Datasource\EntityInterface $entity Entity to attach files to
      * @param array $options Override default options
      * @return string
      */
@@ -97,10 +101,9 @@ class AttachmentsHelper extends Helper
     /**
      * Render a multi select with all available tags of entity and the tags of attachment preselected
      *
-     * @param  EntityInterface                    $entity     the entity to get all allowed tags from
-     * @param  \Attachments\Model\Entity\Attachment $attachment the attachment entity to add the tag to
+     * @param \Cake\Datasource\EntityInterface $entity The entity to get all allowed tags from
+     * @param \Attachments\Model\Entity\Attachment $attachment the attachment entity to add the tag to
      * @return string
-     * @throws
      */
     public function tagsChooser(EntityInterface $entity, Attachment $attachment): string
     {
@@ -115,7 +118,7 @@ class AttachmentsHelper extends Helper
             'style' => 'display: block; width: 100%',
             'label' => false,
             'multiple' => true,
-            'value' => $attachment->tags
+            'value' => $attachment->tags,
         ]);
     }
 }

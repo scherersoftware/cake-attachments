@@ -1,15 +1,15 @@
 <?php
+declare(strict_types = 1);
 namespace Attachments\Controller;
 
-use App\Controller\AppController;
 use Attachments\Model\Entity\Attachment;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Event\Event;
 use Cake\Filesystem\File;
-use Cake\Http\Response;
 use Cake\Http\Exception\UnauthorizedException;
+use Cake\Http\Response;
 use Cake\ORM\Exception\MissingTableClassException;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Text;
@@ -29,12 +29,12 @@ class AttachmentsController extends Controller
      * @param \Cake\Event\Event $event cake event
      * @return void
      */
-    public function beforeFilter(Event $event)
+    public function beforeFilter(Event $event): void
     {
         if (isset($this->Csrf) && $event->getSubject()->getRequest()->getParam('action') === 'upload') {
             $this->getEventManager()->off($this->Csrf);
         }
-        
+
         parent::beforeFilter($event);
     }
 
@@ -47,7 +47,7 @@ class AttachmentsController extends Controller
     {
         $this->loadModel('Attachments.Attachments');
         $this->loadComponent('AttachmentsComponent', [
-            'className' => 'Attachments\Controller\Component\AttachmentsComponent'
+            'className' => 'Attachments\Controller\Component\AttachmentsComponent',
         ]);
         parent::initialize();
     }
@@ -71,10 +71,10 @@ class AttachmentsController extends Controller
         $options = [
             'upload_dir' => Configure::read('Attachments.tmpUploadsPath') . DS . $uuid . DS,
             // FIXME Make file paths configurable
-            'accept_file_types' => Configure::read('Attachments.acceptedFileTypes')
+            'accept_file_types' => Configure::read('Attachments.acceptedFileTypes'),
         ];
 
-        $uploadHandler = new \UploadHandler($options);
+        new \UploadHandler($options);
         exit;
     }
 
@@ -156,7 +156,6 @@ class AttachmentsController extends Controller
                 $file = new File($attachment->getAbsolutePath());
                 echo $file->read();
                 exit;
-                break;
             default:
                 $image = new \Imagick(Plugin::path('Attachments') . '/webroot/img/file.png');
                 break;
@@ -188,14 +187,14 @@ class AttachmentsController extends Controller
 
         return $this->getResponse()->withFile($attachment->getAbsolutePath(), [
             'download' => true,
-            'name' => $attachment->filename
+            'name' => $attachment->filename,
         ]);
     }
 
     /**
      * Rotate image depending on exif info
      *
-     * @param \Imagick $image image handler
+     * @param \Attachments\Model\Entity\Attachment $attachment Attachment entity
      * @return void
      */
     protected function _checkAuthorization(Attachment $attachment): void

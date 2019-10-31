@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types = 1);
 namespace Attachments\Shell;
 
 use Cake\Console\Shell;
@@ -15,7 +15,7 @@ class CleanTempShell extends Shell
      * @param  string $tempDir an other directory to clear of all folders and files, if desired
      * @return void
      */
-    public function main($tempDir = null)
+    public function main(string $tempDir = null): void
     {
         if (empty($tempDir)) {
             $tempDir = Configure::read('Attachments.tmpUploadsPath');

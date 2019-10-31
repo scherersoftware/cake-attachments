@@ -6,11 +6,11 @@
             <ul class="attachments-list list-group">
                 <?php foreach ($entity->attachments as $attachment): ?>
                     <li class="list-group-item" data-attachment-id="<?= $attachment->id ?>">
-                        <?php if ($attachment->isImage()) : ?>
+                        <?php if ($attachment->isImage()): ?>
                             <a href="<?= $attachment->viewUrl() ?>" target="_blank" class="img pull-left" data-featherlight="image" style="background-image: url(<?= $attachment->previewUrl() ?>);">
                                 <i class="fa fa-eye fa-3x" aria-hidden="true"></i>
                             </a>
-                        <?php else : ?>
+                        <?php else: ?>
                             <div class="img pull-left" style="background-image: url(<?= $attachment->previewUrl() ?>);"></div>
                         <?php endif; ?>
                         <div class="misc">

@@ -23,7 +23,7 @@ class AttachmentsTable extends Table
      * @param array $config The configuration for the Table.
      * @return void
      */
-    public function initialize(array $config)
+    public function initialize(array $config): void
     {
         $this->setTable('attachments');
         $this->setDisplayField('filename');
@@ -48,20 +48,20 @@ class AttachmentsTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-            ->allowEmpty('id', 'create')
+            ->allowEmptyString('id', null, 'create')
             ->requirePresence('filepath', 'create')
-            ->notEmpty('filepath')
+            ->notEmptyString('filepath')
             ->requirePresence('filename', 'create')
-            ->notEmpty('filename')
+            ->notEmptyString('filename')
             ->requirePresence('filetype', 'create')
-            ->notEmpty('filetype')
+            ->notEmptyString('filetype')
             ->add('filesize', 'valid', ['rule' => 'numeric'])
             ->requirePresence('filesize', 'create')
-            ->notEmpty('filesize')
+            ->notEmptyString('filesize')
             ->requirePresence('model', 'create')
-            ->notEmpty('model')
+            ->notEmptyString('model')
             ->requirePresence('foreign_key', 'create')
-            ->notEmpty('foreign_key');
+            ->notEmptyString('foreign_key');
 
         return $validator;
     }
@@ -201,7 +201,7 @@ class AttachmentsTable extends Table
             'filetype' => $info['mime'],
             'filepath' => $targetPath,
             'tmpPath' => $filePath,
-            'tags' => $tags
+            'tags' => $tags,
         ]);
     }
 
@@ -213,7 +213,7 @@ class AttachmentsTable extends Table
      * @param string                           $id       counter variable to extend the filename
      * @return array
      */
-    private function __getFileName($fileInfo, EntityInterface $entity, $id = 0): array
+    private function __getFileName(array $fileInfo, EntityInterface $entity, string $id = '0'): array
     {
         if (!file_exists(Configure::read('Attachments.path') . $entity->getSource() . '/' . $entity->id . '/' . $fileInfo['basename'])) {
             return $fileInfo;

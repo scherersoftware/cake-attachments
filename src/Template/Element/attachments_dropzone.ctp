@@ -25,18 +25,18 @@
         </div>
         <?php
             $selectOptions = [];
-            if($this->Form->context('entity')->val($options['formFieldName'])) {
-                $selectOptions = array_combine(
-                    $this->Form->context('entity')->val($options['formFieldName']),
-                    $this->Form->context('entity')->val($options['formFieldName'])
-                );
-            }
+        if ($this->Form->context('entity')->val($options['formFieldName'])) {
+            $selectOptions = array_combine(
+                $this->Form->context('entity')->val($options['formFieldName']),
+                $this->Form->context('entity')->val($options['formFieldName'])
+            );
+        }
 
             echo $this->Form->select($options['formFieldName'], $selectOptions, [
                 'multiple' => true,
                 'label' => false,
-                'class' => 'hidden-attachments-select'
+                'class' => 'hidden-attachments-select',
             ]);
-        ?>
+            ?>
     </div>
 </div>

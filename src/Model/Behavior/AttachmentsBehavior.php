@@ -1,8 +1,8 @@
 <?php
+declare(strict_types = 1);
 namespace Attachments\Model\Behavior;
 
 use Attachments\Model\Entity\Attachment;
-use Attachments\Model\Table\AttachmentsTable;
 use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
 use Cake\ORM\Behavior;
@@ -34,7 +34,7 @@ class AttachmentsBehavior extends Behavior
     protected $_defaultConfig = [
         'formFieldName' => 'attachment_uploads',
         'tags' => [],
-        'downloadAuthorizeCallback' => null
+        'downloadAuthorizeCallback' => null,
     ];
 
     /**
@@ -53,24 +53,24 @@ class AttachmentsBehavior extends Behavior
      * @param array $config The configuration settings provided to this behavior.
      * @return void
      */
-    public function initialize(array $config)
+    public function initialize(array $config): void
     {
         $this->Attachments = TableRegistry::getTableLocator()->get('Attachments.Attachments');
 
         // Dynamically attach the hasMany relationship
         $this->_table->hasMany('Attachments.Attachments', [
             'conditions' => [
-                'Attachments.model' => $this->_table->getRegistryAlias()
+                'Attachments.model' => $this->_table->getRegistryAlias(),
             ],
             'foreignKey' => 'foreign_key',
-            'dependent' => true
+            'dependent' => true,
         ]);
 
         $this->Attachments->belongsTo($this->_table->getRegistryAlias(), [
             'conditions' => [
-                'Attachments.model' => $this->_table->getRegistryAlias()
+                'Attachments.model' => $this->_table->getRegistryAlias(),
             ],
-            'foreignKey' => 'foreign_key'
+            'foreignKey' => 'foreign_key',
         ]);
 
         parent::initialize($config);
@@ -166,7 +166,7 @@ class AttachmentsBehavior extends Behavior
                 'Attachments.id !=' => $attachment->id,
                 'Attachments.model' => $attachment->model,
                 'Attachments.foreign_key' => $attachment->foreign_key,
-                'Attachments.tags LIKE' => '%' . $tag . '%'
+                'Attachments.tags LIKE' => '%' . $tag . '%',
             ], ['Attachments.tags' => 'string'])
             ->contain([])
             ->first();
