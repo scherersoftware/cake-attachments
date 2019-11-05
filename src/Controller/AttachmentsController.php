@@ -17,7 +17,8 @@ use Cake\Utility\Text;
 use FrontendBridge\Lib\ServiceResponse;
 
 /**
- * @property  \Attachments\Model\Table\AttachmentsTable $Attachments
+ * @property \Attachments\Model\Table\AttachmentsTable $Attachments
+ * @property \Attachments\Controller\Component\AttachmentsComponent $AttachmentsComponent
  */
 class AttachmentsController extends Controller
 {
@@ -25,10 +26,11 @@ class AttachmentsController extends Controller
     /**
      * beforeFilter event
      *
-     * @param \Cake\Event\Event $event cake event
-     * @return void
+     * @param \Cake\Event\Event $event An Event instance
+     * @return \Cake\Http\Response|void
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
      */
-    public function beforeFilter(Event $event): void
+    public function beforeFilter(Event $event)
     {
         if (isset($this->Csrf) && $event->getSubject()->getRequest()->getParam('action') === 'upload') {
             $this->getEventManager()->off($this->Csrf);
