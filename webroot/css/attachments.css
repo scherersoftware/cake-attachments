@@ -1,12 +1,15 @@
 .attachments-list {
     position: relative;
 }
+
 .attachments-list > li {
     min-height: 100px;
 }
+
 .attachments-list .misc {
     float: left;
 }
+
 .attachments-list .img {
     border-radius: 10px;
     height: 80px;
@@ -15,6 +18,7 @@
     background-position: center center;
     background-size: cover;
 }
+
 .attachments-list a.img > .fa {
     border-radius: 10px;
     height: 80px;
@@ -27,22 +31,27 @@
     z-index: 10;
     visibility: hidden;
 }
+
 .attachments-list a.img:hover > .fa {
     visibility: visible;
 }
+
 .attachments-list .misc > .tags > .label > .fa-trash {
     cursor: pointer;
     color: #d9534f;
 }
+
 .attachments-list .misc > .tags > .tag-input {
     margin-top: 10px;
 }
+
 .attachments-list .misc > .tags > .tag-input input {
     padding: 3px 12px;
     border: 1px solid #ccc;
     border-radius: 5px;
     width: 250px;
 }
+
 .attachments-list .misc > .tags > .tag-input > div {
     display: inline-block;
     background-color: #eee;
@@ -52,14 +61,17 @@
     text-align: center;
     border-radius: 5px;
 }
+
 .attachments-list .misc > .tags > .tag-input .fa {
     cursor: pointer;
 }
+
 @media (max-width: 450px) {
     .attachments-list .img {
         display: block;
         float: none !important;
     }
+
     .attachments-list .misc {
         float: none !important;
         margin: 10px 0;
@@ -67,19 +79,23 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
+
     .attachments-list .buttons {
         float: none !important;
     }
+
     .attachments-list .buttons > .btn-xs {
         padding: 6px 12px;
     }
 }
+
 .attachments-tiles {
     position: relative;
     width: 100%;
     border-radius: 10px;
     margin-bottom: 50px;
 }
+
 .attachments-tiles > .item {
     border-radius: 10px;
     position: relative;
@@ -88,6 +104,7 @@
     width: 230px;
     margin: 10px 10px 0 0;
 }
+
 .attachments-tiles > .item > .img {
     border-radius: 10px 10px 0 0;
     height: 200px;
@@ -96,6 +113,7 @@
     background-position: center center;
     background-size: cover;
 }
+
 .attachments-tiles > .item > .magnify {
     position: absolute;
     border-radius: 10px;
@@ -107,11 +125,13 @@
     background-color: rgba(1, 1, 1, 0.3);
     cursor: pointer;
 }
+
 .attachments-tiles > .item > .magnify > .fa {
     margin-top: 60px;
     font-size: 75px;
     text-shadow: 1px 1px grey;
 }
+
 .attachments-tiles > .item > .misc {
     position: absolute;
     bottom: 0;
@@ -121,25 +141,31 @@
     border-radius: 0 0 10px 10px;
     color: white;
 }
+
 .attachments-tiles > .item > .misc .info {
     padding: 5px 10px;
 }
+
 .attachments-tiles > .item > .misc .buttons {
     padding: 10px;
 }
+
 .attachments-tiles > .item > .misc .tags {
     padding: 0 10px;
 }
+
 .attachments-tiles > .item > .misc .more-tags {
     padding-top: 5px;
     white-space: nowrap;
 }
+
 .attachments-tiles > .item > .misc .buttons > .button {
     cursor: pointer;
     text-align: center;
     float: left;
     width: 33%;
 }
+
 .attachments-tiles > .item > .misc .edit-tags {
     position: absolute;
     top: 80px;
@@ -153,22 +179,27 @@
     color: black;
     padding: 10px;
 }
+
 .attachments-tiles > .item > .misc .edit-tags > .headline {
     margin-bottom: 5px;
 }
+
 .attachments-tiles > .item > .misc .edit-tags > .label {
     margin-bottom: 5px;
     display: block;
     text-align: left;
     font-size: 90%;
 }
+
 .attachments-tiles > .item > .misc .edit-tags > .label > .fa-trash {
     cursor: pointer;
     color: #d9534f;
 }
+
 .attachments-tiles > .item > .misc .edit-tags > .label.add-tag {
     cursor: pointer;
 }
+
 .attachments-tiles > .item > .misc .edit-tags:before,
 .attachments-tiles > .item > .misc .edit-tags:after {
     bottom: 100%;
@@ -180,21 +211,25 @@
     position: absolute;
     pointer-events: none;
 }
+
 .attachments-tiles > .item > .misc .edit-tags:before {
     border-color: rgba(194, 225, 245, 0);
     border-bottom-color: white;
     border-width: 12px;
     margin-left: -12px;
 }
+
 .attachments-tiles > .item > .misc .edit-tags:after {
     border-color: rgba(136, 183, 213, 0);
     border-bottom-color: white;
     border-width: 12px;
     margin-left: -12px;
 }
+
 .hidden-attachments-select {
     display: none;
 }
+
 .attachments-dropzone {
     position: relative;
     width: 100%;
@@ -206,9 +241,11 @@
     border-radius: 10px;
     padding: 20px 0 0 20px;
 }
+
 .attachments-dropzone.active {
     background-color: rgba(10, 10, 10, 0.2);
 }
+
 .attachments-dropzone input {
     width: 0.1px;
     height: 0.1px;
@@ -217,6 +254,7 @@
     position: absolute;
     z-index: -1;
 }
+
 .attachments-dropzone > .hint {
     position: absolute;
     right: 0;
@@ -229,14 +267,17 @@
     top: 50%;
     text-align: center;
 }
+
 @media (max-width: 450px) {
     .attachments-dropzone > .hint {
         font-size: 20px;
     }
 }
+
 .attachments-dropzone > .hint > b {
     cursor: pointer;
 }
+
 .attachments-dropzone > .item {
     border-radius: 10px;
     position: relative;
@@ -247,6 +288,7 @@
     background-position: center center;
     background-size: cover;
 }
+
 .attachments-dropzone > .add-more {
     background-image: none;
     border: 2px dashed #999;
@@ -254,6 +296,7 @@
     line-height: 150px;
     cursor: pointer;
 }
+
 .attachments-dropzone > .item > .remove,
 .attachments-dropzone > .item > .tag {
     position: absolute;
@@ -268,14 +311,17 @@
     border-radius: 17px;
     cursor: pointer;
 }
+
 .attachments-dropzone > .item > .tag {
     top: 30px;
 }
+
 .attachments-dropzone > .item > .uploading {
     height: 100%;
     width: 100%;
     border-radius: 10px;
 }
+
 .attachments-dropzone > .item > .uploaded > .fa-check {
     width: 100%;
     height: 100%;
@@ -283,6 +329,7 @@
     text-align: center;
     color: #5cb85c;
 }
+
 .attachments-dropzone > .item > .uploading > .progress {
     position: absolute;
     width: 80%;
@@ -291,9 +338,11 @@
     top: 70px;
     border-radius: 5px;
 }
+
 .attachments-dropzone > .item > .uploading > .progress > .progress-bar {
     background-color: rgba(1, 1, 1, 0.5);
 }
+
 .attachments-dropzone > .item > .uploading > .fa-times {
     width: 100%;
     height: 100px;
@@ -301,6 +350,7 @@
     text-align: center;
     color: #d9534f;
 }
+
 .attachments-dropzone > .item > .uploading > .error {
     width: 100%;
     height: 50px;

@@ -10,15 +10,15 @@ App.Lib.AttachmentsWidget = Class.extend({
     config: {
         uploadUrl: null
     },
-    init: function($element, config) {
+    init: function ($element, config) {
         this.$element = $element;
-        if(config) {
+        if (config) {
             this.config = $.extend(this.config, config);
         }
 
-        var isAdvancedUpload = function() {
-          var div = document.createElement('div');
-          return (('draggable' in div) || ('ondragstart' in div && 'ondrop' in div));
+        var isAdvancedUpload = function () {
+            var div = document.createElement('div');
+            return (('draggable' in div) || ('ondragstart' in div && 'ondrop' in div));
         }();
 
         if (isAdvancedUpload === false) {
@@ -27,7 +27,7 @@ App.Lib.AttachmentsWidget = Class.extend({
             $('.attachments-dropzone .hint > span').hide();
         }
 
-        $('.attachments-list a.btn-delete').off('click').on('click', function(e) {
+        $('.attachments-list a.btn-delete').off('click').on('click', function (e) {
             var attachmentId = $(e.currentTarget).data('attachment-id');
             var url = {
                 plugin: 'attachments',
@@ -36,9 +36,9 @@ App.Lib.AttachmentsWidget = Class.extend({
                 pass: [attachmentId]
             };
 
-            if(confirm("Do you really want to delete this file? This action cannot be undone. Click Cancel if you're unsure.")) {
+            if (confirm("Do you really want to delete this file? This action cannot be undone. Click Cancel if you're unsure.")) {
                 App.Main.UIBlocker.blockElement($(e.currentTarget));
-                App.Main.request(url, null, function(response) {
+                App.Main.request(url, null, function (response) {
                     App.Main.UIBlocker.unblockElement($(e.currentTarget));
                     $('.attachments-list li[data-attachment-id=' + attachmentId + ']').remove();
                 });
@@ -47,28 +47,28 @@ App.Lib.AttachmentsWidget = Class.extend({
 
         this.$input = this.$element.find('.fileupload-input');
 
-        $('.fileupload-button').off('click').on('click', function() {
-            this.$input.trigger( "click" );
+        $('.fileupload-button').off('click').on('click', function () {
+            this.$input.trigger("click");
         }.bind(this));
 
-        if(this.$element.find('select.hidden-attachments-select').length > 0) {
-             this.$hiddenSelect = this.$element.find('select.hidden-attachments-select');
+        if (this.$element.find('select.hidden-attachments-select').length > 0) {
+            this.$hiddenSelect = this.$element.find('select.hidden-attachments-select');
         }
         this.$dropZone = this.$element.find('.attachments-dropzone');
 
         var counter = 0;
-        this.$dropZone.off('dragenter').on('dragenter', function(e) {
+        this.$dropZone.off('dragenter').on('dragenter', function (e) {
             e.preventDefault(); // needed for IE
             counter++;
             this.$dropZone.addClass('active');
         }.bind(this));
-        this.$dropZone.off('dragleave').on('dragleave', function() {
+        this.$dropZone.off('dragleave').on('dragleave', function () {
             counter--;
             if (counter === 0) {
                 this.$dropZone.removeClass('active');
             }
         }.bind(this));
-        this.$dropZone.off('drop').on('drop', function() {
+        this.$dropZone.off('drop').on('drop', function () {
             counter = 0;
             this.$dropZone.removeClass('active');
         }.bind(this));
@@ -79,10 +79,10 @@ App.Lib.AttachmentsWidget = Class.extend({
             dataType: 'json',
             dropZone: this.$dropZone,
             done: function (e, data) {
-                if(this.$hiddenSelect) {
+                if (this.$hiddenSelect) {
                     $.each(data.result.files, function (index, file) {
                         this.$dropZone.find('.item[data-name="' + file.name + '"] .progress').remove();
-                        if(file.error) {
+                        if (file.error) {
                             $('.item[data-name="' + file.name + '"] .uploading').append('<i class="fa fa-times fa-3x" aria-hidden="true"></i>');
                             $('.item[data-name="' + file.name + '"] .uploading').append('<div class="error">' + file.error + '</span>');
                         } else {
@@ -113,10 +113,10 @@ App.Lib.AttachmentsWidget = Class.extend({
                 return this._handleFileAdd(data);
             }.bind(this)
         })
-        .prop('disabled', !$.support.fileInput)
-        .parent().addClass($.support.fileInput ? undefined : 'disabled');
+            .prop('disabled', !$.support.fileInput)
+            .parent().addClass($.support.fileInput ? undefined : 'disabled');
     },
-    _handleFileAdd: function(data) {
+    _handleFileAdd: function (data) {
         var abort = false;
         $.each(data.files, function (index, file) {
             // FIXME Workaround for duplicated files
@@ -132,7 +132,7 @@ App.Lib.AttachmentsWidget = Class.extend({
                 case 'image/jpg':
                 case 'image/jpeg':
                 case 'image/gif':
-                    $('.item[data-name="' + file.name + '"]').css("background-image", "url(" + src  + ")");
+                    $('.item[data-name="' + file.name + '"]').css("background-image", "url(" + src + ")");
                     break;
                 default:
                     $('.item[data-name="' + file.name + '"]').css("background-image", "url(/attachments/img/file.png)");
@@ -150,8 +150,8 @@ App.Lib.AttachmentsWidget = Class.extend({
 
         var addMoreTemplate = $('#item-add-more-template').html();
         this.$dropZone.append(addMoreTemplate);
-        this.$dropZone.find('.add-more').off('click').on('click', function() {
-            this.$input.trigger( "click" );
+        this.$dropZone.find('.add-more').off('click').on('click', function () {
+            this.$input.trigger("click");
         }.bind(this));
     }
 });
