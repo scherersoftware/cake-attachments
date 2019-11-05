@@ -12,7 +12,12 @@
                 <div class="item">
                     <div class="uploading">
                         <div class="progress">
-                          <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 0"></div>
+                            <div
+                                class="progress-bar progress-bar-striped active"
+                                role="progressbar"
+                                style="width: 0"
+                            >
+                            </div>
                         </div>
                     </div>
                 </div>

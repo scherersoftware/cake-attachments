@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Attachments\Controller;
 
+use Attachments\Lib\UploadHandler;
 use Attachments\Model\Entity\Attachment;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
@@ -14,8 +15,6 @@ use Cake\ORM\Exception\MissingTableClassException;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Text;
 use FrontendBridge\Lib\ServiceResponse;
-
-require_once Plugin::path('Attachments') . 'src/Lib/UploadHandler.php';
 
 /**
  * @property  \Attachments\Model\Table\AttachmentsTable $Attachments
@@ -74,7 +73,7 @@ class AttachmentsController extends Controller
             'accept_file_types' => Configure::read('Attachments.acceptedFileTypes'),
         ];
 
-        new \UploadHandler($options);
+        new UploadHandler($options);
         exit;
     }
 
@@ -203,7 +202,12 @@ class AttachmentsController extends Controller
             $behaviorConfig = $attachmentsBehavior->getConfig();
             if (is_callable($behaviorConfig['downloadAuthorizeCallback'])) {
                 $relatedEntity = $attachment->getRelatedEntity();
-                $authorized = $behaviorConfig['downloadAuthorizeCallback']($attachment, $relatedEntity, $this->getRequest());
+                $authorized = $behaviorConfig['downloadAuthorizeCallback'](
+                    $attachment,
+                    $relatedEntity,
+                    $this->getRequest()
+                );
+
                 if ($authorized !== true) {
                     throw new UnauthorizedException(__d('attachments', 'attachments.unauthorized_for_attachment'));
                 }

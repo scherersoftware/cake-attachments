@@ -143,7 +143,9 @@ class AttachmentsTable extends Table
             }
             $targetPath = Configure::read('Attachments.path') . $attachment->filepath;
             if (!rename($attachment->tmpPath, $targetPath)) {
-                throw new Exception("Temporary file {$attachment->tmpPath} could not be moved to {$attachment->filepath}");
+                throw new Exception(
+                    "Temporary file {$attachment->tmpPath} could not be moved to {$attachment->filepath}"
+                );
             }
             $attachment->tmpPath = null;
         }
@@ -215,7 +217,9 @@ class AttachmentsTable extends Table
      */
     private function __getFileName(array $fileInfo, EntityInterface $entity, string $id = '0'): array
     {
-        if (!file_exists(Configure::read('Attachments.path') . $entity->getSource() . '/' . $entity->id . '/' . $fileInfo['basename'])) {
+        if (!file_exists(
+            Configure::read('Attachments.path') . $entity->getSource() . '/' . $entity->id . '/' . $fileInfo['basename']
+        )) {
             return $fileInfo;
         }
         $fileInfo['basename'] = $fileInfo['filename'] . ' (' . ++$id . ').' . $fileInfo['extension'];
