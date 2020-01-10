@@ -21,7 +21,8 @@ class AttachmentsComponent extends Component
      */
     public function assertDownloadAuthorization(Attachment $attachment): void
     {
-        if ($attachmentsBehavior = $attachment->getRelatedTable()->behaviors()->get('Attachments')) {
+        $attachmentsBehavior = $attachment->getRelatedTable()->behaviors()->get('Attachments');
+        if ($attachmentsBehavior) {
             $behaviorConfig = $attachmentsBehavior->config();
             if (is_callable($behaviorConfig['downloadAuthorizeCallback'])) {
                 $relatedEntity = $attachment->getRelatedEntity();
