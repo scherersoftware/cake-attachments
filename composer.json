@@ -2,6 +2,7 @@
     "name": "codekanzlei/cake-attachments",
     "description": "File Attachments plugin for CakePHP",
     "type": "cakephp-plugin",
+    "license": "MIT",
     "require": {
         "php": ">=7.3.0",
         "ext-imagick": "*",
