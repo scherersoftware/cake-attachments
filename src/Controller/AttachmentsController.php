@@ -7,7 +7,7 @@ use Attachments\Model\Entity\Attachment;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\Filesystem\File;
 use Cake\Http\Exception\UnauthorizedException;
 use Cake\Http\Response;
@@ -32,7 +32,7 @@ class AttachmentsController extends Controller
      * @return \Cake\Http\Response|void
      * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
      */
-    public function beforeFilter(Event $event)
+    public function beforeFilter(EventInterface $event)
     {
         if (isset($this->Csrf) && $event->getSubject()->getRequest()->getParam('action') === 'upload') {
             $this->getEventManager()->off($this->Csrf);
