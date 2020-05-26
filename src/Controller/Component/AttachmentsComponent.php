@@ -23,7 +23,7 @@ class AttachmentsComponent extends Component
     {
         $attachmentsBehavior = $attachment->getRelatedTable()->behaviors()->get('Attachments');
         if ($attachmentsBehavior) {
-            $behaviorConfig = $attachmentsBehavior->config();
+            $behaviorConfig = $attachmentsBehavior->getConfig();
             if (is_callable($behaviorConfig['downloadAuthorizeCallback'])) {
                 $relatedEntity = $attachment->getRelatedEntity();
                 $authorized = $behaviorConfig['downloadAuthorizeCallback'](
