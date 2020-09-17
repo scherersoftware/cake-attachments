@@ -107,7 +107,7 @@ class AttachmentsTable extends Table
         $path = $upload;
         if (is_array($upload)) {
             $tags = reset($upload);
-            $path = reset(array_flip($upload));
+            $path = array_key_first($upload);
         }
         $file = Configure::read('Attachments.tmpUploadsPath') . $path;
         $attachment = $this->createAttachmentEntity($entity, $file, $tags);
