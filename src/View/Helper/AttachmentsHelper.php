@@ -1,5 +1,4 @@
 <?php
-declare(strict_types = 1);
 namespace Attachments\View\Helper;
 
 use Attachments\Model\Entity\Attachment;
