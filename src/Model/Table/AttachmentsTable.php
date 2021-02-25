@@ -214,10 +214,10 @@ class AttachmentsTable extends Table
      *
      * @param array                            $fileInfo Array of information about the file
      * @param \Cake\Datasource\EntityInterface $entity   Entity
-     * @param string                           $id       counter variable to extend the filename
+     * @param int                              $id       counter variable to extend the filename
      * @return array
      */
-    private function __getFileName(array $fileInfo, EntityInterface $entity, string $id = '0'): array
+    private function __getFileName(array $fileInfo, EntityInterface $entity, int $id = 0): array
     {
         $filepath = $entity->getSource() . DS . $entity->id . DS . $fileInfo['basename'];
         if (

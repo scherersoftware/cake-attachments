@@ -16,7 +16,7 @@ class AttachmentsHelper extends Helper
 {
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public $helpers = [
         'Html',
