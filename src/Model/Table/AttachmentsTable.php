@@ -1,6 +1,8 @@
 <?php
+declare(strict_types = 1);
 namespace Attachments\Model\Table;
 
+use ArrayObject;
 use Attachments\Model\Entity\Attachment;
 use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
@@ -23,7 +25,7 @@ class AttachmentsTable extends Table
      * @param array $config The configuration for the Table.
      * @return void
      */
-    public function initialize(array $config)
+    public function initialize(array $config): void
     {
         $this->setTable('attachments');
         $this->setDisplayField('filename');
@@ -32,9 +34,8 @@ class AttachmentsTable extends Table
 
         $this->getSchema()->setColumnType('tags', 'json');
 
-        if (($afterInitializeCallback = Configure::read('Attachments.afterInitializeCallback'))
-            && is_callable($afterInitializeCallback)
-        ) {
+        $afterInitializeCallback = Configure::read('Attachments.afterInitializeCallback');
+        if ($afterInitializeCallback && is_callable($afterInitializeCallback)) {
             $afterInitializeCallback($this);
         }
     }
@@ -48,20 +49,20 @@ class AttachmentsTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-            ->allowEmpty('id', 'create')
+            ->allowEmptyString('id', null, 'create')
             ->requirePresence('filepath', 'create')
-            ->notEmpty('filepath')
+            ->notEmptyString('filepath')
             ->requirePresence('filename', 'create')
-            ->notEmpty('filename')
+            ->notEmptyString('filename')
             ->requirePresence('filetype', 'create')
-            ->notEmpty('filetype')
+            ->notEmptyString('filetype')
             ->add('filesize', 'valid', ['rule' => 'numeric'])
             ->requirePresence('filesize', 'create')
-            ->notEmpty('filesize')
+            ->notEmptyString('filesize')
             ->requirePresence('model', 'create')
-            ->notEmpty('model')
+            ->notEmptyString('model')
             ->requirePresence('foreign_key', 'create')
-            ->notEmpty('foreign_key');
+            ->notEmptyString('foreign_key');
 
         return $validator;
     }
@@ -106,7 +107,7 @@ class AttachmentsTable extends Table
         $path = $upload;
         if (is_array($upload)) {
             $tags = reset($upload);
-            $path = reset(array_flip($upload));
+            $path = array_key_first($upload);
         }
         $file = Configure::read('Attachments.tmpUploadsPath') . $path;
         $attachment = $this->createAttachmentEntity($entity, $file, $tags);
@@ -125,7 +126,7 @@ class AttachmentsTable extends Table
      * @return void
      * @throws \Exception If the file couldn't be moved
      */
-    public function afterSave(Event $event, Attachment $attachment, \ArrayObject $options): void
+    public function afterSave(Event $event, Attachment $attachment, ArrayObject $options): void
     {
         if ($attachment->tmpPath) {
             // Make sure the folder is created
@@ -143,7 +144,9 @@ class AttachmentsTable extends Table
             }
             $targetPath = Configure::read('Attachments.path') . $attachment->filepath;
             if (!rename($attachment->tmpPath, $targetPath)) {
-                throw new Exception("Temporary file {$attachment->tmpPath} could not be moved to {$attachment->filepath}");
+                throw new Exception(
+                    "Temporary file {$attachment->tmpPath} could not be moved to {$attachment->filepath}"
+                );
             }
             $attachment->tmpPath = null;
         }
@@ -157,7 +160,7 @@ class AttachmentsTable extends Table
      * @param \ArrayObject                         $options    Options
      * @return void
      */
-    public function afterDelete(Event $event, Attachment $attachment, \ArrayObject $options): void
+    public function afterDelete(Event $event, Attachment $attachment, ArrayObject $options): void
     {
         $attachment->deleteFile();
     }
@@ -182,7 +185,8 @@ class AttachmentsTable extends Table
         $file = new File($filePath);
         $info = $file->info();
 
-        if (!empty($invalidChars = Configure::read('Attachments.invalidCharacters'))) {
+        $invalidChars = Configure::read('Attachments.invalidCharacters');
+        if (!empty($invalidChars)) {
             $replaceChars = Configure::read('Attachments.replaceCharacters');
             $info['basename'] = str_replace($invalidChars, $replaceChars ? $replaceChars : '', $info['basename']);
             $info['filename'] = str_replace($invalidChars, $replaceChars ? $replaceChars : '', $info['filename']);
@@ -201,7 +205,7 @@ class AttachmentsTable extends Table
             'filetype' => $info['mime'],
             'filepath' => $targetPath,
             'tmpPath' => $filePath,
-            'tags' => $tags
+            'tags' => $tags,
         ]);
     }
 
@@ -210,12 +214,17 @@ class AttachmentsTable extends Table
      *
      * @param array                            $fileInfo Array of information about the file
      * @param \Cake\Datasource\EntityInterface $entity   Entity
-     * @param string                           $id       counter variable to extend the filename
+     * @param int                              $id       counter variable to extend the filename
      * @return array
      */
-    private function __getFileName($fileInfo, EntityInterface $entity, $id = 0): array
+    private function __getFileName(array $fileInfo, EntityInterface $entity, int $id = 0): array
     {
-        if (!file_exists(Configure::read('Attachments.path') . $entity->getSource() . '/' . $entity->id . '/' . $fileInfo['basename'])) {
+        $filepath = $entity->getSource() . DS . $entity->id . DS . $fileInfo['basename'];
+        if (
+            !file_exists(
+                Configure::read('Attachments.path') . $filepath
+            )
+        ) {
             return $fileInfo;
         }
         $fileInfo['basename'] = $fileInfo['filename'] . ' (' . ++$id . ').' . $fileInfo['extension'];
