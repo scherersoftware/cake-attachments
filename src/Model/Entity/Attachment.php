@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace Attachments\Model\Entity;
 
 use Cake\Core\Configure;
@@ -27,7 +28,7 @@ class Attachment extends Entity
         'model' => true,
         'foreign_key' => true,
         'tags' => true,
-        'tmpPath' => true
+        'tmpPath' => true,
     ];
 
     /**
@@ -42,7 +43,7 @@ class Attachment extends Entity
             'image/jpg',
             'image/jpeg',
             'image/gif',
-            'image/tiff'
+            'image/tiff',
         ];
 
         return in_array($this->filetype, $imageTypes, true);
@@ -64,7 +65,7 @@ class Attachment extends Entity
             'video/x-msvideo',
             'video/x-flv',
             'video/3gpp',
-            'video/3gpp2'
+            'video/3gpp2',
         ];
 
         return in_array($this->filetype, $videoTypes, true);
@@ -82,7 +83,7 @@ class Attachment extends Entity
             'plugin' => 'Attachments',
             'controller' => 'Attachments',
             'action' => 'preview',
-            $this->id
+            $this->id,
         ]);
     }
 
@@ -98,7 +99,7 @@ class Attachment extends Entity
             'plugin' => 'Attachments',
             'controller' => 'Attachments',
             'action' => 'view',
-            $this->id
+            $this->id,
         ]);
     }
 
@@ -114,7 +115,7 @@ class Attachment extends Entity
             'plugin' => 'Attachments',
             'controller' => 'Attachments',
             'action' => 'download',
-            $this->id
+            $this->id,
         ]);
     }
 
@@ -152,7 +153,7 @@ class Attachment extends Entity
             'filesize' => $this->filesize,
             'tags' => $this->tags,
             'preview_url' => $this->previewUrl(),
-            'url' => $this->downloadUrl()
+            'url' => $this->downloadUrl(),
         ];
     }
 

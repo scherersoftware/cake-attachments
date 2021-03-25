@@ -1,24 +1,26 @@
 <?php
+declare(strict_types = 1);
 namespace Attachments\Controller;
 
-use App\Controller\AppController;
+use Attachments\Lib\UploadHandler;
 use Attachments\Model\Entity\Attachment;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\Filesystem\File;
-use Cake\Http\Response;
 use Cake\Http\Exception\UnauthorizedException;
+use Cake\Http\Response;
 use Cake\ORM\Exception\MissingTableClassException;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Text;
 use FrontendBridge\Lib\ServiceResponse;
-
-require_once Plugin::path('Attachments') . 'src/Lib/UploadHandler.php';
+use Imagick;
+use ImagickException;
 
 /**
- * @property  \Attachments\Model\Table\AttachmentsTable $Attachments
+ * @property \Attachments\Model\Table\AttachmentsTable $Attachments
+ * @property \Attachments\Controller\Component\AttachmentsComponent $AttachmentsComponent
  */
 class AttachmentsController extends Controller
 {
@@ -26,15 +28,16 @@ class AttachmentsController extends Controller
     /**
      * beforeFilter event
      *
-     * @param \Cake\Event\Event $event cake event
-     * @return void
+     * @param \Cake\Event\Event $event An Event instance
+     * @return \Cake\Http\Response|void
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
      */
-    public function beforeFilter(Event $event)
+    public function beforeFilter(EventInterface $event)
     {
         if (isset($this->Csrf) && $event->getSubject()->getRequest()->getParam('action') === 'upload') {
             $this->getEventManager()->off($this->Csrf);
         }
-        
+
         parent::beforeFilter($event);
     }
 
@@ -47,7 +50,7 @@ class AttachmentsController extends Controller
     {
         $this->loadModel('Attachments.Attachments');
         $this->loadComponent('AttachmentsComponent', [
-            'className' => 'Attachments\Controller\Component\AttachmentsComponent'
+            'className' => 'Attachments\Controller\Component\AttachmentsComponent',
         ]);
         parent::initialize();
     }
@@ -71,10 +74,10 @@ class AttachmentsController extends Controller
         $options = [
             'upload_dir' => Configure::read('Attachments.tmpUploadsPath') . DS . $uuid . DS,
             // FIXME Make file paths configurable
-            'accept_file_types' => Configure::read('Attachments.acceptedFileTypes')
+            'accept_file_types' => Configure::read('Attachments.acceptedFileTypes'),
         ];
 
-        $uploadHandler = new \UploadHandler($options);
+        new UploadHandler($options);
         exit;
     }
 
@@ -96,7 +99,7 @@ class AttachmentsController extends Controller
             case 'image/jpg':
             case 'image/jpeg':
             case 'image/gif':
-                $image = new \Imagick($attachment->getAbsolutePath());
+                $image = new Imagick($attachment->getAbsolutePath());
                 if (Configure::read('Attachments.autorotate')) {
                     $this->_autorotate($image);
                 }
@@ -104,20 +107,20 @@ class AttachmentsController extends Controller
             case 'application/pdf':
                 // Will render a preview of the first page of this PDF
                 try {
-                    $image = new \Imagick($attachment->getAbsolutePath() . '[0]');
+                    $image = new Imagick($attachment->getAbsolutePath() . '[0]');
                     break;
-                } catch (\ImagickException $e) {
+                } catch (ImagickException $e) {
                     //fall through
                 }
                 // intentional fall through in case of caught exception
             default:
-                $image = new \Imagick(Plugin::path('Attachments') . '/webroot/img/file.png');
+                $image = new Imagick(Plugin::path('Attachments') . '/webroot/img/file.png');
                 break;
         }
 
         $image->setImageFormat('png');
         $image->thumbnailImage(80, 80, true, false);
-        $image->setImageCompression(\Imagick::COMPRESSION_JPEG);
+        $image->setImageCompression(Imagick::COMPRESSION_JPEG);
         $image->setImageCompressionQuality(75);
         $image->stripImage();
 
@@ -146,7 +149,7 @@ class AttachmentsController extends Controller
             case 'image/jpg':
             case 'image/jpeg':
             case 'image/gif':
-                $image = new \Imagick($attachment->getAbsolutePath());
+                $image = new Imagick($attachment->getAbsolutePath());
                 if (Configure::read('Attachments.autorotate')) {
                     $this->_autorotate($image);
                 }
@@ -156,14 +159,13 @@ class AttachmentsController extends Controller
                 $file = new File($attachment->getAbsolutePath());
                 echo $file->read();
                 exit;
-                break;
             default:
-                $image = new \Imagick(Plugin::path('Attachments') . '/webroot/img/file.png');
+                $image = new Imagick(Plugin::path('Attachments') . '/webroot/img/file.png');
                 break;
         }
 
         $image->setImageFormat('png');
-        $image->setImageCompression(\Imagick::COMPRESSION_JPEG);
+        $image->setImageCompression(Imagick::COMPRESSION_JPEG);
         $image->setImageCompressionQuality(75);
         $image->stripImage();
 
@@ -188,23 +190,29 @@ class AttachmentsController extends Controller
 
         return $this->getResponse()->withFile($attachment->getAbsolutePath(), [
             'download' => true,
-            'name' => $attachment->filename
+            'name' => $attachment->filename,
         ]);
     }
 
     /**
      * Rotate image depending on exif info
      *
-     * @param \Imagick $image image handler
+     * @param \Attachments\Model\Entity\Attachment $attachment Attachment entity
      * @return void
      */
     protected function _checkAuthorization(Attachment $attachment): void
     {
-        if ($attachmentsBehavior = $attachment->getRelatedTable()->getBehavior('Attachments')) {
+        $attachmentsBehavior = $attachment->getRelatedTable()->getBehavior('Attachments');
+        if ($attachmentsBehavior) {
             $behaviorConfig = $attachmentsBehavior->getConfig();
             if (is_callable($behaviorConfig['downloadAuthorizeCallback'])) {
                 $relatedEntity = $attachment->getRelatedEntity();
-                $authorized = $behaviorConfig['downloadAuthorizeCallback']($attachment, $relatedEntity, $this->getRequest());
+                $authorized = $behaviorConfig['downloadAuthorizeCallback'](
+                    $attachment,
+                    $relatedEntity,
+                    $this->getRequest()
+                );
+
                 if ($authorized !== true) {
                     throw new UnauthorizedException(__d('attachments', 'attachments.unauthorized_for_attachment'));
                 }
@@ -218,35 +226,35 @@ class AttachmentsController extends Controller
      * @param \Imagick $image image handler
      * @return void
      */
-    protected function _autorotate(\Imagick $image): void
+    protected function _autorotate(Imagick $image): void
     {
         switch ($image->getImageOrientation()) {
-            case \Imagick::ORIENTATION_TOPRIGHT:
+            case Imagick::ORIENTATION_TOPRIGHT:
                 $image->flopImage();
                 break;
-            case \Imagick::ORIENTATION_BOTTOMRIGHT:
+            case Imagick::ORIENTATION_BOTTOMRIGHT:
                 $image->rotateImage('#000', 180);
                 break;
-            case \Imagick::ORIENTATION_BOTTOMLEFT:
+            case Imagick::ORIENTATION_BOTTOMLEFT:
                 $image->flopImage();
                 $image->rotateImage('#000', 180);
                 break;
-            case \Imagick::ORIENTATION_LEFTTOP:
+            case Imagick::ORIENTATION_LEFTTOP:
                 $image->flopImage();
                 $image->rotateImage('#000', -90);
                 break;
-            case \Imagick::ORIENTATION_RIGHTTOP:
+            case Imagick::ORIENTATION_RIGHTTOP:
                 $image->rotateImage('#000', 90);
                 break;
-            case \Imagick::ORIENTATION_RIGHTBOTTOM:
+            case Imagick::ORIENTATION_RIGHTBOTTOM:
                 $image->flopImage();
                 $image->rotateImage('#000', 90);
                 break;
-            case \Imagick::ORIENTATION_LEFTBOTTOM:
+            case Imagick::ORIENTATION_LEFTBOTTOM:
                 $image->rotateImage('#000', -90);
                 break;
         }
-        $image->setImageOrientation(\Imagick::ORIENTATION_TOPLEFT);
+        $image->setImageOrientation(Imagick::ORIENTATION_TOPLEFT);
     }
 
     /**

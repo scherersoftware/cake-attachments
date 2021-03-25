@@ -1,4 +1,7 @@
 <?php
+declare(strict_types = 1);
+namespace Attachments\Lib;
+
 /*
  * jQuery File Upload Plugin PHP Class
  * https://github.com/blueimp/jQuery-File-Upload

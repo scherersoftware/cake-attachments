@@ -2,17 +2,16 @@
     "name": "codekanzlei/cake-attachments",
     "description": "File Attachments plugin for CakePHP",
     "type": "cakephp-plugin",
-    "extra": {
-        "installer-name": "Attachments"
-    },
+    "license": "MIT",
     "require": {
-        "php": ">=7.1",
-        "codekanzlei/cake-frontend-bridge": "3.0.*",
-        "ext-imagick": "*"
+        "php": ">=7.3.0",
+        "ext-imagick": "*",
+        "cakephp/cakephp": ">= 4.0",
+        "codekanzlei/cake-frontend-bridge": "^4.0.0-RC2"
     },
     "require-dev": {
-        "phpunit/phpunit": "*",
-        "cakephp/cakephp": "~3.6"
+        "phpstan/phpstan": "^0.11",
+        "scherersoftware/coding-standard": "^4.0.0"
     },
     "autoload": {
         "psr-4": {
@@ -25,5 +24,14 @@
             "Attachments\\Test\\": "tests",
             "Attachments\\Test\\Fixture\\": "tests/Fixture"
         }
+    },
+    "scripts": {
+        "check": [
+            "@php-check",
+            "@php-check-strict",
+            "@phpstan"
+        ],
+        "php-check": "vendor/bin/phpcs -p --standard=vendor/scherersoftware/coding-standard/scherersoftware ./src ./config",
+        "phpstan": "php -d memory_limit=-1 vendor/bin/phpstan analyse -c phpstan.neon -l 5 ./src"
     }
 }
