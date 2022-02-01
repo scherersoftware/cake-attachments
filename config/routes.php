@@ -1,7 +1,11 @@
 <?php
 
+use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
 
-Router::plugin('Attachments', function ($routes): void {
-    $routes->fallbacks('DashedRoute');
-});
+return static function (RouteBuilder $routes): void {
+    $routes->plugin('Attachments', function ($routes): void {
+        $routes->fallbacks('DashedRoute');
+    });
+};
+
