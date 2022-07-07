@@ -139,6 +139,7 @@ class AttachmentsTable extends Table
                 $mode = Configure::read('Attachments.mode');
             }
 
+            $old = umask(0);
             if (!$folder->create($targetDir, $mode)) {
                 throw new Exception("Folder {$targetDir} could not be created.");
             }
@@ -148,6 +149,7 @@ class AttachmentsTable extends Table
                     "Temporary file {$attachment->tmpPath} could not be moved to {$attachment->filepath}"
                 );
             }
+            umask($old);
             $attachment->tmpPath = null;
         }
     }
